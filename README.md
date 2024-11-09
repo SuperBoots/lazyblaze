@@ -136,7 +136,8 @@ I highly suggest that you keep your own detailed list of app logins and manual c
 1. ???
 
 # TO-DO
-1. Pick a license and make repo public on github
+1. Add SharedFunctionsAndChecks.ps1 to scripts copied to local config directory
+    * Also remove the logic at the start of CloneRepos.ps1 that goes back to the repository to load SharedFunctionsAndChecks.ps1, just load it from local config
 1. Verify that scheduled task still works if it's created with correct case machine name vs the all caps machine name we were using before.
 1. Add step to verify username and machine name
 1. Test scripts on Dev box
