@@ -136,8 +136,9 @@ I highly suggest that you keep your own detailed list of app logins and manual c
 1. ???
 
 # TO-DO
-1. Add SharedFunctionsAndChecks.ps1 to scripts copied to local config directory
-    * Also remove the logic at the start of CloneRepos.ps1 that goes back to the repository to load SharedFunctionsAndChecks.ps1, just load it from local config
+1. Have Backup task scheduler check to make sure there's not already an existing scheduled task.
+1. Try setting up the task scheduler to run as user = "NT AUTHORITY\SYSTEM" to see if it acually runs with no window
+    * https://superuser.com/questions/1820405/configuring-a-scheduled-task-to-run-whether-or-not-a-user-is-logged-in-powershel
 1. Verify that scheduled task still works if it's created with correct case machine name vs the all caps machine name we were using before.
 1. Add step to verify username and machine name
 1. Test scripts on Dev box
