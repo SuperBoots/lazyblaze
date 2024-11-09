@@ -146,7 +146,9 @@ if (!(test-path -PathType leaf $configLocationXmlFile)) {
 
 
 ##########################  Load Config  ################################
-SetConfigValue -Key 'repolocation' -Value $repoDirectory -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+if ($inRepo -like "True") {
+  SetConfigValue -Key 'repolocation' -Value $repoDirectory -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+}
 SetConfigValue -Key 'username' -Value $sysUserName -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
 SetConfigValue -Key 'machinename' -Value $sysMachineName -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
 if ($globalExit -like "True") {
