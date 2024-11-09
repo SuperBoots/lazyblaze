@@ -2,7 +2,7 @@ param (
   $workingDirectory
 )
   
-$PrimaryScriptName = "InstallApps.ps1"
+$PrimaryScriptName = "InstallApps"
 $requireAdmin = "True"
   
   
@@ -556,12 +556,10 @@ if ($stepComplete -like "COMPLETE"){
 else {
   $scriptedBackupName = "Backup.ps1"
   $localScriptedBackupFile = "$($configDir)$($scriptedBackupName)"
-  $actions = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $configDir
-  $trigger = New-ScheduledTaskTrigger -Daily -At '3:30 AM'
-  $principal = New-ScheduledTaskPrincipal -UserId "$($machineName)\$($userFromConfig)" -RunLevel Highest
-  $settings = New-ScheduledTaskSettingsSet -WakeToRun
-  $task = New-ScheduledTask -Action $actions -Principal $principal -Trigger $trigger -Settings $settings
-  Register-ScheduledTask 'BackupSettings' -InputObject $task
+  $user = "NT AUTHORITY\SYSTEM"
+  $trigger = New-ScheduledTaskTrigger -Daily -At '12:15 PM' 
+  $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $configDir
+  Register-ScheduledTask -Action $action -Trigger $trigger -User $user -TaskName "BackupSettings" -Description "run lazyblaze backups daily"
   [Environment]::SetEnvironmentVariable($schBkupEnvVarName, 'COMPLETE', 'User')
   Write-Host -ForegroundColor Green "Finished Schedule Auto Backup of Settings."
 }

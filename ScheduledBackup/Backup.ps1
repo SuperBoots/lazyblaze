@@ -1,4 +1,4 @@
-$PrimaryScriptName = "Backup.ps1"
+$PrimaryScriptName = "Backup"
 $requireAdmin = "True"
 # Execute script in the current session context, variables are shared between the scripts
 . ".\SharedFunctionsAndChecks.ps1"
@@ -54,8 +54,24 @@ if ($config.settings.modifypowersettings -like "True") {
 # I like the idea that as your VS install changes over time the new state will be 
 # automatically captured and backed up using this approach.
 if ($config.settings.backupvscommunity -like "True"){
-  Write-Host "Export Visual Studio Community installation configuration to the VisualStudio folder in the local config"
-  & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\setup.exe" export --quiet --force --config ".\VisualStudio\my.vsconfig" --productID Microsoft.VisualStudio.2022.Community --installPath "C:\Program Files\Microsoft Visual Studio\2022\Community"
+  try {
+    Write-Host "Export Visual Studio Community installation configuration to the VisualStudio folder in the local config"
+    $vsBackupDir = "$($configDir)VisualStudio\"
+    if (-not (Test-Path -LiteralPath $vsBackupDir)) {
+      New-Item -ItemType Directory -Path $vsBackupDir
+    }
+    & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\setup.exe" export --quiet --force --config "$($vsBackupDir)my.vsconfig" --productID Microsoft.VisualStudio.2022.Community --installPath "C:\Program Files\Microsoft Visual Studio\2022\Community"
+  if ($LASTEXITCODE -eq 0) {
+    Write-Host "Export Visual Studio Community installation configuration completed successfully."
+  }
+  else {
+    Write-Host "Export Visual Studio Community installation configuration failed"
+  }
+  }
+  catch [System.Exception] {
+    $_ # Output the current value in the pipe, in this case the exception details
+    Write-Host "Export Visual Studio Community installation configuration failed"
+  }
 }
 
 ##########################  Delete Old Log Files  ################################

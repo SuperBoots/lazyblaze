@@ -136,15 +136,12 @@ I highly suggest that you keep your own detailed list of app logins and manual c
 1. ???
 
 # TO-DO
+1. Make run time of the scheduled backup configurable
 1. Have Backup task scheduler check to make sure there's not already an existing scheduled task.
-1. Try setting up the task scheduler to run as user = "NT AUTHORITY\SYSTEM" to see if it acually runs with no window
-    * https://superuser.com/questions/1820405/configuring-a-scheduled-task-to-run-whether-or-not-a-user-is-logged-in-powershel
-1. Verify that scheduled task still works if it's created with correct case machine name vs the all caps machine name we were using before.
 1. Add step to verify username and machine name
 1. Test scripts on Dev box
 1. Test scripts with a custom local config folder selected
 1. Consider moving the default location for the local config folder into the user directory
-1. Look for alternative to windows task scheduler for backup jobs, it takes focus when it launchs and minimizes running games, it's annoying. Maybe use a powershell scheduled task instead of windows task scheduler?
 1. Fixed broken postman agent winget install, verify that it actually installed the desktop agent.
 1. See if I can get pause/restart/continue working in my scripts?
     * https://stackoverflow.com/questions/15166839/powershell-reboot-and-continue-script
@@ -154,5 +151,3 @@ I highly suggest that you keep your own detailed list of app logins and manual c
 1. Test installing PowerToys via winget (added to LocalConfig.xml in source)
     * Set up FancyZones
 1. Get OpenVPN Connect set up for work (write down instructions)
-1. Can we get user and machine name from system instead of local config? 
-    * this would make life slightly easier when setting up a computer with these restore scripts for the first time

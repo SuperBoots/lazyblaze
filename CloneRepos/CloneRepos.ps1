@@ -2,7 +2,7 @@ param (
   $workingDirectory
 )
 
-$PrimaryScriptName = "CloneRepos.ps1"
+$PrimaryScriptName = "CloneRepos"
 $requireAdmin = "False"
 
 
