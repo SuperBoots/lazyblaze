@@ -1,0 +1,4 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\7516b95f-f776-4464-8c53-06167f40cc99\8ec4b3a5-6868-48c2-be75-4f3044be88a7]
+"Attributes"=dword:00000002
