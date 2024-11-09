@@ -30,7 +30,7 @@ if (test-path -PathType leaf ".\$($configLocationXmlFileName)"){
 }
 # Exit if script is not running in repo or config directory
 if ((-not ($inRepo -like "True")) -and (-not ($inLocalConfig -like "True"))) {
-    Write-Host -ForegroundColor Red "Script appears to not be running in the NewMachineSetupScripts repository or the local config folder. All scripts in this collection must be run from one of these locations."
+    Write-Host -ForegroundColor Red "Script appears to not be running in the lazyblaze repository or the local config folder. All scripts in this collection must be run from one of these locations."
     $globalExit = "True"
     Exit
 }
@@ -183,7 +183,7 @@ if ($repoConfigXml.settings.mylocation -notlike "CodeRepo") {
 }
 if ($repoConfigFail -like "True")
 {
-  Write-Host -ForegroundColor Red "repolocation validation failed. repolocation in $($configFullDest) should be the full path to the NewMachineSetupScripts git repository on your machine."
+  Write-Host -ForegroundColor Red "repolocation validation failed. repolocation in $($configFullDest) should be the full path to the lazyblaze git repository on your machine."
   $globalExit = "True"
   Exit
 }

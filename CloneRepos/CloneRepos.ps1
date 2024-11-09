@@ -30,7 +30,7 @@ if ($tmpConfig.settings.repolocation -like $null) {
 }
 $tmpSharedFunctionsAndChecksFile = "$($tmpConfig.settings.repolocation)SharedFunctionsAndChecks.ps1"
 if (!(test-path -PathType leaf $tmpSharedFunctionsAndChecksFile)) {
-  Write-Host -ForegroundColor Red "$($PrimaryScriptName) script requires repolocation in LocalConfig.xml to point to an up to date NewMachineSetupScripts repository in order to access SharedFunctionsAndChecks.ps1, exiting."
+  Write-Host -ForegroundColor Red "$($PrimaryScriptName) script requires repolocation in LocalConfig.xml to point to an up to date lazyblaze repository in order to access SharedFunctionsAndChecks.ps1, exiting."
   Pause
   Exit
 }

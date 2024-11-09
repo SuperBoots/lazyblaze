@@ -1,4 +1,4 @@
-# NewMachineSetupScripts
+# LazyBlaze
 Created by Dan Partington
 
 The goal of this project is to minimize the time and effort it takes to go from a brand new Windows 11 install to a fully functional PC with the programs you want to use installed and configured.
@@ -7,12 +7,12 @@ This project is designed to take advantage of Backblaze computer backups to get 
 
 This project will work perfectly fine even if you're not using Backblaze, just set usingbackblaze to False in the config and ignore the Backblaze specific steps in the instructions.
 
-## Understanding the local configuration folder `C:\NewMachineSetupConfig\`
-Once you've cloned the repository for NewMachineSetupScripts you should be all set to just start following the "Fresh Windows Install Instructions" below, but there's an external folder that will be created by the scripts that you should be aware of. The default location of this folder is `C:\NewMachineSetupConfig\`, you can change it by updating `Config.xml` in the root of this repository before you run the scripts, but I'd recommend leaving it as default if possible.
+## Understanding the local configuration folder `C:\LazyBlazeConfig\`
+Once you've cloned the repository for lazyblaze you should be all set to just start following the "Fresh Windows Install Instructions" below, but there's an external folder that will be created by the scripts that you should be aware of. The default location of this folder is `C:\LazyBlazeConfig\`, you can change it by updating `Config.xml` in the root of this repository before you run the scripts, but I'd recommend leaving it as default if possible.
 
-The `C:\NewMachineSetupConfig\` folder that gets created will have some values already populated, but the purpose of this folder is to hold values and files that are specific to your machine that the scripts in this repository can use. The most important thing in this directory is LocalConfig.xml, it defines what programs to remove, what programs to install, and generally just lets you pick all your options once and then setup everything with minimal interaction. 
+The `C:\LazyBlazeConfig\` folder that gets created will have some values already populated, but the purpose of this folder is to hold values and files that are specific to your machine that the scripts in this repository can use. The most important thing in this directory is LocalConfig.xml, it defines what programs to remove, what programs to install, and generally just lets you pick all your options once and then setup everything with minimal interaction. 
 
-The idea is that you'll run through the setup process once and make a lot of changes to the local config, then once it's in a spot that you like you can save LocalConfig.xml somewhere safe off your machine, or better yet save the whole `C:\NewMachineSetupConfig\` folder, and then if you need to rebuild your machine from scratch you can just put your saved config folder back in place and run NewMachineSetup.bat to get your environment built out exactly how it was before.
+The idea is that you'll run through the setup process once and make a lot of changes to the local config, then once it's in a spot that you like you can save LocalConfig.xml somewhere safe off your machine, or better yet save the whole `C:\LazyBlazeConfig\` folder, and then if you need to rebuild your machine from scratch you can just put your saved config folder back in place and run LazyBlaze.bat to get your environment built out exactly how it was before.
 
 # Fresh Windows Install Instructions
 I suggest keeping a document for each of your machines with more specific details to keep your environment as repeatable as possible. My personal instruction documents live in google docs, I have one document per machine. I basically copied these instructions to start and then added details as I went.
@@ -60,7 +60,7 @@ If you have another machine handy that's already up and running with access to t
 1. If you didn't already complete the "Enable Remote Access" step above, then do it now.
 1. Check for Windows updates and install them.
 
-## Get the NewMachineSetupScripts repository onto your machine (after Backblaze restore is complete)
+## Get the lazyblaze repository onto your machine (after Backblaze restore is complete)
 1. If you had the most recent version in your backup that you just restored then you're good to go
 1. Otherwise, grab the files from another computer you have up and running or download from github. You don't need to do a git clone or anything, you just need the files, the repository will be overwritten later in the process.
 1. If you had your local config folder backed up somewhere, now would be the time to put that back on this machine
@@ -71,7 +71,7 @@ If you have another machine handy that's already up and running with access to t
 
 ## *Special Instructions - Removing Files from Backblaze Backup - Part 1*
 *There are three main reasons I've needed to remove files from Backblaze backups, either they're causing issues with running the scripts, causing system instability, or they're just excessively large and it's making your restore process take forever. Whatever the reason, the method for removing files from your backup is the same.*
-1. *Identify the folders/files that are adding too much to storage size and add them to the <backblazeclean> section of the LocalConfig.xml (default location `C:\NewMachineSetupConfig\`).* 
+1. *Identify the folders/files that are adding too much to storage size and add them to the <backblazeclean> section of the LocalConfig.xml (default location `C:\LazyBlazeConfig\`).* 
 1. *At this point there should be two backups on backblaze.com for this machine, one that is the 'real' backup and one that was created today (because a new one is created whenever you install Backblaze). Identify the old (real) backup and the new (empty) backup*
 1. *If you've managed to keep the new backup empty, or a least keep any of the files you're trying to remove out of it, then you can just let the new backup be the backup going forward. In this case, skip the rest of 'Removing Files from Backblaze Backup - Part 1'*
 1. *You should only be at this step if you need to throw away the new backup and start a new one*
@@ -81,7 +81,7 @@ If you have another machine handy that's already up and running with access to t
 1. *Continue 'Removing Files from Backblaze Backup - Part 2' after completing the next step*
 
 ## Run .bat file to install all applications (after Backblaze restore is complete)
-1. Run NewMachineSetup.bat in your local NewMachineSetupScripts directory
+1. Run LazyBlaze.bat in your local lazyblaze directory
 
 ## *Special Instructions - Removing Files from Backblaze Backup - Part 2*
 *Creating a fresh backup*
@@ -120,7 +120,7 @@ If you have another machine handy that's already up and running with access to t
 1. If using `Add Git Repositories To Github Desktop` option 
     * Then you'll need to launch the Github Desktop application first on your machine and get logged in.
     * (`addrepostogithubdesktop` setting in config)
-1. Open local config folder, default is `C:\NewMachineSetupConfig\`
+1. Open local config folder, default is `C:\LazyBlazeConfig\`
 1. Run CloneRepos.bat
     * The Git Credentials Manager UI will pop up for any repositories that don't already have creds saved in the manager.
     * *FYI - CloneRepos.ps1 needs to be run from the local config folder because it needs to be in the same directory as the LocalConfig.xml file and it can't be in this repository because this repository will likely be deleted and recreated by the script.*

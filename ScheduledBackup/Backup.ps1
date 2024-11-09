@@ -7,9 +7,9 @@ if ($globalExit -like "True") {
 }
 
 
-# For testing of this file, put it in the local config directory (default is C:\NewMachineSetupConfig\) 
+# For testing of this file, put it in the local config directory (default is C:\LazyBlazeConfig\) 
 # and run it in an administrator powershell that's working directory is the local config directory,
-# for example, run `cd C:\NewMachineSetupConfig\` and then run `.\Backup.ps1`
+# for example, run `cd C:\LazyBlazeConfig\` and then run `.\Backup.ps1`
 
 
 ##########################  Backup Various Config Files  ################################
