@@ -16,29 +16,9 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
 }
 
 
-##########################  Confirm We Can Find SharedFunctionsAndChecks.ps1  ################################
-if (!(test-path -PathType leaf .\LocalConfig.xml)){
-  Write-Host -ForegroundColor Red "$($PrimaryScriptName) script must be run from within the local config directory, exiting."
-  Pause
-  Exit
-}
-$tmpConfig = [xml](Get-Content .\LocalConfig.xml)
-if ($tmpConfig.settings.repolocation -like $null) {
-  Write-Host -ForegroundColor Red "$($PrimaryScriptName) script requires repolocation to be set in LocalConfig.xml, exiting."
-  Pause
-  Exit
-}
-$tmpSharedFunctionsAndChecksFile = "$($tmpConfig.settings.repolocation)SharedFunctionsAndChecks.ps1"
-if (!(test-path -PathType leaf $tmpSharedFunctionsAndChecksFile)) {
-  Write-Host -ForegroundColor Red "$($PrimaryScriptName) script requires repolocation in LocalConfig.xml to point to an up to date lazyblaze repository in order to access SharedFunctionsAndChecks.ps1, exiting."
-  Pause
-  Exit
-}
-
-
 ##########################  Run SharedFunctionsAndChecks.ps1  ################################
 # Execute script in the current session context, variables are shared between the scripts
-. $tmpSharedFunctionsAndChecksFile
+. ".\SharedFunctionsAndChecks.ps1"
 if ($globalExit -like "True") {
   Pause
   Exit

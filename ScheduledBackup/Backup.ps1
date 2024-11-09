@@ -1,8 +1,13 @@
-$PrimaryScriptName = "Backup"
+$PrimaryScriptName = "Backup.ps1"
 $requireAdmin = "True"
 # Execute script in the current session context, variables are shared between the scripts
 . ".\SharedFunctionsAndChecks.ps1"
 if ($globalExit -like "True") {
+  Exit
+}
+if (-not($ranSharedFunctionsAndChecks -like "True")) {
+  Write-Host -ForegroundColor Red "SharedFunctionsAndChecks.ps1 script did not finish successfully, exiting."
+  Pause
   Exit
 }
 

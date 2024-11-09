@@ -437,10 +437,11 @@ if (($majorVersion_LocalConfig -eq $majorVersion_ExampleConfig) -and ($minorVers
 # Move some files into the local config directory for doing things like daily backups and cloning git repos.
 # If you set AddVersionHeader to True it basically stamps the major and minor version from the example local 
 # config in the repo at the top of the file, essentially marking the version of the repository that they are from.
-# The headers are formatted as a comment in powershell (and maybe .bat files?)
+# The headers are formatted as a comment in powershell, but they will break .bat files.
 UpdateLocalFileCopy -TargetDir $configDir -FileName "Backup.ps1" -SourceDir "$($repoDirectory)ScheduledBackup\" -MyConfig $config -AddVersionHeader "True" -MajorVersion $majorVersion_ExampleConfig -MinorVersion $minorVersion_ExampleConfig
 UpdateLocalFileCopy -TargetDir $configDir -FileName "CloneRepos.ps1" -SourceDir "$($repoDirectory)CloneRepos\" -MyConfig $config -AddVersionHeader "True" -MajorVersion $majorVersion_ExampleConfig -MinorVersion $minorVersion_ExampleConfig
 UpdateLocalFileCopy -TargetDir $configDir -FileName "CloneRepos.bat" -SourceDir "$($repoDirectory)CloneRepos\" -MyConfig $config -AddVersionHeader "False" -MajorVersion $majorVersion_ExampleConfig -MinorVersion $minorVersion_ExampleConfig
+UpdateLocalFileCopy -TargetDir $configDir -FileName "SharedFunctionsAndChecks.ps1" -SourceDir $($repoDirectory) -MyConfig $config -AddVersionHeader "True" -MajorVersion $majorVersion_ExampleConfig -MinorVersion $minorVersion_ExampleConfig
 
 
 $ranSharedFunctionsAndChecks = "True"
