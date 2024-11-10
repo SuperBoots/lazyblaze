@@ -136,7 +136,6 @@ I highly suggest that you keep your own detailed list of app logins and manual c
 1. ???
 
 # TO-DO
-1. Make run time of the scheduled backup configurable
 1. Have Backup task scheduler check to make sure there's not already an existing scheduled task.
 1. Add step to verify username and machine name
 1. Test scripts on Dev box
