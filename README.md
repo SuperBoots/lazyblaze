@@ -135,18 +135,3 @@ I highly suggest that you keep your own detailed list of app logins and manual c
 1. [Oculus PC App](https://www.meta.com/help/quest/articles/headsets-and-accessories/oculus-rift-s/install-app-for-link/) 
 1. ???
 
-# TO-DO
-1. Have Backup task scheduler check to make sure there's not already an existing scheduled task.
-1. Add step to verify username and machine name
-1. Test scripts on Dev box
-1. Test scripts with a custom local config folder selected
-1. Consider moving the default location for the local config folder into the user directory
-1. Fixed broken postman agent winget install, verify that it actually installed the desktop agent.
-1. See if I can get pause/restart/continue working in my scripts?
-    * https://stackoverflow.com/questions/15166839/powershell-reboot-and-continue-script
-1. When running the 'InstallApps' script you end up with a bunch of open programs piling up on top of eachother, see if there's a reasonable way to kill processes after install is done.
-1. Would it be reasonable and/or valuable to put a check to see if the user is running the latest version of the repo from git?
-1. Add option to daily backup script to cleanup old files in downloads folder (to keep backup size from growing too large)
-1. Test installing PowerToys via winget (added to LocalConfig.xml in source)
-    * Set up FancyZones
-1. Get OpenVPN Connect set up for work (write down instructions)
