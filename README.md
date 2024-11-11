@@ -1,5 +1,6 @@
 # LazyBlaze
 Created by Dan Partington
+https://buymeacoffee.com/danpartington
 
 The goal of this project is to minimize the time and effort it takes to go from a brand new Windows 11 install to a fully functional PC with the programs you want to use installed and configured.
 
