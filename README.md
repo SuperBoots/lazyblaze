@@ -4,7 +4,7 @@ https://buymeacoffee.com/danpartington
 
 The goal of this project is to minimize the time and effort it takes to go from a brand new Windows 11 install to a fully functional PC with the programs you want to use installed and configured.
 
-This project is designed to take advantage of Backblaze computer backups to get a machine as close as possible to the state it was in before while still retaining the wonderful cleaning power of a disc reformat and Windows reinstall.
+This project is designed to take advantage of Backblaze computer backups to get a machine as close as possible to the state it was in before while still retaining the wonderful cleaning power of a disc reformat and Windows reinstall. (Note: I have not tested lazyblaze with Backblaze B2 Cloud Storage, but a ticket has been added to the backlog to investigate compatibility)
 
 This project will work perfectly fine even if you're not using Backblaze, just set usingbackblaze to False in the config and ignore the Backblaze specific steps in the instructions.
 
