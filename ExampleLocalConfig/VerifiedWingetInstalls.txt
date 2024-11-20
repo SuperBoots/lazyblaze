@@ -1,3 +1,8 @@
+A collection of config entries for winget installs that have been tested and are working properly.
+Ordered alphabetically by id.
+Note: If you're looking for a specific program try searching within this document, some of the ids 
+are not very helpful but the name of the program should be in the description.
+
 <app skip="False" id="7zip.7zip"                               description="7-Zip is a free and open-source file archiver"></app>
 <app skip="False" id="Corsair.iCUE.5"                          description="iCUEs single intuitive interface links together supported CORSAIR products, allowing you to quickly and easily fine-tune your settings"></app>
 <app skip="False" id="CyberPowerSystemsInc.PowerPanelPersonal" description="PowerPanel Personal makes the most vital information about your UPS, power source, battery capacity, and runtime, immediately visible on your computer"></app>
