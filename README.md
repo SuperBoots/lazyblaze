@@ -8,6 +8,18 @@ This project is designed to take advantage of Backblaze computer backups to get 
 
 This project will work perfectly fine even if you're not using Backblaze, just set usingbackblaze to False in the config and ignore the Backblaze specific steps in the instructions.
 
+# Simplified Usage Instructions
+1. Run `LazyBlaze.bat` for first time, local config will be created.
+    * For more information see "Understanding the local configuration folder" below
+1. Make updates to `C:\LazyBlazeConfig\LocalConfig.xml` to define which programs to install (among other things)
+    * Example Winget config entries for program installations that have been tested can be found in `\ExampleLocalConfig\VerifiedWingetInstalls.txt`
+    * Example registry edits can be found in `\registrysettings\`
+    * Update `<reviewed>False</reviewed>` to `<reviewed>True</reviewed>` at the bottom of the `C:\LazyBlazeConfig\LocalConfig.xml` file, if you don't update this the script won't install anything.
+1. Run `LazyBlaze.bat` again, if everything is configured correctly then the InstallApps.ps1 will be executed in it's entirety.
+1. Run `C:\LazyBlazeConfig\CloneRepos.bat` to clone the git repositories you've defined in your local config
+    * For more information see "Clone Code Repositories" below
+1. Done!
+
 ## Understanding the local configuration folder `C:\LazyBlazeConfig\`
 Once you've cloned the repository for lazyblaze you should be all set to just start following the "Fresh Windows Install Instructions" below, but there's an external folder that will be created by the scripts that you should be aware of. The default location of this folder is `C:\LazyBlazeConfig\`, you can change it by updating `Config.xml` in the root of this repository before you run the scripts, but I'd recommend leaving it as default if possible.
 
