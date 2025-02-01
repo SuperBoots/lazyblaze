@@ -32,8 +32,7 @@ if (-not($ranSharedFunctionsAndChecks -like "True")) {
 
 ##########################  Remove Bloatware  ################################
 # (Can be run multiple times)
-if ($config.settings.bloatwareremoval.skipsection -like "False")
-{
+if ($config.settings.bloatwareremoval.skipsection -like "False") {
   $totalBloatwareRemovals = $config.settings.bloatwareremoval.SelectNodes("./bloatware[(@skip='False')]").count
   $currentBloatwareRemoval = 0
   if ($totalBloatwareRemovals -gt 0) {
@@ -108,8 +107,7 @@ if ($totalWingetInstalls -gt 0) {
 
 ##########################  Update Registry Settings  ################################
 # (Can be run multiple times)
-if ($config.settings.registryedits.skipsection -like "False")
-{
+if ($config.settings.registryedits.skipsection -like "False") {
   # Run registry edits based on what's in the local config file
   foreach ($regedit in $config.settings.registryedits.regedit) {
     if ($regedit.skip -like "True") {
@@ -145,7 +143,7 @@ if ($config.settings.registryedits.skipsection -like "False")
 
 ##########################  Update Power Settings  ################################
 # (Can be run multiple times)
-if ($config.settings.modifypowersettings -like "True") {
+if ($config.settings.powersettings.skipsection -like "False") {
   Write-Host -ForegroundColor Yellow "Updating Power settings..."
   $powerSettingsDir = "$($configDir)PowerSettings\"
   $powerSettingsFile = "$($powerSettingsDir)myscheme.pow"

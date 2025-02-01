@@ -6,7 +6,6 @@
   <machinename></machinename>
   <wallpaper>space.jpg</wallpaper>
   <usingbackblaze>True</usingbackblaze>
-  <modifypowersettings>True</modifypowersettings>
   <backupvscommunity>True</backupvscommunity>
   <backuplogretentiondays>30</backuplogretentiondays>
   <updatescripts>True</updatescripts>
@@ -31,6 +30,10 @@
     <regedit skip="False" filename="UpdateConsoleLockDisplayOffTimeout.reg" description="Enable Update Console Lock Display off timeout"></regedit>
     <regedit skip="True"  filename="DisableUAC.reg"                         description="Disable UAC prompts"></regedit>
   </registryedits>
+  <powersettings skipsection=True>
+    <details>If running for the first time, current power settings will be backed up to local config directory</details>
+    <details>If power settings backup already exists in local config directory it will be imported and set as current power settings</details>
+  </powersettings>
   <appdatabackups>
     <backup skip="False" configfolder="DBeaver"        filename="data-sources.json" appdatadir="AppData\Roaming\DBeaverData\workspace6\General\.dbeaver\"                   description="DBeaver stores connection settings in this file, not passwords though"></backup>
     <backup skip="False" configfolder="TerminalConfig" filename="settings.json"     appdatadir="AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\" description="Windows Terminal stores its profiles in this settings file"></backup>
