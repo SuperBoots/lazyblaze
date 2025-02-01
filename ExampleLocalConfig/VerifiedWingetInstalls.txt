@@ -17,6 +17,7 @@ are not very helpful but the name of the program should be in the description.
 <app skip="False" id="Guru3D.Afterburner"                      description="MSI Afterburner monitoring and GPU overclocking tool"></app>
 <app skip="False" id="Hashicorp.Terraform"                     description="Terraform is an infrastructure-as-code software tool created by HashiCorp"></app>
 <app skip="False" id="JetBrains.IntelliJIDEA.Community"        description="IntelliJ IDEA Community Edition is a free IDE built on open-source code that provides essential features for Java and Kotlin enthusiasts"></app>
+<app skip="False" id="Microsoft.Azure.StorageExplorer"         description="Microsoft Azure Storage Explorer is a standalone app that makes it easy to work with Azure Storage data on Windows, macOS, and Linux."></app>
 <app skip="False" id="Microsoft.AzureCLI"                      description="Azure CLI, our next generation multi-platform command line experience for Azure"></app>
 <app skip="False" id="Microsoft.SQLServer.2022.Express"        description="SQL Server 2022 Express is a free edition of SQL Server, ideal for development and production for desktop, web, and small server applications"></app>
 <app skip="False" id="Microsoft.SQLServerManagementStudio"     description="Microsoft SQL Server Management Studio is used for configuring, managing, and administering all components within Microsoft SQL Server"></app>
