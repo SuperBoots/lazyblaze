@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
-  <version major="012" minor="005" minorblocking="True" description="If this sample config is updated in a non-breaking way the minor version should be increased, if a breaking change is introduced (a rename, a new section, etc) then the major version should be increased and the minor version should be reset."></version>
+  <version major="013" minor="001" minorblocking="True" description="If this sample config is updated in a non-breaking way the minor version should be increased, if a breaking change is introduced (a rename, a new section, etc) then the major version should be increased and the minor version should be reset."></version>
   <repolocation></repolocation>
   <username></username>
   <machinename></machinename>
@@ -14,6 +14,12 @@
   <addrepostogithubdesktop>True</addrepostogithubdesktop>
   <rundisccleanupmorethanonce>False</rundisccleanupmorethanonce>
   <rundismcleanmorethanonce>False</rundismcleanmorethanonce>
+  <bloatwareremoval skipsection=True note="This is an experimental new feature, proceed with caution">
+    <details   reference="https://github.com/Kugane/winget/blob/main/winget-basic.ps1"></details>
+    <bloatware skip="False" id="MicrosoftTeams"           description="Microsoft Teams is a team collaboration application developed by Microsoft as part of the Microsoft 365 family of products, offering workspace chat and video conferencing, file storage, and integration of proprietary and third-party applications and services"></bloatware>
+    <bloatware skip="False" id="Clipchamp.Clipchamp"      description="Clipchamp is an online video editing tool developed by Australian company Clipchamp Pty Ltd., which is now a subsidiary of Microsoft. It is non-linear editing software that allows users to import, edit, and export audiovisual material in an Internet browser window"></bloatware>
+    <bloatware skip="False" id="Microsoft.OneDriveSync"   description="OneDrive is a cloud storage service from Microsoft that lets you back up, access, edit, share, and sync your files from any device"></bloatware>
+  </bloatwareremoval>
   <registryedits>
     <regedit skip="False" filename="WindowsExplorerShowHiddenFiles.reg"     description="Set Windows Explorer to show hidden files and folders"></regedit>
     <regedit skip="False" filename="WindowsExplorerShowFileExtensions.reg"  description="Set Windows Explorer to show file extensions"></regedit>
@@ -65,12 +71,6 @@
     <app skip="False" id="SlackTechnologies.Slack"                 description="Slack is a cloud-based team communication platform developed by Slack Technologies"></app>
     <app skip="False" id="TheDocumentFoundation.LibreOffice"       description="LibreOffice is a free and open-source office productivity software suite, a project of The Document Foundation"></app>
   </wingetinstalls>
-  <bloatwareremoval>
-    <details   reference="https://github.com/Kugane/winget/blob/main/winget-basic.ps1"></details>
-    <bloatware skip="False" id="MicrosoftTeams"           description="Microsoft Teams is a team collaboration application developed by Microsoft as part of the Microsoft 365 family of products, offering workspace chat and video conferencing, file storage, and integration of proprietary and third-party applications and services"></bloatware>
-    <bloatware skip="False" id="Clipchamp.Clipchamp"      description="Clipchamp is an online video editing tool developed by Australian company Clipchamp Pty Ltd., which is now a subsidiary of Microsoft. It is non-linear editing software that allows users to import, edit, and export audiovisual material in an Internet browser window"></bloatware>
-    <bloatware skip="False" id="Microsoft.OneDriveSync"   description="OneDrive is a cloud storage service from Microsoft that lets you back up, access, edit, share, and sync your files from any device"></bloatware>
-  </bloatwareremoval>
   <gitrepositories>
     <gitrepo skip="False" name="lazyblaze" dest="C:\Code\" url="https://github.com/SuperBoots/lazyblaze.git" excludefrombackblaze="False"></gitrepo>
   </gitrepositories>

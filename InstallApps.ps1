@@ -32,28 +32,31 @@ if (-not($ranSharedFunctionsAndChecks -like "True")) {
 
 ##########################  Remove Bloatware  ################################
 # (Can be run multiple times)
-$totalBloatwareRemovals = $config.settings.bloatwareremoval.SelectNodes("./bloatware[(@skip='False')]").count
-$currentBloatwareRemoval = 0
-if ($totalBloatwareRemovals -gt 0) {
-  $backupProgressPreference = $progressPreference
-  $progressPreference = 'SilentlyContinue' # These Remove-AppxPackage have clunky progress counters, just ignore them
-  foreach ($bloatware in $config.settings.bloatwareremoval.bloatware) {
-    if ($bloatware.skip -like "True") {
-      continue
+if ($config.settings.bloatwareremoval.skipsection -like "False")
+{
+  $totalBloatwareRemovals = $config.settings.bloatwareremoval.SelectNodes("./bloatware[(@skip='False')]").count
+  $currentBloatwareRemoval = 0
+  if ($totalBloatwareRemovals -gt 0) {
+    $backupProgressPreference = $progressPreference
+    $progressPreference = 'SilentlyContinue' # These Remove-AppxPackage have clunky progress counters, just ignore them
+    foreach ($bloatware in $config.settings.bloatwareremoval.bloatware) {
+      if ($bloatware.skip -like "True") {
+        continue
+      }
+      $currentBloatwareRemoval++
+      Write-Host -ForegroundColor Yellow "Removing Bloatware ($($currentBloatwareRemoval)/$($totalBloatwareRemovals)) '$($bloatware.id)' based on config"
+      if ($config.settings.displaydescriptions -like "True" -and $null -ne $bloatware.description) {
+        Write-Host "Description: $($bloatware.description)"
+      }
+      $package = Get-AppxPackage -AllUsers $bloatware.id
+      if ($null -ne $package) {
+        $package | Remove-AppxPackage
+      } else {
+        Write-Host -ForegroundColor Green "Bloatware $($bloatware.id) appears to not be installed. Skipping..."
+      }
     }
-    $currentBloatwareRemoval++
-    Write-Host -ForegroundColor Yellow "Removing Bloatware ($($currentBloatwareRemoval)/$($totalBloatwareRemovals)) '$($bloatware.id)' based on config"
-    if ($config.settings.displaydescriptions -like "True" -and $null -ne $bloatware.description) {
-      Write-Host "Description: $($bloatware.description)"
-    }
-    $package = Get-AppxPackage -AllUsers $bloatware.id
-    if ($null -ne $package) {
-      $package | Remove-AppxPackage
-    } else {
-      Write-Host -ForegroundColor Green "Bloatware $($bloatware.id) appears to not be installed. Skipping..."
-    }
+    $progressPreference = $backupProgressPreference
   }
-  $progressPreference = $backupProgressPreference
 }
 
 
