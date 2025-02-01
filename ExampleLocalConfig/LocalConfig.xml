@@ -20,7 +20,7 @@
     <bloatware skip="False" id="Clipchamp.Clipchamp"      description="Clipchamp is an online video editing tool developed by Australian company Clipchamp Pty Ltd., which is now a subsidiary of Microsoft. It is non-linear editing software that allows users to import, edit, and export audiovisual material in an Internet browser window"></bloatware>
     <bloatware skip="False" id="Microsoft.OneDriveSync"   description="OneDrive is a cloud storage service from Microsoft that lets you back up, access, edit, share, and sync your files from any device"></bloatware>
   </bloatwareremoval>
-  <registryedits>
+  <registryedits skipsection=True>
     <regedit skip="False" filename="WindowsExplorerShowHiddenFiles.reg"     description="Set Windows Explorer to show hidden files and folders"></regedit>
     <regedit skip="False" filename="WindowsExplorerShowFileExtensions.reg"  description="Set Windows Explorer to show file extensions"></regedit>
     <regedit skip="False" filename="EnableDarkMode.reg"                     description="Enable Windows dark theme"></regedit>

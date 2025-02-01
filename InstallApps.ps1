@@ -108,34 +108,37 @@ if ($totalWingetInstalls -gt 0) {
 
 ##########################  Update Registry Settings  ################################
 # (Can be run multiple times)
-# Run registry edits based on what's in the local config file
-foreach ($regedit in $config.settings.registryedits.regedit) {
-  if ($regedit.skip -like "True") {
-    continue
-  }
-  Write-Host -ForegroundColor Yellow "Registry Setting Edit $($regedit.filename) from config"
-  if ($config.settings.displaydescriptions -like "True" -and $null -ne $regedit.description) {
-    Write-Host "Description: $($regedit.description)"
-  }
-  $cleanedName = CleanForEnvVar -Dirty $regedit.filename
-  $installEnvVarName = "NMSS_REGEDITS_$($cleanedName)"
-  $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
-  if ($installComplete -like "COMPLETE"){
-    Write-Host -ForegroundColor Green "Registry Setting Update '$($regedit.filename)' already completed according to environment variable. Skipping."
-    continue
-  }
-  $regeditfile = "registrysettings\$($regedit.filename)"
-  if (!(test-path -PathType leaf $regeditfile)) {
-    Write-Host "ERROR: Registry update file $($regeditfile) not found"
-    continue
-  }
-  Reg import "registrysettings\$($regedit.filename)"
-  if ($LASTEXITCODE -eq 0) {
-    Write-Host -ForegroundColor Green "$($regedit.filename) registry update completed successfully."
-    [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
-  }
-  else {
-    Write-Host -ForegroundColor Red "$($regedit.filename) registry update failed"
+if ($config.settings.registryedits.skipsection -like "False")
+{
+  # Run registry edits based on what's in the local config file
+  foreach ($regedit in $config.settings.registryedits.regedit) {
+    if ($regedit.skip -like "True") {
+      continue
+    }
+    Write-Host -ForegroundColor Yellow "Registry Setting Edit $($regedit.filename) from config"
+    if ($config.settings.displaydescriptions -like "True" -and $null -ne $regedit.description) {
+      Write-Host "Description: $($regedit.description)"
+    }
+    $cleanedName = CleanForEnvVar -Dirty $regedit.filename
+    $installEnvVarName = "NMSS_REGEDITS_$($cleanedName)"
+    $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
+    if ($installComplete -like "COMPLETE"){
+      Write-Host -ForegroundColor Green "Registry Setting Update '$($regedit.filename)' already completed according to environment variable. Skipping."
+      continue
+    }
+    $regeditfile = "registrysettings\$($regedit.filename)"
+    if (!(test-path -PathType leaf $regeditfile)) {
+      Write-Host "ERROR: Registry update file $($regeditfile) not found"
+      continue
+    }
+    Reg import "registrysettings\$($regedit.filename)"
+    if ($LASTEXITCODE -eq 0) {
+      Write-Host -ForegroundColor Green "$($regedit.filename) registry update completed successfully."
+      [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
+    }
+    else {
+      Write-Host -ForegroundColor Red "$($regedit.filename) registry update failed"
+    }
   }
 }
 
