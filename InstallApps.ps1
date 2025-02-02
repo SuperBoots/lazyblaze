@@ -33,6 +33,7 @@ if (-not($ranSharedFunctionsAndChecks -like "True")) {
 ##########################  Remove Bloatware  ################################
 # (Can be run multiple times)
 if ($config.settings.bloatwareremoval.skipsection -like "False") {
+  Write-Host "Section: Remove Bloatware (bloatwareremoval in config), starting..."
   $totalBloatwareRemovals = $config.settings.bloatwareremoval.SelectNodes("./bloatware[(@skip='False')]").count
   $currentBloatwareRemoval = 0
   if ($totalBloatwareRemovals -gt 0) {
@@ -56,13 +57,18 @@ if ($config.settings.bloatwareremoval.skipsection -like "False") {
     }
     $progressPreference = $backupProgressPreference
   }
+  Write-Host "Section: Remove Bloatware (bloatwareremoval in config), finished"
+}
+else {
+  Write-Host "Section: Remove Bloatware (bloatwareremoval in config), skipping"
 }
 
 
 ##########################  Install Chocolatey  ################################
 # (Can be run multiple times)
 $totalChocoInstalls = $config.settings.chocoinstalls.SelectNodes("./app[(@skip='False')]").count
-if ($totalChocoInstalls -gt 0) {
+if ($config.settings.chocoinstalls.skipsection -like "False" -and $totalChocoInstalls -gt 0) {
+  Write-Host "Section: Install Chocolatey (chocoinstalls in config), starting..."
   try {
     $chocoVersion = choco -v
   } 
@@ -83,12 +89,17 @@ if ($totalChocoInstalls -gt 0) {
   } else {
     Write-Host -ForegroundColor Green "Chocolatey is already installed, version $($chocoVersion ), continuing.";
   }
+  Write-Host "Section: Install Chocolatey (chocoinstalls in config), finished"
+}
+else {
+  Write-Host "Section: Install Chocolatey (chocoinstalls in config), skipping"
 }
 
 ##########################  Install Winget  ################################
 # (Can be run multiple times)
 $totalWingetInstalls = $config.settings.wingetinstalls.SelectNodes("./app[(@skip='False')]").count
-if ($totalWingetInstalls -gt 0) {
+if ($config.settings.wingetinstalls.skipsection -like "False" -and $totalWingetInstalls -gt 0) {
+  Write-Host "Section: Install Winget (wingetinstalls in config), starting..."
   try {
     $wingetVersion = winget -v
   }
@@ -103,11 +114,17 @@ if ($totalWingetInstalls -gt 0) {
   } else {
     Write-Host -ForegroundColor Green "Winget is already installed, version $($wingetVersion), continuing.";
   }
+  Write-Host "Section: Install Winget (wingetinstalls in config), finished"
 }
+else {
+  Write-Host "Section: Install Winget (wingetinstalls in config), skipping"
+}
+
 
 ##########################  Update Registry Settings  ################################
 # (Can be run multiple times)
 if ($config.settings.registryedits.skipsection -like "False") {
+  Write-Host "Section: Update Registry Settings (registryedits in config), starting..."
   # Run registry edits based on what's in the local config file
   foreach ($regedit in $config.settings.registryedits.regedit) {
     if ($regedit.skip -like "True") {
@@ -138,13 +155,17 @@ if ($config.settings.registryedits.skipsection -like "False") {
       Write-Host -ForegroundColor Red "$($regedit.filename) registry update failed"
     }
   }
+  Write-Host "Section: Update Registry Settings (registryedits in config), finished"
+}
+else {
+  Write-Host "Section: Update Registry Settings (registryedits in config), skipping"
 }
 
 
 ##########################  Update Power Settings  ################################
 # (Can be run multiple times)
 if ($config.settings.powersettings.skipsection -like "False") {
-  Write-Host -ForegroundColor Yellow "Updating Power settings..."
+  Write-Host "Section: Update Power Settings (powersettings in config), starting..."
   $powerSettingsDir = "$($configDir)PowerSettings\"
   $powerSettingsFile = "$($powerSettingsDir)myscheme.pow"
   # Look for an existing power setting backup
@@ -166,13 +187,17 @@ if ($config.settings.powersettings.skipsection -like "False") {
     POWERCFG /EXPORT $powerSettingsFile $currentSchemeGuid
     Write-Host -ForegroundColor Green "Existing Power Scheme backed up successfully."
   }
+  Write-Host "Section: Update Power Settings (powersettings in config), finished"
+}
+else {
+  Write-Host "Section: Update Power Settings (powersettings in config), skipping"
 }
 
 
 ###############  Add Exclusions To Backblaze Cloud Backup Config ###############
 # (Can be run multiple times, will just reset the config file and start over)
-if ($config.settings.usingbackblaze -like "True") {
-  Write-Host -ForegroundColor Yellow "Configuring Backblaze Exclusion List..."
+if ($config.settings.backblazeclean.skipsection -like "False") {
+  Write-Host "Section: Add Exclusions To Backblaze Cloud Backup Config (backblazeclean in config), starting..."
   $bbconfigfilepath = "C:\ProgramData\Backblaze\bzdata\bzinfo.xml"
   $backupfile = "C:\ProgramData\Backblaze\bzdata\bzinfo_backup.xml"
   if (Test-Path -LiteralPath $backupfile) {
@@ -216,7 +241,10 @@ if ($config.settings.usingbackblaze -like "True") {
       Exit
     }
   }
-  Write-Host -ForegroundColor Green "Finished Configuring Backblaze Exclusion List Successfully."
+  Write-Host "Section: Add Exclusions To Backblaze Cloud Backup Config (backblazeclean in config), finished"
+}
+else {
+  Write-Host "Section: Add Exclusions To Backblaze Cloud Backup Config (backblazeclean in config), skipping"
 }
 
 
@@ -276,50 +304,51 @@ if ($diskCleanupComplete -like "COMPLETE" -and (-not($config.settings.rundisccle
 # (Can be run multiple times)
 # Install Chocolatey items from the local config file
 $totalChocoInstalls = $config.settings.chocoinstalls.SelectNodes("./app[(@skip='False')]").count
-if ($totalChocoInstalls -gt 0){
-  Write-Host -ForegroundColor Yellow "Starting Chocolatey Installs..."
-}
 $currentChocoInstall = 0
-foreach ($app in $config.settings.chocoinstalls.app) {
-  if ($app.skip -like "True") {
-    continue
-  }
-  try {
+if ($config.settings.chocoinstalls.skipsection -like "False" -and $totalChocoInstalls -gt 0){
+  Write-Host "Section: Chocolatey installs (chocoinstalls in config), starting..."
+  foreach ($app in $config.settings.chocoinstalls.app) {
+    if ($app.skip -like "True") {
+      continue
+    }
+    try {
+      $chocoVersion = choco -v
+    } 
+    catch [System.Exception] {
+      $chocoFail = "True"
+    }
     $chocoVersion = choco -v
-  } 
-  catch [System.Exception] {
-    $chocoFail = "True"
+    $chocoVersionRegex = '\d{1,}.\d{1,}.\d{1,}' # ex: 2.3.0
+    if ((-not($chocoVersion -match $chocoVersionRegex)) -or $chocoFail -like "True"){
+      Write-Host -ForegroundColor Red "Chocolatey installation not found, you need to solve this problem before this script can progress any further. Exiting."
+      Pause
+      Exit
+    }
+    $currentChocoInstall++
+    $cleanedId = CleanForEnvVar -Dirty $app.id
+    $installEnvVarName = "NMSS_CHOCOINSTALLS_$($cleanedId)"
+    $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
+    Write-Host -ForegroundColor Yellow  "Chocolatey install ($($currentChocoInstall)/$($totalChocoInstalls)) '$($app.id)' from config"
+    if ($config.settings.displaydescriptions -like "True" -and $null -ne $app.description) {
+      Write-Host "Description: $($app.description)"
+    }
+    if ($installComplete -like "COMPLETE"){
+      Write-Host -ForegroundColor Green "Choco install '$($app.id)' already completed according to environment variable. Skipping."
+      continue
+    }
+    choco install $app.id -y
+    if ($LASTEXITCODE -eq 0) {
+      Write-Host -ForegroundColor Green "$($app.id) successfully installed."
+      [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
+    }
+    else {
+      Write-Host -ForegroundColor Red "$($app.id) installation failed"
+    }
   }
-  $chocoVersion = choco -v
-  $chocoVersionRegex = '\d{1,}.\d{1,}.\d{1,}' # ex: 2.3.0
-  if ((-not($chocoVersion -match $chocoVersionRegex)) -or $chocoFail -like "True"){
-    Write-Host -ForegroundColor Red "Chocolatey installation not found, you need to solve this problem before this script can progress any further. Exiting."
-    Pause
-    Exit
-  }
-  $currentChocoInstall++
-  $cleanedId = CleanForEnvVar -Dirty $app.id
-  $installEnvVarName = "NMSS_CHOCOINSTALLS_$($cleanedId)"
-  $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
-  Write-Host -ForegroundColor Yellow  "Chocolatey install ($($currentChocoInstall)/$($totalChocoInstalls)) '$($app.id)' from config"
-  if ($config.settings.displaydescriptions -like "True" -and $null -ne $app.description) {
-    Write-Host "Description: $($app.description)"
-  }
-  if ($installComplete -like "COMPLETE"){
-    Write-Host -ForegroundColor Green "Choco install '$($app.id)' already completed according to environment variable. Skipping."
-    continue
-  }
-  choco install $app.id -y
-  if ($LASTEXITCODE -eq 0) {
-    Write-Host -ForegroundColor Green "$($app.id) successfully installed."
-    [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
-  }
-  else {
-    Write-Host -ForegroundColor Red "$($app.id) installation failed"
-  }
+  Write-Host "Section: Chocolatey installs (chocoinstalls in config), finished"
 }
-if ($totalChocoInstalls -gt 0){
-  Write-Host -ForegroundColor Green "Finished Chocolatey Installs."
+else {
+  Write-Host "Section: Chocolatey installs (chocoinstalls in config), skipping"
 }
 
 
@@ -327,54 +356,58 @@ if ($totalChocoInstalls -gt 0){
 # (Can be run multiple times)
 # Install winget items from the local config file
 $totalWingetInstalls = $config.settings.wingetinstalls.SelectNodes("./app[(@skip='False')]").count
-if ($totalWingetInstalls -gt 0 -or  $config.settings.visualstudio.app.skip -like "False"){
-  Write-Host -ForegroundColor Yellow "Starting Winget Installs..."
-}
 $currentWingetInstall = 0
-foreach ($app in $config.settings.wingetinstalls.app) {
-  if ($app.skip -like "True") {
-    continue
+if ($totalWingetInstalls -gt 0 -or  $config.settings.visualstudio.app.skip -like "False"){
+  Write-Host "Section: winget installs (wingetinstalls in config), starting..."
+  foreach ($app in $config.settings.wingetinstalls.app) {
+    if ($app.skip -like "True") {
+      continue
+    }
+    try {
+      $wingetVersion = winget -v
+    }
+    catch [System.Exception] {
+      $wingetFail = "True"
+    }
+    $wingetVersionRegex = 'v\d{1,}.\d{1,}.\d{1,}' # ex: v1.9.25180
+    if ((-not ($wingetVersion -match $wingetVersionRegex)) -or $wingetFail -like "True" ) {
+      Write-Host -ForegroundColor Red "Winget installation not found, you need to solve this problem before this script can progress any further. Exiting."
+      Pause
+      Exit
+    }
+    $currentWingetInstall++
+    $cleanedId = CleanForEnvVar -Dirty $app.id
+    $installEnvVarName = "NMSS_WINGETINSTALLS_$($cleanedId)"
+    $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
+    Write-Host -ForegroundColor Yellow "Winget install ($($currentWingetInstall)/$($totalWingetInstalls)) '$($app.id)' from config..."
+    if ($config.settings.displaydescriptions -like "True" -and $null -ne $app.description) {
+      Write-Host "Description: $($app.description)"
+    }
+    if ($installComplete -like "COMPLETE"){
+      Write-Host -ForegroundColor Green "Winget install '$($app.id)' already completed according to environment variable. Skipping."
+      continue
+    }
+    if ($null -ne $app.msstore -and $app.msstore -like "True") {
+      winget install --id $app.id --exact --accept-source-agreements --accept-package-agreements --source=msstore
+    }
+    elseif ($null -ne $app.override) {
+      winget install --id $app.id --exact --accept-source-agreements --accept-package-agreements --override $app.override
+    }
+    else {
+      winget install --id $app.id --exact --accept-source-agreements --accept-package-agreements
+    }
+    if ($LASTEXITCODE -eq 0) {
+      Write-Host -ForegroundColor Green "$($app.id) successfully installed."
+      [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
+    }
+    else {
+      Write-Host -ForegroundColor Red "$($app.id) installation failed"
+    }
   }
-  try {
-    $wingetVersion = winget -v
-  }
-  catch [System.Exception] {
-    $wingetFail = "True"
-  }
-  $wingetVersionRegex = 'v\d{1,}.\d{1,}.\d{1,}' # ex: v1.9.25180
-  if ((-not ($wingetVersion -match $wingetVersionRegex)) -or $wingetFail -like "True" ) {
-    Write-Host -ForegroundColor Red "Winget installation not found, you need to solve this problem before this script can progress any further. Exiting."
-    Pause
-    Exit
-  }
-  $currentWingetInstall++
-  $cleanedId = CleanForEnvVar -Dirty $app.id
-  $installEnvVarName = "NMSS_WINGETINSTALLS_$($cleanedId)"
-  $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
-  Write-Host -ForegroundColor Yellow "Winget install ($($currentWingetInstall)/$($totalWingetInstalls)) '$($app.id)' from config..."
-  if ($config.settings.displaydescriptions -like "True" -and $null -ne $app.description) {
-    Write-Host "Description: $($app.description)"
-  }
-  if ($installComplete -like "COMPLETE"){
-    Write-Host -ForegroundColor Green "Winget install '$($app.id)' already completed according to environment variable. Skipping."
-    continue
-  }
-  if ($null -ne $app.msstore -and $app.msstore -like "True") {
-    winget install --id $app.id --exact --accept-source-agreements --accept-package-agreements --source=msstore
-  }
-  elseif ($null -ne $app.override) {
-    winget install --id $app.id --exact --accept-source-agreements --accept-package-agreements --override $app.override
-  }
-  else {
-    winget install --id $app.id --exact --accept-source-agreements --accept-package-agreements
-  }
-  if ($LASTEXITCODE -eq 0) {
-    Write-Host -ForegroundColor Green "$($app.id) successfully installed."
-    [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
-  }
-  else {
-    Write-Host -ForegroundColor Red "$($app.id) installation failed"
-  }
+  Write-Host "Section: winget installs (wingetinstalls in config), finished"
+}
+else {
+  Write-Host "Section: winget installs (wingetinstalls in config), skipping"
 }
 
 
