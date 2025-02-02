@@ -293,7 +293,7 @@ if ($config.settings.disccleanup.skipsection -like "False") {
   Write-Host "Section: Run Disc Cleanup (disccleanup in config), starting..."
   $diskCleanupEnvVarName = "NMSS_DISKCLEANUP"
   $diskCleanupComplete = [Environment]::GetEnvironmentVariable($diskCleanupEnvVarName, 'User')
-  if ($diskCleanupComplete -like "COMPLETE" -and (-not($config.settings.rundisccleanupmorethanonce -like "True"))) {
+  if ($diskCleanupComplete -like "COMPLETE" -and $config.settings.disccleanup.firstrunonly -like "True") {
     Write-Host -ForegroundColor Green "Run Disc Cleanup already completed according to environment variable $($diskCleanupEnvVarName) and rundisccleanupmorethanonce in config is False. Skipping."
   } else {
     Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\*' | % {
@@ -426,51 +426,58 @@ else {
 
 ##########################  Install Visual Studio Community  ################################
 # (Can be run multiple times)
-# Install Visual Studio Community using custom arguments
-if ($config.settings.visualstudio.app.skip -like "False") {
-  try {
-    $wingetVersion = winget -v
-  }
-  catch [System.Exception] {
-    $wingetFail = "True"
-  }
-  $wingetVersionRegex = 'v\d{1,}.\d{1,}.\d{1,}' # ex: v1.9.25180
-  if ((-not ($wingetVersion -match $wingetVersionRegex)) -or $wingetFail -like "True" ) {
-    Write-Host -ForegroundColor Red "Winget installation not found, you need to solve this problem before this script can progress any further. Exiting."
-    Pause
-    Exit
-  }
-  $cleanedId = CleanForEnvVar -Dirty $config.settings.visualstudio.app.id
-  $installEnvVarName = "NMSS_WINGETINSTALLS_$($cleanedId)"
-  $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
-  Write-Host -ForegroundColor Yellow "Winget install '$($config.settings.visualstudio.app.id)' from config..."
-  if ($config.settings.displaydescriptions -like "True" -and $null -ne $config.settings.visualstudio.app.description) {
-    Write-Host "Description: $($config.settings.visualstudio.app.description)"
-  }
-  if ($installComplete -like "COMPLETE"){
-    Write-Host -ForegroundColor Green "Winget install '$($config.settings.visualstudio.app.id)' already completed according to environment variable. Skipping."
-  }
-  else {
-    $workloads = ""
-    foreach ($workload in $config.settings.visualstudio.workloads.workload) {
-      if ($workload.skip -like "False") {
-        $workloads += " --add $($workload.id)"
-      }
+if ($config.settings.visualstudio.skipsection -like "False") {
+  Write-Host "Section: Install Visual Studio Community (visualstudio in config), starting..."
+  # Install Visual Studio Community using custom arguments
+  if ($config.settings.visualstudio.options.loadfrombackup -like "False") {
+    try {
+      $wingetVersion = winget -v
     }
-    winget install --id $($config.settings.visualstudio.app.id) --exact --accept-source-agreements --accept-package-agreements --silent --disable-interactivity --override "--passive --wait$($workloads)"
-    if ($LASTEXITCODE -eq 0) {
-      Write-Host -ForegroundColor Green "$($config.settings.visualstudio.app.id) successfully installed."
-      [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
+    catch [System.Exception] {
+      $wingetFail = "True"
+    }
+    $wingetVersionRegex = 'v\d{1,}.\d{1,}.\d{1,}' # ex: v1.9.25180
+    if ((-not ($wingetVersion -match $wingetVersionRegex)) -or $wingetFail -like "True" ) {
+      Write-Host -ForegroundColor Red "Winget installation not found, you need to solve this problem before this script can progress any further. Exiting."
+      Pause
+      Exit
+    }
+    $cleanedId = CleanForEnvVar -Dirty $config.settings.visualstudio.app.id
+    $installEnvVarName = "NMSS_WINGETINSTALLS_$($cleanedId)"
+    $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
+    Write-Host -ForegroundColor Yellow "Winget install '$($config.settings.visualstudio.app.id)' from config..."
+    if ($config.settings.displaydescriptions -like "True" -and $null -ne $config.settings.visualstudio.app.description) {
+      Write-Host "Description: $($config.settings.visualstudio.app.description)"
+    }
+    if ($installComplete -like "COMPLETE"){
+      Write-Host -ForegroundColor Green "Winget install '$($config.settings.visualstudio.app.id)' already completed according to environment variable. Skipping."
     }
     else {
-      Write-Host -ForegroundColor Red "$($config.settings.visualstudio.app.id) installation failed"
-      Write-Host -ForegroundColor Red "The installation log file is at '$($userdir)AppData\Local\Temp\' and the log file name looks like dd_setup_* or dd_installer_* or dd_backgrounddownload_*"
-      Write-Host -ForegroundColor Red "You may need to uninstall the Visual Studio Installer, this process seems to struggle when you're in a state with the Visual Studio Installer installed but Visual Studio Community not installed."
+      $workloads = ""
+      foreach ($workload in $config.settings.visualstudio.workloads.workload) {
+        if ($workload.skip -like "False") {
+          $workloads += " --add $($workload.id)"
+        }
+      }
+      winget install --id $($config.settings.visualstudio.app.id) --exact --accept-source-agreements --accept-package-agreements --silent --disable-interactivity --override "--passive --wait$($workloads)"
+      if ($LASTEXITCODE -eq 0) {
+        Write-Host -ForegroundColor Green "$($config.settings.visualstudio.app.id) successfully installed."
+        [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
+      }
+      else {
+        Write-Host -ForegroundColor Red "$($config.settings.visualstudio.app.id) installation failed"
+        Write-Host -ForegroundColor Red "The installation log file is at '$($userdir)AppData\Local\Temp\' and the log file name looks like dd_setup_* or dd_installer_* or dd_backgrounddownload_*"
+        Write-Host -ForegroundColor Red "You may need to uninstall the Visual Studio Installer, this process seems to struggle when you're in a state with the Visual Studio Installer installed but Visual Studio Community not installed."
+      }
     }
   }
+  else {
+    Write-Host -ForegroundColor Red "TODO: install based on backup file goes here"
+  }
+  Write-Host "Section: Install Visual Studio Community (visualstudio in config), finished"
 }
-if ($totalWingetInstalls -gt 0 -or  $config.settings.visualstudio.app.skip -like "False"){
-  Write-Host -ForegroundColor Green "Finished Winget Installs."
+else {
+  Write-Host "Section: Install Visual Studio Community (visualstudio in config), skipping"
 }
 
 

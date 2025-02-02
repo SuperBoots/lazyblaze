@@ -47,10 +47,6 @@
   <disccleanup skipsection="True" firstrunonly="True">
     <details>Runs CleanMgr.exe with argument sagerun:1</details>
   </disccleanup>
-  <appdatabackups>
-    <backup skip="False" configfolder="DBeaver"        filename="data-sources.json" appdatadir="AppData\Roaming\DBeaverData\workspace6\General\.dbeaver\"                   description="DBeaver stores connection settings in this file, not passwords though"></backup>
-    <backup skip="False" configfolder="TerminalConfig" filename="settings.json"     appdatadir="AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\" description="Windows Terminal stores its profiles in this settings file"></backup>
-  </appdatabackups>
   <chocoinstalls skipsection="True">
     <app skip="False" id="intel-xtu"                               description="Intel Extreme Tuning Utility (Intel XTU) is used to overclock, monitor, and stress a system"></app>
     <app skip="False" id="samsung-magician"                        description="Samsung Magician - Manage your drive like magic"></app>
@@ -65,8 +61,11 @@
     <app skip="False" id="SlackTechnologies.Slack"                 description="Slack is a cloud-based team communication platform developed by Slack Technologies"></app>
     <app skip="False" id="TheDocumentFoundation.LibreOffice"       description="LibreOffice is a free and open-source office productivity software suite, a project of The Document Foundation"></app>
   </wingetinstalls>
-  <visualstudio>
-    <app skip="False" id="Microsoft.VisualStudio.2022.Community"   description="Visual Studio is an integrated development environment (IDE) developed by Microsoft. It is used to develop computer programs including websites, web apps, web services and mobile apps"></app>
+  <visualstudio skipsection="True">
+    <details>Install Visual Studio Community</details>
+    <details>If loadfrombackup is set True then workload selections below will be ignored and installation preferences will be determined by my.vsconfig file in local config directory</details>
+    <options loadfrombackup="False"></options>
+    <app id="Microsoft.VisualStudio.2022.Community"   description="Visual Studio is an integrated development environment (IDE) developed by Microsoft. It is used to develop computer programs including websites, web apps, web services and mobile apps"></app>
     <workloaddetails website="https://learn.microsoft.com/en-us/visualstudio/install/workload-component-id-vs-community?view=vs-2022"></workloaddetails>
     <workloads>
       <workload skip="False" name="Azure development"                        id="Microsoft.VisualStudio.Workload.Azure"                 description="Azure SDKs, tools, and projects for developing cloud apps and creating resources using .NET and .NET Framework. Also includes tools for containerizing your application, including Docker support"></workload>
@@ -87,6 +86,10 @@
       <workload skip="True"  name="Visual Studio extension development"      id="Microsoft.VisualStudio.Workload.VisualStudioExtension" description="Create add-ons and extensions for Visual Studio, including new commands, code analyzers and tool windows"></workload>
     </workloads>
   </visualstudio>
+  <appdatabackups>
+    <backup skip="False" configfolder="DBeaver"        filename="data-sources.json" appdatadir="AppData\Roaming\DBeaverData\workspace6\General\.dbeaver\"                   description="DBeaver stores connection settings in this file, not passwords though"></backup>
+    <backup skip="False" configfolder="TerminalConfig" filename="settings.json"     appdatadir="AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\" description="Windows Terminal stores its profiles in this settings file"></backup>
+  </appdatabackups>
   <gitrepositories>
     <gitrepo skip="False" name="lazyblaze" dest="C:\Code\" url="https://github.com/SuperBoots/lazyblaze.git" excludefrombackblaze="False"></gitrepo>
   </gitrepositories>
