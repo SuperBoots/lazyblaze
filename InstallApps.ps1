@@ -429,7 +429,7 @@ else {
 if ($config.settings.visualstudio.skipsection -like "False") {
   Write-Host "Section: Install Visual Studio Community (visualstudio in config), starting..."
   # Install Visual Studio Community using custom arguments
-  if ($config.settings.visualstudio.options.loadfrombackup -like "False") {
+  if ($config.settings.visualstudio.options.installfromsnapshot -like "False") {
     try {
       $wingetVersion = winget -v
     }

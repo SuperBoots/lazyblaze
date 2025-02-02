@@ -4,7 +4,6 @@
   <repolocation></repolocation>
   <username></username>
   <machinename></machinename>
-  <backupvscommunity>True</backupvscommunity>
   <backuplogretentiondays>30</backuplogretentiondays>
   <updatescripts>True</updatescripts>
   <displaydescriptions>True</displaydescriptions>
@@ -63,8 +62,9 @@
   </wingetinstalls>
   <visualstudio skipsection="True">
     <details>Install Visual Studio Community</details>
-    <details>If loadfrombackup is set True then workload selections below will be ignored and installation preferences will be determined by my.vsconfig file in local config directory</details>
-    <options loadfrombackup="False"></options>
+    <options savesnapshots="True" installfromsnapshot="False"></options>
+    <details>If savesnapshots is set True then current installation details will be saved to my.vsconfig file in local config directory during scheduled auto backup (requires Schedule Auto Backup of Settings to be enabled)</details>
+    <details>If installfromsnapshot is set True then workload selections below will be ignored and installation preferences will be based off my.vsconfig snapshot</details>
     <app id="Microsoft.VisualStudio.2022.Community"   description="Visual Studio is an integrated development environment (IDE) developed by Microsoft. It is used to develop computer programs including websites, web apps, web services and mobile apps"></app>
     <workloaddetails website="https://learn.microsoft.com/en-us/visualstudio/install/workload-component-id-vs-community?view=vs-2022"></workloaddetails>
     <workloads>

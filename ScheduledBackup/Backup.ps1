@@ -53,7 +53,7 @@ if ($config.settings.modifypowersettings -like "True") {
 # Keeping it around for the moment because I like the concept and might try again, 
 # I like the idea that as your VS install changes over time the new state will be 
 # automatically captured and backed up using this approach.
-if ($config.settings.backupvscommunity -like "True"){
+if ($config.settings.visualstudio.options.savesnapshots -like "True"){
   try {
     Write-Host "Export Visual Studio Community installation configuration to the VisualStudio folder in the local config"
     $vsBackupDir = "$($configDir)VisualStudio\"
