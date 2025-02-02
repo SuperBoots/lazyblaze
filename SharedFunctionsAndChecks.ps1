@@ -149,7 +149,6 @@ if (!(test-path -PathType leaf $configLocationXmlFile)) {
 $config = [xml](Get-Content $configFullDest)
 $userFromConfig = $config.settings.username
 $userdir = "C:\Users\$($userFromConfig)\"
-$wallpaperName = $config.settings.wallpaper
 
 
 ##########################  Verify User Has Reviewed Config  ################################

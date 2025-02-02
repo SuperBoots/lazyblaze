@@ -4,13 +4,11 @@
   <repolocation></repolocation>
   <username></username>
   <machinename></machinename>
-  <wallpaper>space.jpg</wallpaper>
   <backupvscommunity>True</backupvscommunity>
   <backuplogretentiondays>30</backuplogretentiondays>
   <updatescripts>True</updatescripts>
   <displaydescriptions>True</displaydescriptions>
   <addrepostogithubdesktop>True</addrepostogithubdesktop>
-  <rundisccleanupmorethanonce>False</rundisccleanupmorethanonce>
   <rundismcleanmorethanonce>False</rundismcleanmorethanonce>
   <bloatwareremoval skipsection="True">
     <details>This is an experimental new feature, proceed with caution</details>
@@ -42,6 +40,13 @@
     <dir skip="False" userdir="True"  directory="AppData\Local\Google" notes="This directory can easily be over 10 GB"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Internet Explorer"></dir>
   </backblazeclean>
+  <setwallpaper skipsection="True">
+    <details>This section sets the desktop wallpaper to an existing image in the local config wallpapers directory</details>
+    <wallpaper>space.jpg</wallpaper>
+  </setwallpaper>
+  <disccleanup skipsection="True" firstrunonly="True">
+    <details>Runs CleanMgr.exe with argument sagerun:1</details>
+  </disccleanup>
   <appdatabackups>
     <backup skip="False" configfolder="DBeaver"        filename="data-sources.json" appdatadir="AppData\Roaming\DBeaverData\workspace6\General\.dbeaver\"                   description="DBeaver stores connection settings in this file, not passwords though"></backup>
     <backup skip="False" configfolder="TerminalConfig" filename="settings.json"     appdatadir="AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\" description="Windows Terminal stores its profiles in this settings file"></backup>

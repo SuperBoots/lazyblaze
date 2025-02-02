@@ -252,16 +252,19 @@ else {
 
 ##########################  Set Wallpaper  ################################
 # (Can be run multiple times)
-Write-Host -ForegroundColor Yellow "Setting wallpaper to $($wallpaperName)"
-$wallpapersDir = "$($configDir)wallpapers\"
-$MyWallpaper="$($wallpapersDir)$($wallpaperName)"
-if (!(Test-Path -LiteralPath $wallpapersDir)){
-  New-Item -ItemType Directory -Path $wallpapersDir 
-}
-If (!(test-path -PathType leaf $MyWallpaper)){
-  Copy-Item -Path ".\wallpapers\$($wallpaperName)" -Destination $MyWallpaper
-}
-$code = @' 
+if ($config.settings.setwallpaper.skipsection -like "False") {
+  Write-Host "Section: Set Wallpaper (setwallpaper in config), starting..."
+  $wallpaperName = $config.settings.setwallpaper.wallpaper
+  Write-Host -ForegroundColor Yellow "Setting wallpaper to $($wallpaperName)"
+  $wallpapersDir = "$($configDir)wallpapers\"
+  $MyWallpaper="$($wallpapersDir)$($wallpaperName)"
+  if (!(Test-Path -LiteralPath $wallpapersDir)){
+    New-Item -ItemType Directory -Path $wallpapersDir 
+  }
+  If (!(test-path -PathType leaf $MyWallpaper)){
+    Copy-Item -Path ".\wallpapers\$($wallpaperName)" -Destination $MyWallpaper
+  }
+  $code = @' 
 using System.Runtime.InteropServices; 
 namespace Win32{ 
     
@@ -275,28 +278,38 @@ namespace Win32{
     }
  } 
 '@
-add-type $code 
-[Win32.Wallpaper]::SetWallpaper($MyWallpaper)
-Write-Host -ForegroundColor Green "Finished Setting Wallpaper."
+  add-type $code 
+  [Win32.Wallpaper]::SetWallpaper($MyWallpaper)
+  Write-Host "Section: Set Wallpaper (setwallpaper in config), finished"
+}
+else {
+  Write-Host "Section: Set Wallpaper (setwallpaper in config), skipping"
+}
 
 
 ##########################  Run Disc Cleanup  ################################
 # (Can be run multiple times)
-Write-Host -ForegroundColor Yellow "Running Disk Cleanup..."
-$diskCleanupEnvVarName = "NMSS_DISKCLEANUP"
-$diskCleanupComplete = [Environment]::GetEnvironmentVariable($diskCleanupEnvVarName, 'User')
-if ($diskCleanupComplete -like "COMPLETE" -and (-not($config.settings.rundisccleanupmorethanonce -like "True"))) {
-  Write-Host -ForegroundColor Green "Run Disc Cleanup already completed according to environment variable $($diskCleanupEnvVarName) and rundisccleanupmorethanonce in config is False. Skipping."
-} else {
-  Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\*' | % {
-      New-ItemProperty -Path $_.PSPath -Name StateFlags0001 -Value 2 -PropertyType DWord -Force
-  };
-  # Note: This had arguments "-WindowStyle Hidden -Wait" which seemed to work on my desktop
-  # but caused the script to hang on my laptop, be careful putting anything after this in the
-  # script because without -wait the disc cleanup will be running and the script will continue.
-  Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' -WindowStyle Hidden -Wait
-  [Environment]::SetEnvironmentVariable($diskCleanupEnvVarName, 'COMPLETE', 'User')
-  Write-Host -ForegroundColor Green "Finished Disk Cleanup."
+if ($config.settings.disccleanup.skipsection -like "False") {
+  Write-Host "Section: Run Disc Cleanup (disccleanup in config), starting..."
+  $diskCleanupEnvVarName = "NMSS_DISKCLEANUP"
+  $diskCleanupComplete = [Environment]::GetEnvironmentVariable($diskCleanupEnvVarName, 'User')
+  if ($diskCleanupComplete -like "COMPLETE" -and (-not($config.settings.rundisccleanupmorethanonce -like "True"))) {
+    Write-Host -ForegroundColor Green "Run Disc Cleanup already completed according to environment variable $($diskCleanupEnvVarName) and rundisccleanupmorethanonce in config is False. Skipping."
+  } else {
+    Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\*' | % {
+        New-ItemProperty -Path $_.PSPath -Name StateFlags0001 -Value 2 -PropertyType DWord -Force
+    };
+    # Note: This had arguments "-WindowStyle Hidden -Wait" which seemed to work on my desktop
+    # but caused the script to hang on my laptop, be careful putting anything after this in the
+    # script because without -wait the disc cleanup will be running and the script will continue.
+    Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' -WindowStyle Hidden -Wait
+    [Environment]::SetEnvironmentVariable($diskCleanupEnvVarName, 'COMPLETE', 'User')
+    Write-Host -ForegroundColor Green "Finished Disk Cleanup."
+  }
+  Write-Host "Section: Run Disc Cleanup (disccleanup in config), finished"
+}
+else {
+  Write-Host "Section: Run Disc Cleanup (disccleanup in config), skipping"
 }
 
 
