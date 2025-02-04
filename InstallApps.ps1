@@ -294,7 +294,7 @@ if ($config.settings.disccleanup.skipsection -like "False") {
   $diskCleanupEnvVarName = "NMSS_DISKCLEANUP"
   $diskCleanupComplete = [Environment]::GetEnvironmentVariable($diskCleanupEnvVarName, 'User')
   if ($diskCleanupComplete -like "COMPLETE" -and $config.settings.disccleanup.firstrunonly -like "True") {
-    Write-Host -ForegroundColor Green "Run Disc Cleanup already completed according to environment variable $($diskCleanupEnvVarName) and rundisccleanupmorethanonce in config is False. Skipping."
+    Write-Host -ForegroundColor Green "Run Disc Cleanup already completed according to environment variable $($diskCleanupEnvVarName) and firstrunonly in config is True. Skipping."
   } else {
     Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VolumeCaches\*' | % {
         New-ItemProperty -Path $_.PSPath -Name StateFlags0001 -Value 2 -PropertyType DWord -Force
@@ -620,7 +620,7 @@ if ($config.settings.rundismclean.skipsection -like "False") {
   $dismCleanEnvVarName = "NMSS_DISMCLEAN"
   $dismCleanComplete = [Environment]::GetEnvironmentVariable($dismCleanEnvVarName, 'User')
   if ($dismCleanComplete -like "COMPLETE" -and $config.settings.rundismclean.firstrunonly -like "True") {
-    Write-Host -ForegroundColor Green "Clean System Using DISM and SFC already completed according to environment variable $($dismCleanEnvVarName) and rundismcleanmorethanonce in config is False. Skipping."
+    Write-Host -ForegroundColor Green "Clean System Using DISM and SFC already completed according to environment variable $($dismCleanEnvVarName) and firstrunonly in config is True. Skipping."
   } else {
     Write-Host "Cleaning System with DISM"
     DISM /Online /Cleanup-image /Restorehealth

@@ -8,7 +8,6 @@
   <updatescripts>True</updatescripts>
   <displaydescriptions>True</displaydescriptions>
   <addrepostogithubdesktop>True</addrepostogithubdesktop>
-  <rundismcleanmorethanonce>False</rundismcleanmorethanonce>
   <bloatwareremoval skipsection="True">
     <details>This is an experimental new feature, proceed with caution</details>
     <details   reference="https://github.com/Kugane/winget/blob/main/winget-basic.ps1"></details>
