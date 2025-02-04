@@ -614,19 +614,26 @@ else {
 # (Can be run multiple times)
 # This section was added in an attempt to fix the black background bug I've been having. It doesn't seem to have helped.
 # Deployment Image Servicing and Management tool
-Write-Host -ForegroundColor Yellow "Clean System Using DISM and SFC..."
-$dismCleanEnvVarName = "NMSS_DISMCLEAN"
-$dismCleanComplete = [Environment]::GetEnvironmentVariable($dismCleanEnvVarName, 'User')
-if ($dismCleanComplete -like "COMPLETE" -and (-not($config.settings.rundismcleanmorethanonce -like "True"))) {
-  Write-Host -ForegroundColor Green "Clean System Using DISM and SFC already completed according to environment variable $($dismCleanEnvVarName) and rundismcleanmorethanonce in config is False. Skipping."
-} else {
-  Write-Host "Cleaning System with DISM"
-  DISM /Online /Cleanup-image /Restorehealth
-  #System File Checker tool
-  Write-Host "Cleaning System with SFC"
-  sfc /scannow
-  [Environment]::SetEnvironmentVariable($dismCleanEnvVarName, 'COMPLETE', 'User')
-  Write-Host -ForegroundColor Green "Finished Clean System Using DISM and SFC."
+if ($config.settings.rundismclean.skipsection -like "False") {
+  Write-Host "Section: Clean System Using DISM and SFC (rundismclean in config), starting..."
+  Write-Host -ForegroundColor Yellow "Clean System Using DISM and SFC..."
+  $dismCleanEnvVarName = "NMSS_DISMCLEAN"
+  $dismCleanComplete = [Environment]::GetEnvironmentVariable($dismCleanEnvVarName, 'User')
+  if ($dismCleanComplete -like "COMPLETE" -and $config.settings.rundismclean.firstrunonly -like "True") {
+    Write-Host -ForegroundColor Green "Clean System Using DISM and SFC already completed according to environment variable $($dismCleanEnvVarName) and rundismcleanmorethanonce in config is False. Skipping."
+  } else {
+    Write-Host "Cleaning System with DISM"
+    DISM /Online /Cleanup-image /Restorehealth
+    #System File Checker tool
+    Write-Host "Cleaning System with SFC"
+    sfc /scannow
+    [Environment]::SetEnvironmentVariable($dismCleanEnvVarName, 'COMPLETE', 'User')
+    Write-Host -ForegroundColor Green "Finished Clean System Using DISM and SFC."
+  }
+  Write-Host "Section: Clean System Using DISM and SFC (rundismclean in config), finished"
+}
+else {
+  Write-Host "Section: Clean System Using DISM and SFC (rundismclean in config), skipping"
 }
 
 

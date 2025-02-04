@@ -102,6 +102,9 @@
     <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\Start Menu\" description="User specific location for shortcuts that are used in the Start Menu"></dir>
     <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Windows\Start Menu\"  description="Global location for shortcuts that are used in the Start Menu"></dir>
   </brokenshortcutremoval>
+  <rundismclean skipsection="True" firstrunonly="True">
+    <details>Clean System Using DISM and SFC</details>
+  </rundismclean>
   <gitrepositories>
     <gitrepo skip="False" name="lazyblaze" dest="C:\Code\" url="https://github.com/SuperBoots/lazyblaze.git" excludefrombackblaze="False"></gitrepo>
   </gitrepositories>
