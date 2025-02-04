@@ -33,7 +33,8 @@ foreach ($backup in $config.settings.appdatabackups.backup) {
 
 
 ##########################  Backup Power Settings  ################################
-if ($config.settings.modifypowersettings -like "True") {
+if ($config.settings.powersettings.skipsection -like "False") {
+  Write-Host "Section: Backup Power Settings (powersettings in config), starting..."
   $powerSettingsDir = ".\PowerSettings\"
   $powerSettingsFile = "$($powerSettingsDir)myscheme.pow"
   If (test-path -PathType leaf $powerSettingsFile){
@@ -44,6 +45,10 @@ if ($config.settings.modifypowersettings -like "True") {
   }
   $currentSchemeGuid = [regex]::Match((POWERCFG /GETACTIVESCHEME), 'GUID: ([\w-]+)').Groups[1].Value
   POWERCFG /EXPORT $powerSettingsFile $currentSchemeGuid
+  Write-Host "Section: Backup Power Settings (powersettings in config), finished"
+}
+else {
+  Write-Host "Section: Backup Power Settings (powersettings in config), skipping"
 }
 
 
