@@ -585,22 +585,29 @@ else {
 
 ##########################  Remove Broken Shortcuts  ################################
 # (Can be run multiple times)
-Write-Host -ForegroundColor Yellow "Remove Broken Shortcuts..."
-foreach ($dir in $config.settings.brokenshortcutremoval.dir) {
-  if ($dir.skip -like "True") {
-    continue
+if ($config.settings.brokenshortcutremoval.skipsection -like "False") {
+  Write-Host "Section: Remove Broken Shortcuts (brokenshortcutremoval in config), starting..."
+  Write-Host -ForegroundColor Yellow "Remove Broken Shortcuts..."
+  foreach ($dir in $config.settings.brokenshortcutremoval.dir) {
+    if ($dir.skip -like "True") {
+      continue
+    }
+    $fullDirectory = $dir.directory
+    if ($dir.userdir -like "True") {
+      $fullDirectory = "$($userdir)$($dir.directory)"
+    }
+    Write-Host "Cleaning broken shortcuts in $($fullDirectory)"
+    if ($config.settings.displaydescriptions -like "True" -and $null -ne $dir.description) {
+      Write-Host $dir.description
+    }
+    RemoveBrokenShortcuts -Directory $fullDirectory
   }
-  $fullDirectory = $dir.directory
-  if ($dir.userdir -like "True") {
-    $fullDirectory = "$($userdir)$($dir.directory)"
-  }
-  Write-Host "Cleaning broken shortcuts in $($fullDirectory)"
-  if ($config.settings.displaydescriptions -like "True" -and $null -ne $dir.description) {
-    Write-Host $dir.description
-  }
-  RemoveBrokenShortcuts -Directory $fullDirectory
+  Write-Host -ForegroundColor Green "Finished Remove Broken Shortcuts."
+  Write-Host "Section: Remove Broken Shortcuts (brokenshortcutremoval in config), finished"
 }
-Write-Host -ForegroundColor Green "Finished Remove Broken Shortcuts."
+else {
+  Write-Host "Section: Remove Broken Shortcuts (brokenshortcutremoval in config), skipping"
+}
 
 
 ##########################  Clean System Using DISM and SFC  ################################

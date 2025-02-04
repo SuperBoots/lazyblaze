@@ -97,7 +97,7 @@
     <details>Create a Shortcuts folder in the users directory and move all shortcuts from the desktop into the folder.</details>
     <details>Leaves a single shortcut on the desktop, a shortcut to the new shortcuts folder.</details>
   </cleandesktop>
-  <brokenshortcutremoval>
+  <brokenshortcutremoval skipsection="True">
     <dir skip="False" userdir="True"  directory="Shortcuts\"                                    description="Custom location for storing shortcuts instead of the desktop"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\Start Menu\" description="User specific location for shortcuts that are used in the Start Menu"></dir>
     <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Windows\Start Menu\"  description="Global location for shortcuts that are used in the Start Menu"></dir>
