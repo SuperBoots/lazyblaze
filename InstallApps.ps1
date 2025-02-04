@@ -556,24 +556,31 @@ else {
 
 ##########################  Clean Desktop  ################################
 # (Can be run multiple times)
-Write-Host -ForegroundColor Yellow "Clean Desktop..."
-$shortcutsFolderName = "Shortcuts"
-$desktopPath = "$($userdir)Desktop\"
-$publicDesktopPath = "C:\Users\Public\Desktop\"
-$shortcutsDestination = "$($userdir)$($shortcutsFolderName)\"
-$shortcutsShortcut = "$($desktopPath)$($shortcutsFolderName).lnk"
-Write-Host "Moving Shortcuts on Desktop into $($shortcutsDestination)"
-If (test-path -PathType leaf $shortcutsShortcut){
-  Write-Host "Deleting $($shortcutsShortcut)"
-  Remove-Item -LiteralPath $shortcutsShortcut
+if ($config.settings.cleandesktop.skipsection -like "False") {
+  Write-Host "Section: Clean Desktop (cleandesktop in config), starting..."
+  Write-Host -ForegroundColor Yellow "Clean Desktop..."
+  $shortcutsFolderName = "Shortcuts"
+  $desktopPath = "$($userdir)Desktop\"
+  $publicDesktopPath = "C:\Users\Public\Desktop\"
+  $shortcutsDestination = "$($userdir)$($shortcutsFolderName)\"
+  $shortcutsShortcut = "$($desktopPath)$($shortcutsFolderName).lnk"
+  Write-Host "Moving Shortcuts on Desktop into $($shortcutsDestination)"
+  If (test-path -PathType leaf $shortcutsShortcut){
+    Write-Host "Deleting $($shortcutsShortcut)"
+    Remove-Item -LiteralPath $shortcutsShortcut
+  }
+  MoveShortcuts -SourceDir $desktopPath -TargetDir $shortcutsDestination
+  MoveShortcuts -SourceDir $publicDesktopPath -TargetDir $shortcutsDestination
+  $WshShell = New-Object -COMObject WScript.Shell
+  $Shortcut = $WshShell.CreateShortcut($shortcutsShortcut)
+  $Shortcut.TargetPath = $shortcutsDestination
+  $Shortcut.Save()
+  Write-Host -ForegroundColor Green "Finished Clean Desktop."
+  Write-Host "Section: Clean Desktop (cleandesktop in config), finished"
 }
-MoveShortcuts -SourceDir $desktopPath -TargetDir $shortcutsDestination
-MoveShortcuts -SourceDir $publicDesktopPath -TargetDir $shortcutsDestination
-$WshShell = New-Object -COMObject WScript.Shell
-$Shortcut = $WshShell.CreateShortcut($shortcutsShortcut)
-$Shortcut.TargetPath = $shortcutsDestination
-$Shortcut.Save()
-Write-Host -ForegroundColor Green "Finished Clean Desktop."
+else {
+  Write-Host "Section: Clean Desktop (cleandesktop in config), skipping"
+}
 
 
 ##########################  Remove Broken Shortcuts  ################################

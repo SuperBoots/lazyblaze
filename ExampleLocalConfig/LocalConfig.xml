@@ -93,6 +93,10 @@
     <backup skip="False" configfolder="DBeaver"        filename="data-sources.json" appdatadir="AppData\Roaming\DBeaverData\workspace6\General\.dbeaver\"                   description="DBeaver stores connection settings in this file, not passwords though"></backup>
     <backup skip="False" configfolder="TerminalConfig" filename="settings.json"     appdatadir="AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\" description="Windows Terminal stores its profiles in this settings file"></backup>
   </appdatabackups>
+  <cleandesktop skipsection="True">
+    <details>Create a Shortcuts folder in the users directory and move all shortcuts from the desktop into the folder.</details>
+    <details>Leaves a single shortcut on the desktop, a shortcut to the new shortcuts folder.</details>
+  </cleandesktop>
   <brokenshortcutremoval>
     <dir skip="False" userdir="True"  directory="Shortcuts\"                                    description="Custom location for storing shortcuts instead of the desktop"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\Start Menu\" description="User specific location for shortcuts that are used in the Start Menu"></dir>
