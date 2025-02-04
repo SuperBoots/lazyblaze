@@ -89,7 +89,7 @@
   <setchromedefaultbrowser skipsection="True">
     <details>Sets Google Chrome as the default browser for Windows</details>
   </setchromedefaultbrowser>
-  <appdatabackups>
+  <appdatabackups skipsection="True">
     <backup skip="False" configfolder="DBeaver"        filename="data-sources.json" appdatadir="AppData\Roaming\DBeaverData\workspace6\General\.dbeaver\"                   description="DBeaver stores connection settings in this file, not passwords though"></backup>
     <backup skip="False" configfolder="TerminalConfig" filename="settings.json"     appdatadir="AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\" description="Windows Terminal stores its profiles in this settings file"></backup>
   </appdatabackups>

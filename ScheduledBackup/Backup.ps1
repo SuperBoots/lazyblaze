@@ -18,17 +18,24 @@ if (-not($ranSharedFunctionsAndChecks -like "True")) {
 
 
 ##########################  Backup Various Config Files  ################################
-foreach ($backup in $config.settings.appdatabackups.backup) {
-  if ($backup.skip -like "True") {
-    continue
-  }
-  else {
-    Write-Host "Backing up $($backup.filename) from config"
-    if ($config.settings.displaydescriptions -like "True" -and $backup.description -ne $null) {
-      Write-Host $backup.description
+if ($config.settings.appdatabackups.skipsection -like "False") {
+  Write-Host "Section: Backup Various Config Files (appdatabackups in config), starting..."
+  foreach ($backup in $config.settings.appdatabackups.backup) {
+    if ($backup.skip -like "True") {
+      continue
     }
-    BackupConfigFile -FileName $backup.filename -SourceDir "$($userdir)$($backup.appdatadir)" -TargetDir ".\$($backup.configfolder)\"
+    else {
+      Write-Host "Backing up $($backup.filename) from config"
+      if ($config.settings.displaydescriptions -like "True" -and $backup.description -ne $null) {
+        Write-Host $backup.description
+      }
+      BackupConfigFile -FileName $backup.filename -SourceDir "$($userdir)$($backup.appdatadir)" -TargetDir ".\$($backup.configfolder)\"
+    }
   }
+  Write-Host "Section: Backup Various Config Files (appdatabackups in config), finished"
+}
+else {
+  Write-Host "Section: Backup Various Config Files (appdatabackups in config), skipping"
 }
 
 

@@ -524,25 +524,32 @@ else {
 
 ##########################  Populate Config Files  ################################
 # (Lets only run this one once)
-Write-Host -ForegroundColor Yellow "Populate Config Files..."
-$popConfigsEnvVarName = "NMSS_POPULATECONFIGS"
-$stepComplete = [Environment]::GetEnvironmentVariable($popConfigsEnvVarName, 'User')
-if ($stepComplete -like "COMPLETE"){
-  Write-Host -ForegroundColor Green "Populate Various Config Files already completed according to environment variable $($popConfigsEnvVarName). Skipping."
+if ($config.settings.appdatabackups.skipsection -like "False") {
+  Write-Host "Section: Populate Config Files (appdatabackups in config), starting..."
+  Write-Host -ForegroundColor Yellow "Populate Config Files..."
+  $popConfigsEnvVarName = "NMSS_POPULATECONFIGS"
+  $stepComplete = [Environment]::GetEnvironmentVariable($popConfigsEnvVarName, 'User')
+  if ($stepComplete -like "COMPLETE"){
+    Write-Host -ForegroundColor Green "Populate Various Config Files already completed according to environment variable $($popConfigsEnvVarName). Skipping."
+  }
+  else {
+    foreach ($backup in $config.settings.appdatabackups.backup) {
+      if ($backup.skip -like "True") {
+        continue
+      }
+      Write-Host "Inserting $($backup.filename) from config"
+      if ($config.settings.displaydescriptions -like "True" -and $null -ne $backup.description) {
+        Write-Host $backup.description
+      }
+      PopulateConfigFile -FileName $backup.filename -SourceDir "$($configDir)$($backup.configfolder)\" -TargetDir "$($userdir)$($backup.appdatadir)"
+    }
+    [Environment]::SetEnvironmentVariable($popConfigsEnvVarName, 'COMPLETE', 'User')
+    Write-Host -ForegroundColor Green "Finished Populate Config Files."
+  }
+  Write-Host "Section: Populate Config Files (appdatabackups in config), finished"
 }
 else {
-  foreach ($backup in $config.settings.appdatabackups.backup) {
-    if ($backup.skip -like "True") {
-      continue
-    }
-    Write-Host "Inserting $($backup.filename) from config"
-    if ($config.settings.displaydescriptions -like "True" -and $null -ne $backup.description) {
-      Write-Host $backup.description
-    }
-    PopulateConfigFile -FileName $backup.filename -SourceDir "$($configDir)$($backup.configfolder)\" -TargetDir "$($userdir)$($backup.appdatadir)"
-  }
-  [Environment]::SetEnvironmentVariable($popConfigsEnvVarName, 'COMPLETE', 'User')
-  Write-Host -ForegroundColor Green "Finished Populate Config Files."
+  Write-Host "Section: Populate Config Files (appdatabackups in config), skipping"
 }
 
 
