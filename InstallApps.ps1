@@ -639,21 +639,28 @@ else {
 
 ##########################  Schedule Auto Backup of Settings  ################################
 # (Lets only run this one once)
-Write-Host -ForegroundColor Yellow "Schedule Auto Backup of Settings..."
-$schBkupEnvVarName = "NMSS_SCHEDULEBACKUP"
-$stepComplete = [Environment]::GetEnvironmentVariable($schBkupEnvVarName, 'User')
-if ($stepComplete -like "COMPLETE"){
-  Write-Host -ForegroundColor Green "Schedule Auto Backup of Settings already completed according to environment variable $($schBkupEnvVarName). Skipping."
+if ($config.settings.scheduledbackuptask.skipsection -like "False") {
+  Write-Host "Section: Schedule Auto Backup of Settings (scheduledbackuptask in config), starting..."
+  Write-Host -ForegroundColor Yellow "Schedule Auto Backup of Settings..."
+  $schBkupEnvVarName = "NMSS_SCHEDULEBACKUP"
+  $stepComplete = [Environment]::GetEnvironmentVariable($schBkupEnvVarName, 'User')
+  if ($stepComplete -like "COMPLETE"){
+    Write-Host -ForegroundColor Green "Schedule Auto Backup of Settings already completed according to environment variable $($schBkupEnvVarName). Skipping."
+  }
+  else {
+    $scriptedBackupName = "Backup.ps1"
+    $localScriptedBackupFile = "$($configDir)$($scriptedBackupName)"
+    $user = "NT AUTHORITY\SYSTEM"
+    $trigger = New-ScheduledTaskTrigger -Daily -At '12:15 PM' 
+    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $configDir
+    Register-ScheduledTask -Action $action -Trigger $trigger -User $user -TaskName "BackupSettings" -Description "run lazyblaze backups daily"
+    [Environment]::SetEnvironmentVariable($schBkupEnvVarName, 'COMPLETE', 'User')
+    Write-Host -ForegroundColor Green "Finished Schedule Auto Backup of Settings."
+  }
+  Write-Host "Section: Schedule Auto Backup of Settings (scheduledbackuptask in config), finished"
 }
 else {
-  $scriptedBackupName = "Backup.ps1"
-  $localScriptedBackupFile = "$($configDir)$($scriptedBackupName)"
-  $user = "NT AUTHORITY\SYSTEM"
-  $trigger = New-ScheduledTaskTrigger -Daily -At '12:15 PM' 
-  $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $configDir
-  Register-ScheduledTask -Action $action -Trigger $trigger -User $user -TaskName "BackupSettings" -Description "run lazyblaze backups daily"
-  [Environment]::SetEnvironmentVariable($schBkupEnvVarName, 'COMPLETE', 'User')
-  Write-Host -ForegroundColor Green "Finished Schedule Auto Backup of Settings."
+  Write-Host "Section: Schedule Auto Backup of Settings (scheduledbackuptask in config), skipping"
 }
 
 

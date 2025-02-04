@@ -60,8 +60,8 @@
     <app skip="False" id="TheDocumentFoundation.LibreOffice"       description="LibreOffice is a free and open-source office productivity software suite, a project of The Document Foundation"></app>
   </wingetinstalls>
   <visualstudio skipsection="True">
-    <details>Install Visual Studio Community</details>
     <options savesnapshots="True" installfromsnapshot="False"></options>
+    <details>Install Visual Studio Community</details>
     <details>If savesnapshots is set True then current installation details will be saved to my.vsconfig file in local config directory during scheduled auto backup (requires Schedule Auto Backup of Settings to be enabled)</details>
     <details>If installfromsnapshot is set True then workload selections below will be ignored and installation preferences will be based off my.vsconfig snapshot</details>
     <app id="Microsoft.VisualStudio.2022.Community"   description="Visual Studio is an integrated development environment (IDE) developed by Microsoft. It is used to develop computer programs including websites, web apps, web services and mobile apps"></app>
@@ -104,7 +104,14 @@
   <rundismclean skipsection="True" firstrunonly="True">
     <details>Clean System Using DISM and SFC</details>
   </rundismclean>
-  <gitrepositories>
+  <scheduledbackuptask skipsection="True">
+    <details>Add a scheduled task to run Backup.ps1 script daily</details>
+  </scheduledbackuptask>
+  <gitrepositories skipsection="True">
+    <options addrepostogithubdesktop="False"></options>
+    <details>This section for cloning git repositories is meant to be run manually after the primary script (LazyBlaze.bat) has run successfully at least once.</details>
+    <details>Run this section by running CloneRepos.bat from your local config directory (C:\LazyBlazeConfig\ if you haven't changed default)</details>
+    <details>If you set addrepostogithubdesktop to True then after all the repositories are cloned you will be prompted one by one to add them as existing repos to github desktop</details>
     <gitrepo skip="False" name="lazyblaze" dest="C:\Code\" url="https://github.com/SuperBoots/lazyblaze.git" excludefrombackblaze="False"></gitrepo>
   </gitrepositories>
   <reviewed>False</reviewed>
