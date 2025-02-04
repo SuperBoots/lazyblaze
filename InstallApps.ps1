@@ -484,34 +484,41 @@ else {
 ##########################  Set Chrome As Default Browser  ################################
 # (Lets only run this one once)
 # Changing default browser for Windows 11 only #
-Write-Host -ForegroundColor Yellow "Set Chrome As Default Browser..."
-$chrDftEnvVarName = "NMSS_SETCHROMEASDEFAULT"
-$stepComplete = [Environment]::GetEnvironmentVariable($chrDftEnvVarName, 'User')
-if ($stepComplete -like "COMPLETE"){
-  Write-Host -ForegroundColor Green "Set Chrome as Default Browser already completed according to environment variable $($chrDftEnvVarName). Skipping."
+if ($config.settings.setchromedefaultbrowser.skipsection -like "False") {
+  Write-Host "Section: Set Chrome As Default Browser (setchromedefaultbrowser in config), starting..."
+  Write-Host -ForegroundColor Yellow "Set Chrome As Default Browser..."
+  $chrDftEnvVarName = "NMSS_SETCHROMEASDEFAULT"
+  $stepComplete = [Environment]::GetEnvironmentVariable($chrDftEnvVarName, 'User')
+  if ($stepComplete -like "COMPLETE"){
+    Write-Host -ForegroundColor Green "Set Chrome as Default Browser already completed according to environment variable $($chrDftEnvVarName). Skipping."
+  }
+  else {
+    if ($env:OS -ne 'Windows_NT') { throw 'This script runs on Windows only' }
+    Stop-Process -ErrorAction Ignore -Name SystemSettings
+    Start-Process ms-settings:defaultapps
+    $ps = Get-Process -ErrorAction Stop SystemSettings
+    do {
+      Start-Sleep -Milliseconds 100
+      $ps.Refresh()
+    } while ([int] $ps.MainWindowHandle)
+    Start-Sleep -Milliseconds 200
+    # Entering key strokes mode.
+    $shell = New-Object -ComObject WScript.Shell
+    # Tab to the "Set defaults for applications".
+    foreach ($i in 1..4) { $shell.SendKeys('{TAB}'); Start-Sleep -milliseconds 100 }
+    # Set Chrom as a defaults browser
+    $shell.SendKeys("chrom"); Start-Sleep -seconds 1
+    $shell.SendKeys('{TAB}'); Start-Sleep -milliseconds 100
+    $shell.SendKeys('{ENTER}'); Start-Sleep -milliseconds 100
+    $shell.SendKeys('{ENTER}'); Start-Sleep -milliseconds 100
+    $shell.SendKeys('%{F4}')
+    [Environment]::SetEnvironmentVariable($chrDftEnvVarName, 'COMPLETE', 'User')
+    Write-Host -ForegroundColor Green "Finished Set Chrome As Default Browser."
+  }
+  Write-Host "Section: Set Chrome As Default Browser (setchromedefaultbrowser in config), finished"
 }
 else {
-  if ($env:OS -ne 'Windows_NT') { throw 'This script runs on Windows only' }
-  Stop-Process -ErrorAction Ignore -Name SystemSettings
-  Start-Process ms-settings:defaultapps
-  $ps = Get-Process -ErrorAction Stop SystemSettings
-  do {
-    Start-Sleep -Milliseconds 100
-    $ps.Refresh()
-  } while ([int] $ps.MainWindowHandle)
-  Start-Sleep -Milliseconds 200
-  # Entering key strokes mode.
-  $shell = New-Object -ComObject WScript.Shell
-  # Tab to the "Set defaults for applications".
-  foreach ($i in 1..4) { $shell.SendKeys('{TAB}'); Start-Sleep -milliseconds 100 }
-  # Set Chrom as a defaults browser
-  $shell.SendKeys("chrom"); Start-Sleep -seconds 1
-  $shell.SendKeys('{TAB}'); Start-Sleep -milliseconds 100
-  $shell.SendKeys('{ENTER}'); Start-Sleep -milliseconds 100
-  $shell.SendKeys('{ENTER}'); Start-Sleep -milliseconds 100
-  $shell.SendKeys('%{F4}')
-  [Environment]::SetEnvironmentVariable($chrDftEnvVarName, 'COMPLETE', 'User')
-  Write-Host -ForegroundColor Green "Finished Set Chrome As Default Browser."
+  Write-Host "Section: Set Chrome As Default Browser (setchromedefaultbrowser in config), skipping"
 }
 
 
