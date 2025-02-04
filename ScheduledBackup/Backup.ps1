@@ -65,7 +65,8 @@ else {
 # Keeping it around for the moment because I like the concept and might try again, 
 # I like the idea that as your VS install changes over time the new state will be 
 # automatically captured and backed up using this approach.
-if ($config.settings.visualstudio.options.savesnapshots -like "True"){
+if ($config.settings.visualstudio.skipsection -like "False" -and $config.settings.visualstudio.options.savesnapshots -like "True"){
+  Write-Host "Section: Visual Studio Install Options Export (visualstudio in config), starting..."
   try {
     Write-Host "Export Visual Studio Community installation configuration to the VisualStudio folder in the local config"
     $vsBackupDir = "$($configDir)VisualStudio\"
@@ -84,6 +85,10 @@ if ($config.settings.visualstudio.options.savesnapshots -like "True"){
     $_ # Output the current value in the pipe, in this case the exception details
     Write-Host "Export Visual Studio Community installation configuration failed"
   }
+  Write-Host "Section: Visual Studio Install Options Export (visualstudio in config), finished"
+}
+else {
+  Write-Host "Section: Visual Studio Install Options Export (visualstudio in config), skipping"
 }
 
 ##########################  Delete Old Log Files  ################################
