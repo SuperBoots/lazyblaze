@@ -26,8 +26,8 @@
     <regedit skip="True"  filename="DisableUAC.reg"                         description="Disable UAC prompts"></regedit>
   </registryedits>
   <powersettings skipsection="True">
-    <details>If running for the first time, current power settings will be backed up to local config directory</details>
-    <details>If power settings backup already exists in local config directory it will be imported and set as current power settings</details>
+    <details>If running for the first time, current power settings will be backed up as myscheme.pow to local config directory</details>
+    <details>If power settings backup already exists in local config directory it will be imported from existing myscheme.pow file and set as current power settings</details>
   </powersettings>
   <backblazeclean skipsection="True">
     <details>This section adds lines to the Backblaze config file C:\ProgramData\Backblaze\bzdata\bzinfo.xml</details>
