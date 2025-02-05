@@ -1,0 +1,280 @@
+I just keep adding to this list when I find another directory that I don't want in my backblaze backups, either because of size or because it causes issues.
+It doesn't hurt to include exclusions in your list that don't exist on your machine, so I just keep one big master list instead of maintaining specific lists for each machine.
+
+    <dir skip="False" userdir="False" directory="C:\$SysReset" notes="The $SysReset folder is created when a Refresh or Reset operation fails. It contains a log folder that may be useful to system administrators experiencing a problem with refreshing or resetting a PC"></dir>
+    <dir skip="False" userdir="False" directory="C:\Config.Msi" notes="The Config.Msi folder is used by the Windows Installer process during an installation of software. It saves files with the extension of .RBS and .RBF. These are Rollback Script Files used by the installer to uninstall recent changes if an install fails somewhere along the way"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Adobe"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Battle.net"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Battle.net_components"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Blizzard Entertainment"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\chocolatey"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\ChocolateyHttpCache"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Corsair"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\CRU"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Cudo Miner"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\dftmp"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\DockerDesktop"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Dropbox"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\EA Desktop"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Electronic Arts"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Intel\Intel Extreme Tuning Utility"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Intel Package Cache {1CEAC85D-2590-4760-800F-8DE5E91F3700}"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Intel Package Cache {9f9c9e51-d42f-4462-a27a-7d419da18045}"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Intel Package Cache {29d6077f-6adb-42de-abac-1c60aeb0e237}"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Intel Package Cache {58E22E6B-0E58-4E93-AF9A-036556EB66F5}"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Intel Telemetry"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\LGHUB"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\LGHUBData"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Logishrd"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\AppV"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Crypto"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Default Account Pictures"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Device Stage"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\DeviceSync"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Diagnosis"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\DiagnosticLogCSP"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\DRM"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\EdgeUpdate"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Event Viewer"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\HelpLibrary2"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\IdentityCRL"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\MapData"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\MF"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\NetFramework"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Network"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Phone Tools"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Provisioning"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Search"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Settings"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\SmsRouter"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Spectrum"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Speech_OneCore"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Storage Health"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\UEV"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Vault"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\VisualStudio"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\WDF"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Windows"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Windows Defender"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Windows Defender Advanced Threat Protection"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Windows NT"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Windows Security Health"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Windows Terminal"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\WinMSIPC"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\Wlansvc"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\WPD"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\WwanSvc"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft\XboxLive"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft DevDiv"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft OneDrive"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Microsoft Visual Studio"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Mozilla-1de4eec8-1241-4177-a864-e594e8d1fb38"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\MSI"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\NETGEAR"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\NVIDIA"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\NVIDIA Corporation"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Oculus"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Oracle"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Origin"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Package Cache"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Packages"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Realtek"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\regid.1991-06.com.microsoft"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Samsung"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\shimgen"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\SoftwareDistribution"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Sony"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\SquirrelMachineInstalls"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\UL"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\USOPrivate"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\USOShared"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\Windows App Certification Kit"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\WindowsHolographicDevices"></dir>
+    <dir skip="False" userdir="False" directory="C:\ProgramData\XSplit"></dir>
+    <dir skip="False" userdir="True"  directory=".1password"></dir>
+    <dir skip="False" userdir="True"  directory=".azure"></dir>
+    <dir skip="False" userdir="True"  directory=".config"></dir>
+    <dir skip="False" userdir="True"  directory=".docker"></dir>
+    <dir skip="False" userdir="True"  directory=".dotnet"></dir>
+    <dir skip="False" userdir="True"  directory=".eclipse"></dir>
+    <dir skip="False" userdir="True"  directory=".gnupg"></dir>
+    <dir skip="False" userdir="True"  directory=".jdks"></dir>
+    <dir skip="False" userdir="True"  directory=".librarymanager"></dir>
+    <dir skip="False" userdir="True"  directory=".ls"></dir>
+    <dir skip="False" userdir="True"  directory=".m2"></dir>
+    <dir skip="False" userdir="True"  directory=".nuget"></dir>
+    <dir skip="False" userdir="True"  directory=".ssh"></dir>
+    <dir skip="False" userdir="True"  directory=".templateengine"></dir>
+    <dir skip="False" userdir="True"  directory=".vscode"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\1Password"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Activision"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\AdvinstAnalytics"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\ASP.NET"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\AzureFunctionsTools"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Battle.net"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\BattlEye"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Blizzard Entertainment"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\cache"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\CEF"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Comms"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\ConnectedDevicesPlatform"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\CrashDumps"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\CrashReportClient"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\D3DSCache"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Discord"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Docker"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Dropbox"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\EADesktop"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\EALaunchHelper"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\EDMarketConnector"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Electronic Arts"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\fanal"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\ForzaHorizon5"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Frontier Developments"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Frontier_Developments"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Futuremark"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\GitCredentialManager"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\GitHubDesktop"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Google"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\JetBrains"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\LGHUB"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Link2EA"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\LogMeIn Client"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\LogMeIn Hamachi"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\ApplicationInsights"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Azure DevOps"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\BGAHelperLib"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\CLR_v4.0"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\CLR_v4.0_32"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Credentials"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\dotnet"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Edge"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\EdgeBho"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\EDP"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Event Viewer"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Feeds"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\fluency"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\GameDVR"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\IdentityCache"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\input"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Internet Explorer"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Media Player"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Microsoft SQL Server Local DB"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\OneAuth"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\OneDrive"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\PenWorkspace"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\PlayReady"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\PowerShell"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Speech"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\SQL Server Management Studio"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\TaskSchedulerConfig"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Team Foundation"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Teams"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\TeamsMeetingAddin"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\TeamsPresenceAddin"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Terminal Server Client"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\TokenBroker"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\TypeScript"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Vault"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\VisualStudio"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\VisualStudio Services"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\VSApplicationInsights"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\VSCommon"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\VsTelemetry"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Windows"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Windows Media"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\Windows Terminal"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\WindowsApps"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\WinGet"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft\XboxLive"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Microsoft SDKs"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Mozilla"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\NuGet"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\NVIDIA"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\NVIDIA Corporation"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Oculus"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\OneDrive"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\openvr"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Origin"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Package Cache"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Packages"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\PlaceholderTileLogoFolder"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Postman-Agent"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Programs\Microsoft VS Code"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\RescueTime.com"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\slack"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\SourceServer"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\SquirrelTemp"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Steam"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\SteamVR"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Temp"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\ToastNotificationManagerCompat"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\UnrealEngine"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\VoiceAttack.com"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Xamarin"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\LocalLow\Microsoft\CryptnetUrlCache"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\LocalLow\Microsoft\Crypto"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\LocalLow\Microsoft\EdgeBho"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\LocalLow\Microsoft\Internet Explorer"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\LocalLow\Microsoft\Windows"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\LocalLow\NVIDIA"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\LocalLow\Sun"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\1Password"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Adobe"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Autodesk"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Blender Foundation"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Code"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Cudo Miner"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\discord"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\DBeaverData"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Docker"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Docker Desktop"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Dropbox"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\EasyAntiCheat"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\GitHub Desktop"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\JetBrains"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\LGHUB"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\LibreOffice"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Logishrd"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\CLR Security Config"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Credentials"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Crypto"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\HTML Help"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\InputMethod"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Installer"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Internet Explorer"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Microsoft SQL Server"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\MMC"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Network"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Protect"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Speech"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Spelling"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\SQL Server Management Studio"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\SystemCertificates"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Teams"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Vault"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\VisualStudio"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\Account Pictures"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\CloudStore"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\PowerShell"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\Printer Shortcuts"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\Recent Items"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\SendTo"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\Templates"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft\Windows\Themes"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft Flight Simulator\Packages"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Microsoft Flight Simulator\ROLLINGCACHE.CCC"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Mozilla"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\npm-cache"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\NuGet\config"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\NVIDIA"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Oculus"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\OculusClient"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\PostmanAgent"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Samsung Magician"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Slack"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Sony\INZONE Hub"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Visual Studio Setup"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\VoiceAttack"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Zoom"></dir>
+    <dir skip="False" userdir="True"  directory="Documents\My Games\FINAL FANTASY VII REMAKE\Steam" notes="Steam cloud save enabled for Final Fantasy VII Remake"></dir>
