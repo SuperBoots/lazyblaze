@@ -149,5 +149,6 @@ I highly suggest that you keep your own detailed list of app logins and manual c
 1. ???
 
 ## A list of other similar projects on github
-[Open source tweakers collection](https://github.com/PearPony/Creosynth/discussions/3#discussioncomment-12041215)
+1. [Opendows Tweakers](https://github.com/MarcoRavich/Opendows/blob/main/Tweakers.md#-) (this list is awesome)
+1. [Open source tweakers collection discussion](https://github.com/PearPony/Creosynth/discussions/)
 
