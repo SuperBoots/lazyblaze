@@ -33,5 +33,6 @@ are not very helpful but the name of the program should be in the description.
 <app skip="False" id="TheDocumentFoundation.LibreOffice"       description="LibreOffice is a free and open-source office productivity software suite, a project of The Document Foundation"></app>
 <app skip="False" id="Valve.Steam"                             description="Steam is a video game digital distribution service and storefront managed by Valve"></app>
 <app skip="False" id="XSplit.VCam"                             description="XSplit VCam is a webcam background removal software. Our green screen app allows for background blurring, removal or replacement without a green screen"></app>
+<app skip="False" id="9PGZKJC81Q7J"   msstore="True"           description="Cinebench is a free cross-platform test suite that evaluates your computer's hardware capabilities"></app>
 <app skip="False" id="XP89DCGQ3K6VLD" msstore="True"           description="Microsoft PowerToys is a set of freeware system utilities designed for power users developed by Microsoft for use on the Windows operating system"></app>
 <app skip="False" id="XP99C9G0KRDZ27" msstore="True"           description="1Password is a password manager developed by the Canadian software company AgileBits Inc"></app>
