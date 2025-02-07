@@ -155,7 +155,8 @@ $userdir = "C:\Users\$($userFromConfig)\"
 # This section exists to protect users from running a newer version of the scripts with an older local config
 # file when there have been breaking changes to the codebase. This can happen very easily if you're keeping your
 # local LazyBlaze repository up to date.
-$exampleLocalConfigFullName = "$($repoDirectory)ExampleLocalConfig\LocalConfig.xml"
+$repoDirectoryInConfig = $config.settings.repolocation
+$exampleLocalConfigFullName = "$($repoDirectoryInConfig)ExampleLocalConfig\LocalConfig.xml"
 $exampleLocalConfig = [xml](Get-Content $exampleLocalConfigFullName)
 $majorVersion_ExampleConfig = $exampleLocalConfig.settings.version.major
 $minorVersion_ExampleConfig = $exampleLocalConfig.settings.version.minor
