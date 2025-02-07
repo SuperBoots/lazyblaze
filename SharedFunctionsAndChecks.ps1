@@ -151,6 +151,41 @@ $userFromConfig = $config.settings.username
 $userdir = "C:\Users\$($userFromConfig)\"
 
 
+##########################  Checking Config Version  ################################
+# This section exists to protect users from running a newer version of the scripts with an older local config
+# file when there have been breaking changes to the codebase. This can happen very easily if you're keeping your
+# local LazyBlaze repository up to date.
+$exampleLocalConfigFullName = "$($repoDirectory)ExampleLocalConfig\LocalConfig.xml"
+$exampleLocalConfig = [xml](Get-Content $exampleLocalConfigFullName)
+$majorVersion_ExampleConfig = $exampleLocalConfig.settings.version.major
+$minorVersion_ExampleConfig = $exampleLocalConfig.settings.version.minor
+$majorVersion_LocalConfig = $config.settings.version.major
+$minorVersion_LocalConfig = $config.settings.version.minor
+if (($majorVersion_LocalConfig -gt $majorVersion_ExampleConfig) -or (($majorVersion_LocalConfig -eq $majorVersion_ExampleConfig) -and ($minorVersion_LocalConfig -gt $minorVersion_ExampleConfig))) {
+  # User has somehow ende up with a local config version that's more recent than the repo that the scripts are being run from.
+  Write-Host -ForegroundColor Red "You've somehow got a version of your local config that's more recent than the version in source control. I'm going to be honest, I'm confused. I give up."
+  $globalExit = "True"
+  Exit
+}
+if ($majorVersion_LocalConfig -lt $majorVersion_ExampleConfig) {
+  # User has a local config that is old enough that the current repo has breaking changes
+  Write-Host -ForegroundColor Red "ERROR: The example config $($exampleLocalConfigFullName) has a more recent major version ($($majorVersion_ExampleConfig)) than the local config $($configFullDest) ($($majorVersion_LocalConfig
+)). Updated major versions indicate breaking changes, please bring your local config up to date before trying again."
+  $globalExit = "True"
+  Exit
+}
+if (($majorVersion_LocalConfig -eq $majorVersion_ExampleConfig) -and ($minorVersion_LocalConfig -lt $minorVersion_ExampleConfig)) {
+  # User has a local config that is slightly out of date, default behavior is to block script execution but this can be overridden by the minorblocking setting in the local config.
+  Write-Host -ForegroundColor Yellow "Warning: The example config $($exampleLocalConfigFullName) has a more recent minor version ($($minorVersion_ExampleConfig
+)) than the local config $($configFullDest) ($($minorVersion_LocalConfig)). Updated minor versions indicate non-breaking changes but you may want to review the example config."
+  if ($null -eq $config.settings.version.minorblocking -or $config.settings.version.minorblocking -like "True") {
+    Write-Host -ForegroundColor Red "Exiting script. If you want to allow this script to continue with minor version differences set the minorblocking property to False in your local config $($configFullDest)"
+    $globalExit = "True"
+    Exit
+  }
+}
+
+
 ##########################  Verify User Has Reviewed Config  ################################
 if ($config.settings.reviewed -notlike "True") {
   Write-Host -ForegroundColor Red "This script will not run until the 'reviewed' property has been set to True at the bottom of the new config file $($configDir)$($configFileName)"
@@ -159,9 +194,56 @@ if ($config.settings.reviewed -notlike "True") {
 }
 
 
+##########################  Check/Populate Core Config Values  ################################
+$generatedNewConfigValue = "False"
+$coreConfigValueMismatch = "False"
+$repolocationInConfig = $config.settings.repolocation
+$actualRepoDirectory = "NotFound"
+if ($inRepo -like "True") {
+  $actualRepoDirectory = "$(Get-Location)\"
+}
+if ($null -eq $repolocationInConfig -or $repolocationInConfig -like "") {
+  SetConfigValue -Key 'repolocation' -Value $actualRepoDirectory -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+  Write-Host -ForegroundColor Green "Automatically setting missing value in local config, Name: repolocation, Value: $($actualRepoDirectory)"
+  $generatedNewConfigValue = "True"
+}
+$usernameInConfig = $config.settings.username
+$actualUsername = $env:USERNAME
+if ($null -eq $usernameInConfig -or $usernameInConfig -like "") {
+  SetConfigValue -Key 'username' -Value $actualUsername -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+  Write-Host -ForegroundColor Green "Automatically setting missing value in local config, Name: username, Value: $($actualUsername)"
+  $generatedNewConfigValue = "True"
+}
+elseif ($usernameInConfig -ne $actualUsername) {
+  Write-Host -ForegroundColor Red "Error, username value in config does not match current user, config value: $($usernameInConfig), actual value: $($actualUsername)"
+  $coreConfigValueMismatch = "True"
+}
+$machinenameInConfig = $config.settings.machinename
+$actualMachinename = Invoke-Expression -Command 'hostname'
+if ($null -eq $machinenameInConfig -or $machinenameInConfig -like "") {
+  SetConfigValue -Key 'machinename' -Value $actualMachinename -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+  Write-Host -ForegroundColor Green "Automatically setting missing value in local config, Name: machinename, Value: $($actualMachinename)"
+  $generatedNewConfigValue = "True"
+}
+elseif ($machinenameInConfig -ne $actualMachinename) {
+  Write-Host -ForegroundColor Red "Error, machinename value in config does not match current machine name, config value: $($machinenameInConfig), actual value: $($actualMachinename)"
+  $coreConfigValueMismatch = "True"
+}
+if ($coreConfigValueMismatch -like "True") {
+  Write-Host -ForegroundColor Red "Check/Populate core config values has found at least one existing config entry that does not match the current environment. Exiting."
+  $globalExit = "True"
+  Exit
+}
+if ($generatedNewConfigValue -like "True") {
+  Write-Host -ForegroundColor Red "Check/Populate core config values has populated at least one missing value. It is recommended that you review the populated value before running again. Exiting."
+  $globalExit = "True"
+  Exit
+}
+
+
 ##########################  Verify Repo Location In Config Is Correct  ################################
 $repoDirectory = $config.settings.repolocation
-if ($null -eq $repoDirectory -or $repoDirectory -like ""){
+if ($null -eq $repoDirectory -or $repoDirectory -like "") {
   Write-Host "Local Config $($configFullDest) has blank or missing setting for repolocation."
   $repoConfigFail = "True"
 }
@@ -174,8 +256,7 @@ if ($repoConfigXml.settings.mylocation -notlike "CodeRepo") {
   Write-Host "Expected mylocation in Config.xml in repo to be 'CodeRepo' but found:  '$($repoConfigXml.settings.mylocation)'"
   $repoConfigFail = "True"
 }
-if ($repoConfigFail -like "True")
-{
+if ($repoConfigFail -like "True") {
   Write-Host -ForegroundColor Red "repolocation validation failed. repolocation in $($configFullDest) should be the full path to the lazyblaze git repository on your machine."
   $globalExit = "True"
   Exit
@@ -393,38 +474,6 @@ function CleanForEnvVar {
 ########################  End Function Definitions  ##############################
 ##################################################################################
 
-
-
-##########################  Checking Config Version  ################################
-$exampleLocalConfigFullName = "$($repoDirectory)ExampleLocalConfig\LocalConfig.xml"
-$exampleLocalConfig = [xml](Get-Content $exampleLocalConfigFullName)
-$majorVersion_ExampleConfig = $exampleLocalConfig.settings.version.major
-$minorVersion_ExampleConfig = $exampleLocalConfig.settings.version.minor
-$majorVersion_LocalConfig = $config.settings.version.major
-$minorVersion_LocalConfig = $config.settings.version.minor
-if (($majorVersion_LocalConfig -gt $majorVersion_ExampleConfig) -or (($majorVersion_LocalConfig -eq $majorVersion_ExampleConfig) -and ($minorVersion_LocalConfig -gt $minorVersion_ExampleConfig))) {
-  # User has somehow ende up with a local config version that's more recent than the repo that the scripts are being run from.
-  Write-Host -ForegroundColor Red "You've somehow got a version of your local config that's more recent than the version in source control. I'm going to be honest, I'm confused. I give up."
-  $globalExit = "True"
-  Exit
-}
-if ($majorVersion_LocalConfig -lt $majorVersion_ExampleConfig) {
-  # User has a local config that is old enough that the current repo has breaking changes
-  Write-Host -ForegroundColor Red "ERROR: The example config $($exampleLocalConfigFullName) has a more recent major version ($($majorVersion_ExampleConfig)) than the local config $($configFullDest) ($($majorVersion_LocalConfig
-)). Updated major versions indicate breaking changes, please bring your local config up to date before trying again."
-  $globalExit = "True"
-  Exit
-}
-if (($majorVersion_LocalConfig -eq $majorVersion_ExampleConfig) -and ($minorVersion_LocalConfig -lt $minorVersion_ExampleConfig)) {
-  # User has a local config that is slightly out of date, default behavior is to block script execution but this can be overridden by the minorblocking setting in the local config.
-  Write-Host -ForegroundColor Yellow "Warning: The example config $($exampleLocalConfigFullName) has a more recent minor version ($($minorVersion_ExampleConfig
-)) than the local config $($configFullDest) ($($minorVersion_LocalConfig)). Updated minor versions indicate non-breaking changes but you may want to review the example config."
-  if ($null -eq $config.settings.version.minorblocking -or $config.settings.version.minorblocking -like "True") {
-    Write-Host -ForegroundColor Red "Exiting script. If you want to allow this script to continue with minor version differences set the minorblocking property to False in your local config $($configFullDest)"
-    $globalExit = "True"
-    Exit
-  }
-}
 
 ##########################  Copy Files to Local Config Directory  ################################
 # Move some files into the local config directory for doing things like daily backups and cloning git repos.
