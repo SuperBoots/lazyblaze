@@ -5,6 +5,8 @@ are not very helpful but the name of the program should be in the description.
 
 <app skip="False" id="7zip.7zip"                               description="7-Zip is a free and open-source file archiver"></app>
 <app skip="False" id="Corsair.iCUE.5"                          description="iCUEs single intuitive interface links together supported CORSAIR products, allowing you to quickly and easily fine-tune your settings"></app>
+<app skip="False" id="CrystalDewWorld.CrystalDiskInfo"         description="CrystalDiskInfo is open source software for checking HDD/SSD health status"></app>
+<app skip="False" id="CrystalDewWorld.CrystalDiskMark"         description="CrystalDiskMark is an open source disk drive benchmark tool for Microsoft Windows from Crystal Dew World"></app>
 <app skip="False" id="CyberPowerSystemsInc.PowerPanelPersonal" description="PowerPanel Personal makes the most vital information about your UPS, power source, battery capacity, and runtime, immediately visible on your computer"></app>
 <app skip="False" id="dbeaver.dbeaver"                         description="DBeaver is a SQL client software application and a database administration tool"></app>
 <app skip="False" id="Discord.Discord"                         description="Discord is an instant messaging and VoIP social platform which allows communication through voice calls, video calls, text messaging, and media"></app>
