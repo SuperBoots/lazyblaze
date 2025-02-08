@@ -2,8 +2,8 @@ param (
   $workingDirectory
 )
 
-$PrimaryScriptName = "CloneRepos"
-$requireAdmin = "False"
+$globalPrimaryScriptName = "CloneRepos"
+$globalRequireAdmin = "False"
 
 
 ##########################  Fix Working Directory  ################################
@@ -31,6 +31,7 @@ if (-not($ranSharedFunctionsAndChecks -like "True")) {
 
 
 # Verify script is NOT running as administrator
+# If repos are cloned while running as administrator it causes issues adding them to github desktop
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 $isAdmin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if ($isAdmin -notlike "False") {
@@ -42,41 +43,49 @@ if ($isAdmin -notlike "False") {
 
 ##########################  Clone Git Repositories  ################################
 # (Can be run multiple times)
-$totalGitClones = $config.settings.gitrepositories.SelectNodes("./gitrepo[(@skip='False')]").count
-if ($totalGitClones -gt 0){
-  Write-Host -ForegroundColor Yellow "Clone Git Repositories..."
+if ($config.settings.gitrepositories.skipsection -like "False") {
+  Write-Host "Section: Clone Git Repositories (gitrepositories in config), starting..."
+  $totalGitClones = $config.settings.gitrepositories.SelectNodes("./gitrepo[(@skip='False')]").count
+  if ($totalGitClones -gt 0) {
+    Write-Host -ForegroundColor Yellow "Clone Git Repositories..."
+  }
+  $currentGitClone = 0
+  foreach ($gitrepo in $config.settings.gitrepositories.gitrepo) {
+    if ($gitrepo.skip -like "True") {
+      continue
+    }
+    $currentGitClone++
+    $cleanedId = CleanForEnvVar -Dirty "$($gitrepo.dest)$($gitrepo.name)"
+    $gitCloneEnvVarName = "NMSS_CLONEGITREPO_$($cleanedId)"
+    $cloneComplete = [Environment]::GetEnvironmentVariable($gitCloneEnvVarName, 'User')
+    Write-Host -ForegroundColor Yellow  "Cloning git repository ($($currentGitClone)/$($totalGitClones)) '$($gitrepo.name)' (source: '$($gitrepo.url)') from config"
+    if ($cloneComplete -like "COMPLETE"){
+      Write-Host -ForegroundColor Green "Clone Git Repository '$($gitrepo.name)' already completed according to environment variable. Skipping."
+      continue
+    }
+    CloneGitRepo -URL $gitrepo.url -DestinationParentDir $gitrepo.dest -LocalName $gitrepo.name
+    if ($LASTEXITCODE -eq 0) {
+      Write-Host -ForegroundColor Green "$($gitrepo.name) successfully cloned."
+      [Environment]::SetEnvironmentVariable($gitCloneEnvVarName, 'COMPLETE', 'User')
+    }
+    else {
+      Write-Host -ForegroundColor Red "$($gitrepo.name) clone failed"
+    }
+  }
+  if ($totalGitClones -gt 0){
+    Write-Host -ForegroundColor Green "Finished Clone Git Repositories."
+  }
+  Write-Host "Section: Clone Git Repositories (gitrepositories in config), finished"
 }
-$currentGitClone = 0
-foreach ($gitrepo in $config.settings.gitrepositories.gitrepo) {
-  if ($gitrepo.skip -like "True") {
-    continue
-  }
-  $currentGitClone++
-  $cleanedId = CleanForEnvVar -Dirty "$($gitrepo.dest)$($gitrepo.name)"
-  $gitCloneEnvVarName = "NMSS_CLONEGITREPO_$($cleanedId)"
-  $cloneComplete = [Environment]::GetEnvironmentVariable($gitCloneEnvVarName, 'User')
-  Write-Host -ForegroundColor Yellow  "Cloning git repository ($($currentGitClone)/$($totalGitClones)) '$($gitrepo.name)' (source: '$($gitrepo.url)') from config"
-  if ($cloneComplete -like "COMPLETE"){
-    Write-Host -ForegroundColor Green "Clone Git Repository '$($gitrepo.name)' already completed according to environment variable. Skipping."
-    continue
-  }
-  CloneGitRepo -URL $gitrepo.url -DestinationParentDir $gitrepo.dest -LocalName $gitrepo.name
-  if ($LASTEXITCODE -eq 0) {
-    Write-Host -ForegroundColor Green "$($gitrepo.name) successfully cloned."
-    [Environment]::SetEnvironmentVariable($gitCloneEnvVarName, 'COMPLETE', 'User')
-  }
-  else {
-    Write-Host -ForegroundColor Red "$($gitrepo.name) clone failed"
-  }
-}
-if ($totalGitClones -gt 0){
-  Write-Host -ForegroundColor Green "Finished Clone Git Repositories."
+else {
+  Write-Host "Section: Clone Git Repositories (gitrepositories in config), skipping"
 }
 
 
 ##########################  Add Git Repositories To Github Desktop  ################################
 # (Can be run multiple times)
-if ($config.settings.addrepostogithubdesktop -like "True"){
+if ($config.settings.gitrepositories.skipsection -like "False" -and $config.settings.gitrepositories.options.addrepostogithubdesktop -like "True") {
+  Write-Host "Section: Add Git Repositories To Github Desktop (gitrepositories in config), starting..."
   $totalGitRepos = $config.settings.gitrepositories.SelectNodes("./gitrepo[(@skip='False')]").count
   if ($totalGitClones -gt 0){
     Write-Host -ForegroundColor Yellow "Add Git Repositories To Github Desktop..."
@@ -105,6 +114,10 @@ if ($config.settings.addrepostogithubdesktop -like "True"){
   if ($totalGitClones -gt 0){
     Write-Host -ForegroundColor Green "Finished Add Git Repositories To Github Desktop."
   }
+  Write-Host "Section: Add Git Repositories To Github Desktop (gitrepositories in config), finished"
+}
+else {
+  Write-Host "Section: Add Git Repositories To Github Desktop (gitrepositories in config), skipping"
 }
 
 
@@ -115,5 +128,5 @@ if ($logStarted -like "True") {
 
 
 ##########################  Success Message  ################################
-Write-Host -ForegroundColor Green "Execution of script $($PrimaryScriptName) successfully finished."
+Write-Host -ForegroundColor Green "Execution of script $($globalPrimaryScriptName) successfully finished."
 Pause

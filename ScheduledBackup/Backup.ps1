@@ -1,5 +1,7 @@
-$PrimaryScriptName = "Backup"
-$requireAdmin = "True"
+$globalPrimaryScriptName = "Backup"
+$globalRequireAdmin = "True"
+$globalRequireUserMatch = "False"
+
 # Execute script in the current session context, variables are shared between the scripts
 . ".\SharedFunctionsAndChecks.ps1"
 if ($globalExit -like "True") {
@@ -18,22 +20,30 @@ if (-not($ranSharedFunctionsAndChecks -like "True")) {
 
 
 ##########################  Backup Various Config Files  ################################
-foreach ($backup in $config.settings.appdatabackups.backup) {
-  if ($backup.skip -like "True") {
-    continue
-  }
-  else {
-    Write-Host "Backing up $($backup.filename) from config"
-    if ($config.settings.displaydescriptions -like "True" -and $backup.description -ne $null) {
-      Write-Host $backup.description
+if ($config.settings.appdatabackups.skipsection -like "False") {
+  Write-Host "Section: Backup Various Config Files (appdatabackups in config), starting..."
+  foreach ($backup in $config.settings.appdatabackups.backup) {
+    if ($backup.skip -like "True") {
+      continue
     }
-    BackupConfigFile -FileName $backup.filename -SourceDir "$($userdir)$($backup.appdatadir)" -TargetDir ".\$($backup.configfolder)\"
+    else {
+      Write-Host "Backing up $($backup.filename) from config"
+      if ($config.settings.displaydescriptions -like "True" -and $backup.description -ne $null) {
+        Write-Host $backup.description
+      }
+      BackupConfigFile -FileName $backup.filename -SourceDir "$($userdir)$($backup.appdatadir)" -TargetDir ".\$($backup.configfolder)\"
+    }
   }
+  Write-Host "Section: Backup Various Config Files (appdatabackups in config), finished"
+}
+else {
+  Write-Host "Section: Backup Various Config Files (appdatabackups in config), skipping"
 }
 
 
 ##########################  Backup Power Settings  ################################
-if ($config.settings.modifypowersettings -like "True") {
+if ($config.settings.powersettings.skipsection -like "False") {
+  Write-Host "Section: Backup Power Settings (powersettings in config), starting..."
   $powerSettingsDir = ".\PowerSettings\"
   $powerSettingsFile = "$($powerSettingsDir)myscheme.pow"
   If (test-path -PathType leaf $powerSettingsFile){
@@ -44,6 +54,10 @@ if ($config.settings.modifypowersettings -like "True") {
   }
   $currentSchemeGuid = [regex]::Match((POWERCFG /GETACTIVESCHEME), 'GUID: ([\w-]+)').Groups[1].Value
   POWERCFG /EXPORT $powerSettingsFile $currentSchemeGuid
+  Write-Host "Section: Backup Power Settings (powersettings in config), finished"
+}
+else {
+  Write-Host "Section: Backup Power Settings (powersettings in config), skipping"
 }
 
 
@@ -53,7 +67,8 @@ if ($config.settings.modifypowersettings -like "True") {
 # Keeping it around for the moment because I like the concept and might try again, 
 # I like the idea that as your VS install changes over time the new state will be 
 # automatically captured and backed up using this approach.
-if ($config.settings.backupvscommunity -like "True"){
+if ($config.settings.visualstudio.skipsection -like "False" -and $config.settings.visualstudio.options.savesnapshots -like "True"){
+  Write-Host "Section: Visual Studio Install Options Export (visualstudio in config), starting..."
   try {
     Write-Host "Export Visual Studio Community installation configuration to the VisualStudio folder in the local config"
     $vsBackupDir = "$($configDir)VisualStudio\"
@@ -72,6 +87,10 @@ if ($config.settings.backupvscommunity -like "True"){
     $_ # Output the current value in the pipe, in this case the exception details
     Write-Host "Export Visual Studio Community installation configuration failed"
   }
+  Write-Host "Section: Visual Studio Install Options Export (visualstudio in config), finished"
+}
+else {
+  Write-Host "Section: Visual Studio Install Options Export (visualstudio in config), skipping"
 }
 
 ##########################  Delete Old Log Files  ################################
