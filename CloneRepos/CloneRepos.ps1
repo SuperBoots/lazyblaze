@@ -2,8 +2,8 @@ param (
   $workingDirectory
 )
 
-$PrimaryScriptName = "CloneRepos"
-$requireAdmin = "False"
+$globalPrimaryScriptName = "CloneRepos"
+$globalRequireAdmin = "False"
 
 
 ##########################  Fix Working Directory  ################################
@@ -128,5 +128,5 @@ if ($logStarted -like "True") {
 
 
 ##########################  Success Message  ################################
-Write-Host -ForegroundColor Green "Execution of script $($PrimaryScriptName) successfully finished."
+Write-Host -ForegroundColor Green "Execution of script $($globalPrimaryScriptName) successfully finished."
 Pause

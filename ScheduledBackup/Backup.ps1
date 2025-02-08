@@ -1,5 +1,7 @@
-$PrimaryScriptName = "Backup"
-$requireAdmin = "True"
+$globalPrimaryScriptName = "Backup"
+$globalRequireAdmin = "True"
+$globalRequireUserMatch = "False"
+
 # Execute script in the current session context, variables are shared between the scripts
 . ".\SharedFunctionsAndChecks.ps1"
 if ($globalExit -like "True") {

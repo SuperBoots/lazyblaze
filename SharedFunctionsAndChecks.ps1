@@ -1,5 +1,5 @@
 ##########################  Admin Check  ################################
-if ($requireAdmin -like "True") {
+if ($globalRequireAdmin -like "True") {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
     $isAdmin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if ($isAdmin -notlike "True") {
@@ -125,7 +125,7 @@ if ($inLocalConfig -like "True") {
 
 ##########################  Logging  ################################
 $date = (Get-Date).ToString("yyyy-MM-dd_HHmmss")
-$logFile = "$($configDir)Logs\$($date)_$($PrimaryScriptName)_log.txt"
+$logFile = "$($configDir)Logs\$($date)_$($globalPrimaryScriptName)_log.txt"
 Start-Transcript -Path $logFile
 $logStarted = "True"
 
@@ -215,7 +215,7 @@ if ($null -eq $usernameInConfig -or $usernameInConfig -like "") {
   Write-Host -ForegroundColor Green "Automatically setting missing value in local config, Name: username, Value: $($actualUsername)"
   $generatedNewConfigValue = "True"
 }
-elseif ($usernameInConfig -ne $actualUsername) {
+elseif ($usernameInConfig -ne $actualUsername -and $globalRequireUserMatch -ne "False") {
   Write-Host -ForegroundColor Red "Error, username value in config does not match current user, config value: $($usernameInConfig), actual value: $($actualUsername)"
   $coreConfigValueMismatch = "True"
 }

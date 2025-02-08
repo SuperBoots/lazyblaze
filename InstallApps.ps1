@@ -2,8 +2,8 @@ param (
   $workingDirectory
 )
   
-$PrimaryScriptName = "InstallApps"
-$requireAdmin = "True"
+$globalPrimaryScriptName = "InstallApps"
+$globalRequireAdmin = "True"
   
   
 ##########################  Fix Working Directory  ################################
@@ -678,5 +678,5 @@ if ($logStarted -like "True") {
 
 
 ##########################  Success Message  ################################
-Write-Host -ForegroundColor Green "Execution of script $($PrimaryScriptName) successfully finished."
+Write-Host -ForegroundColor Green "Execution of script $($globalPrimaryScriptName) successfully finished."
 Pause
