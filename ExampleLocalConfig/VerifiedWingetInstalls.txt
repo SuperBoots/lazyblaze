@@ -33,6 +33,7 @@ are not very helpful but the name of the program should be in the description.
 <app skip="False" id="Postman.Postman"                         description="If you are using the Postman web client, you will need to also download the Postman desktop agent. The Postman agent overcomes the Cross Object Resource Sharing (CORS) limitations of browsers, and facilitates API request sending from your browser version of Postman"></app>
 <app skip="False" id="SlackTechnologies.Slack"                 description="Slack is a cloud-based team communication platform developed by Slack Technologies"></app>
 <app skip="False" id="TheDocumentFoundation.LibreOffice"       description="LibreOffice is a free and open-source office productivity software suite, a project of The Document Foundation"></app>
+<app skip="False" id="Ubisoft.Connect"                         description="Ubisoft Connect is the ecosystem of players services for Ubisoft games across all platforms"></app>
 <app skip="False" id="Valve.Steam"                             description="Steam is a video game digital distribution service and storefront managed by Valve"></app>
 <app skip="False" id="XSplit.VCam"                             description="XSplit VCam is a webcam background removal software. Our green screen app allows for background blurring, removal or replacement without a green screen"></app>
 <app skip="False" id="9PGZKJC81Q7J"   msstore="True"           description="Cinebench is a free cross-platform test suite that evaluates your computer's hardware capabilities"></app>
