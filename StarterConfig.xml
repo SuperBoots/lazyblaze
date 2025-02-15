@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
-  <version major="013" minor="001" minorblocking="True" description="If this sample config is updated in a non-breaking way the minor version should be increased, if a breaking change is introduced (a rename, a new section, etc) then the major version should be increased and the minor version should be reset."></version>
+  <version major="" minor=""></version>
   <repolocation></repolocation>
   <username></username>
   <machinename></machinename>
