@@ -1,3 +1,5 @@
+# Version info $scriptMajorVersion and $scriptMajorVersion will be inserted above this line by install script
+
 ##########################  Admin Check  ################################
 if ($globalRequireAdmin -like "True") {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())

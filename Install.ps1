@@ -1,6 +1,8 @@
 param (
   $workingDirectory
 )
+
+Import-Module ReplaceLine
   
 $globalPrimaryScriptName = "InstallApps"
 $globalRequireAdmin = "True"
@@ -89,7 +91,7 @@ if (-not (test-path -PathType leaf $userConfigFileName)) {
   if (!(Test-Path -LiteralPath $installLocation)) {
     New-Item -ItemType Directory -Path $installLocation 
   }
-  Copy-Item -Path ".\StarterConfig.xml" -Destination $userConfigFileName
+  Copy-Item -Path ".\InstallFiles\Config.xml" -Destination $userConfigFileName
   $attempts = 0
   $maxAttempts = 10
   while ($attempts -lt $maxAttempts) {
@@ -160,6 +162,76 @@ if (($userConfigMajorVersion -eq $installMajorVersion) -and ($userConfigMinorVer
 
 
 ##########################  Copy Scripts To Install Location  ################################
+function InstallFile {
+  param (
+    $TargetDir,
+    $TargetFileName,
+    $SourceFile,
+    $FileType,
+    $MajorVersion,
+    $MinorVersion
+  )
+  Write-Host -ForegroundColor Yellow "Installing file $($TargetFileName)"
+  $targetFile = "$($TargetDir)$($TargetFileName)"
+  #if target does not exist then just do copy
+  #if target exists, overwrite if true
+  #write version comment to top of script
+
+  # create target directory if missing
+  if (!(Test-Path -LiteralPath $TargetDir)){
+    New-Item -ItemType Directory -Path $TargetDir 
+  }
+  # check for existing script
+  If (test-path -PathType leaf $targetFile){
+    Remove-Item -LiteralPath $targetFile
+  }
+  # update script with the lastest version from source control directory
+  Copy-Item -Path $SourceFile -Destination $targetFile
+  # add comment to top of script with version info
+  switch ($FileType) {
+    ".ps1" {
+      $header = "`$scriptMajorVersion=$($MajorVersion);`$scriptMajorVersion=$($MinorVersion);"
+    }
+    ".bat" {
+      $header = ":: scriptMajorVersion=$($MajorVersion);scriptMajorVersion=$($MinorVersion);"
+    }
+    ".jpg" {
+      return
+    }
+    ".reg" {
+      return
+    }
+    default {
+      Write-Host -ForegroundColor Red "File $($TargetFileName) was copied but no version header was added, failed to determine file type."
+      return
+    }
+  }
+  $header | Set-Content "$($targetFile).temp"
+  Get-Content $targetFile -ReadCount 5000 |
+    Add-Content "$($targetFile).temp"
+  Remove-item $targetFile
+  Rename-Item "$($targetFile).temp" -NewName $targetFile
+}
+
+InstallFile -TargetDir $installLocation -TargetFileName "LazyBlaze.bat" -SourceFile ".\InstallFiles\LazyBlaze.bat" -FileType ".bat" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir $installLocation -TargetFileName "CloneRepos.bat" -SourceFile ".\InstallFiles\CloneRepos.bat" -FileType ".bat" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+
+InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Main.ps1" -SourceFile ".\InstallFiles\Main.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "SharedFunctionsAndChecks.ps1" -SourceFile ".\InstallFiles\SharedFunctionsAndChecks.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Backup.ps1" -SourceFile ".\InstallFiles\Backup.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "CloneRepos.ps1" -SourceFile ".\InstallFiles\CloneRepos.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+
+InstallFile -TargetDir "$($installLocation)wallpapers\" -TargetFileName "space.jpg" -SourceFile ".\wallpapers\space.jpg" -FileType ".jpg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "DisableOneDriveSync.reg" -SourceFile ".\registrysettings\DisableOneDriveSync.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "DisableSearchBoxWebResults.reg" -SourceFile ".\registrysettings\DisableSearchBoxWebResults.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "DisableUAC.reg" -SourceFile ".\registrysettings\DisableUAC.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "DisableWindowsCopilot.reg" -SourceFile ".\registrysettings\DisableWindowsCopilot.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "EnableDarkMode.reg" -SourceFile ".\registrysettings\EnableDarkMode.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "FixOneDriveDirectories.reg" -SourceFile ".\registrysettings\FixOneDriveDirectories.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "UpdateConsoleLockDisplayOffTimeout.reg" -SourceFile ".\registrysettings\UpdateConsoleLockDisplayOffTimeout.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "WindowsExplorerShowFileExtensions.reg" -SourceFile ".\registrysettings\WindowsExplorerShowFileExtensions.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "WindowsExplorerShowHiddenFiles.reg" -SourceFile ".\registrysettings\WindowsExplorerShowHiddenFiles.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
 
 ##########################  Copy Other Files To Install Location  ################################

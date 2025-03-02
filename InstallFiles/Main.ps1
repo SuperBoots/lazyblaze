@@ -1,8 +1,11 @@
 param (
   $workingDirectory
 )
+
+# Version info will be inserted by install script
+$scriptMajorVersion=?;$scriptMinorVersion=?;
   
-$globalPrimaryScriptName = "InstallApps"
+$globalPrimaryScriptName = "Main"
 $globalRequireAdmin = "True"
   
   
@@ -18,7 +21,7 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
   
 ##########################  Run SharedFunctionsAndChecks.ps1  ################################
 # Execute script in the current session context, variables are shared between the scripts
-. ".\SharedFunctionsAndChecks.ps1"
+. ".\Scripts\SharedFunctionsAndChecks.ps1"
 if ($globalExit -like "True") {
   Pause
   Exit
