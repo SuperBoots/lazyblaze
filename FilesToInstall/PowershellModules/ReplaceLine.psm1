@@ -1,5 +1,5 @@
 # Version info will be inserted by install script
-#$scriptMajorVersion=;$scriptMinorVersion=;
+#$scriptMajorVersion="";$scriptMinorVersion="";
 
 <#
  .Synopsis
@@ -52,4 +52,6 @@ function ReplaceLine {
     }
   }
 }
+
+
 Export-ModuleMember -Function ReplaceLine

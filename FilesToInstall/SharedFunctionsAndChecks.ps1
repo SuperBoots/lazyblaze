@@ -1,5 +1,5 @@
 # Version info will be inserted by install script
-$scriptMajorVersion=;$scriptMinorVersion=;
+$scriptMajorVersion="";$scriptMinorVersion="";
 
 ##########################  Admin Check  ################################
 if ($globalRequireAdmin -like "True") {

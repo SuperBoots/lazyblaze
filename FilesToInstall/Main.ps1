@@ -3,7 +3,7 @@ param (
 )
 
 # Version info will be inserted by install script
-$scriptMajorVersion=;$scriptMinorVersion=;
+$scriptMajorVersion="";$scriptMinorVersion="";
   
 $globalPrimaryScriptName = "Main"
 $globalRequireAdmin = "True"
@@ -18,15 +18,62 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
   Set-Location $workingDirectory
 }
 
-  
+
+##########################  Import Custom Powershell Modules ################################
 Import-Module ".\Scripts\PowershellModules\IsAdmin.psm1"
+Import-Module ".\Scripts\PowershellModules\SetConfigValue.psm1"
 
 
+##########################  Verify Script Is Running As Admin ################################
 if (-not (IsAdmin)) {
   Write-Host -ForegroundColor Red "Script must be run as administrator, exiting."
   Pause
   Exit
 }
+
+
+##########################  Get User Specific Values From System ################################
+$sysUserName = $env:USERNAME
+$sysMachineName = Invoke-Expression -Command 'hostname'
+
+
+##########################  Load Config  ################################
+$configFullDest = ".\Config.xml"
+$config = [xml](Get-Content $configFullDest)
+$userFromConfig = $config.settings.username
+$userdir = "C:\Users\$($userFromConfig)\"
+
+
+##########################  Checking Config Version  ################################
+# This section exists to protect users from running a newer version of the scripts with an older local config
+# file when there have been breaking changes to the codebase. This can happen very easily if you're keeping your
+# local LazyBlaze repository up to date.
+$configMajorVersion = $config.settings.version.major
+$configMinorVersion = $config.settings.version.minor
+if (($configMajorVersion -gt $scriptMajorVersion) -or (($configMajorVersion -eq $scriptMajorVersion) -and ($configMinorVersion -gt $scriptMinorVersion))) {
+  # User has somehow ende up with a local config version that's more recent than the repo that the scripts are being run from.
+  Write-Host -ForegroundColor Red "You've somehow got a version of your config that's more recent than the current script. I'm going to be honest, I'm confused. I give up."
+  Pause
+  Exit
+}
+if ($configMajorVersion -lt $scriptMajorVersion) {
+  # User has a local config that is old enough that the current repo has breaking changes
+  Write-Host -ForegroundColor Red "ERROR: This script has a more recent major version ($($scriptMajorVersion)) than the config $($configFullDest) ($($configMajorVersion
+)). Updated major versions indicate breaking changes, please bring your local config up to date before trying again."
+  Pause
+  Exit
+}
+if (($configMajorVersion -eq $scriptMajorVersion) -and ($configMinorVersion -lt $scriptMinorVersion)) {
+  # User has a local config that is slightly out of date, default behavior is to block script execution but this can be overridden by the minorblocking setting in the local config.
+  Write-Host -ForegroundColor Yellow "Warning: This script has a more recent minor version ($($scriptMinorVersion
+)) than the config $($configFullDest) ($($configMinorVersion)). Updated minor versions indicate non-breaking changes but you may want to review the example config."
+  if ($null -eq $config.settings.version.minorblocking -or $config.settings.version.minorblocking -like "True") {
+    Write-Host -ForegroundColor Red "Exiting script. If you want to allow this script to continue with minor version differences set the minorblocking property to False in your local config $($configFullDest)"
+    Pause
+    Exit
+  }
+}
+
 
   
 ##########################  Run SharedFunctionsAndChecks.ps1  ################################

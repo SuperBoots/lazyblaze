@@ -2,7 +2,7 @@ param (
   $workingDirectory
 )
 
-$globalPrimaryScriptName = "InstallApps"
+$globalPrimaryScriptName = "Install"
 $globalRequireAdmin = "True"
 
 
@@ -16,7 +16,15 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
 }
 
 
-Import-Module ".\InstallFiles\PowershellModules\ReplaceLine.psm1"
+Import-Module ".\FilesToInstall\PowershellModules\IsAdmin.psm1"
+Import-Module ".\FilesToInstall\PowershellModules\ReplaceLine.psm1"
+
+
+if (-not (IsAdmin)) {
+  Write-Host -ForegroundColor Red "Script must be run as administrator, exiting."
+  Pause
+  Exit
+}
 
 
 ##########################  Install Steps  ################################
@@ -36,7 +44,7 @@ Import-Module ".\InstallFiles\PowershellModules\ReplaceLine.psm1"
 
 
 ##########################  Get Install Config  ################################
-$configLocationXmlFileName = ".\InstallConfig.xml"
+$configLocationXmlFileName = ".\Installer\InstallConfig.xml"
 if (-not (test-path -PathType leaf $configLocationXmlFileName)) {
   Write-Host -ForegroundColor Red "Failed to find config $($configLocationXmlFileName), exiting."
   Pause
@@ -92,7 +100,7 @@ if (-not (test-path -PathType leaf $userConfigFileName)) {
   if (!(Test-Path -LiteralPath $installLocation)) {
     New-Item -ItemType Directory -Path $installLocation 
   }
-  Copy-Item -Path ".\InstallFiles\Config.xml" -Destination $userConfigFileName
+  Copy-Item -Path ".\FilesToInstall\Config.xml" -Destination $userConfigFileName
   $attempts = 0
   $maxAttempts = 10
   while ($attempts -lt $maxAttempts) {
@@ -191,16 +199,16 @@ function InstallFile {
   # add comment to top of script with version info
   switch ($FileType) {
     ".ps1" {
-      $lineRegex = ".scriptMajorVersion=\d*;.scriptMinorVersion=\d*;"
-      $newLine = "`$scriptMajorVersion=$($MajorVersion);`$scriptMajorVersion=$($MinorVersion);"
+      $lineRegex = ".scriptMajorVersion=.\d*.;.scriptMinorVersion=.\d*.;"
+      $newLine = "`$scriptMajorVersion=`"$($MajorVersion)`";`$scriptMinorVersion=`"$($MinorVersion)`";"
     }
     ".psm1" {
-      $lineRegex = "#.scriptMajorVersion=\d*;.scriptMinorVersion=\d*;"
-      $newLine = "#`$scriptMajorVersion=$($MajorVersion);`$scriptMajorVersion=$($MinorVersion);"
+      $lineRegex = "#.scriptMajorVersion=.\d*.;.scriptMinorVersion=.\d*.;"
+      $newLine = "#`$scriptMajorVersion=`"$($MajorVersion)`";`$scriptMinorVersion=`"$($MinorVersion)`";"
     }
     ".bat" {
-      $lineRegex = ":: scriptMajorVersion=\d*;scriptMajorVersion=\d*;"
-      $newLine = ":: scriptMajorVersion=$($MajorVersion);scriptMajorVersion=$($MinorVersion);"
+      $lineRegex = ":: scriptMajorVersion=.\d*.;scriptMinorVersion=.\d*.;"
+      $newLine = ":: scriptMajorVersion=`"$($MajorVersion)`";scriptMinorVersion=`"$($MinorVersion)`";"
     }
     ".jpg" {
       return
@@ -217,16 +225,17 @@ function InstallFile {
   return
 }
 
-InstallFile -TargetDir $installLocation -TargetFileName "LazyBlaze.bat" -SourceFile ".\InstallFiles\LazyBlaze.bat" -FileType ".bat" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
-InstallFile -TargetDir $installLocation -TargetFileName "CloneRepos.bat" -SourceFile ".\InstallFiles\CloneRepos.bat" -FileType ".bat" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir $installLocation -TargetFileName "LazyBlaze.bat" -SourceFile ".\FilesToInstall\LazyBlaze.bat" -FileType ".bat" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir $installLocation -TargetFileName "CloneRepos.bat" -SourceFile ".\FilesToInstall\CloneRepos.bat" -FileType ".bat" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
-InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Main.ps1" -SourceFile ".\InstallFiles\Main.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
-InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "SharedFunctionsAndChecks.ps1" -SourceFile ".\InstallFiles\SharedFunctionsAndChecks.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
-InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Backup.ps1" -SourceFile ".\InstallFiles\Backup.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
-InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "CloneRepos.ps1" -SourceFile ".\InstallFiles\CloneRepos.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Main.ps1" -SourceFile ".\FilesToInstall\Main.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "SharedFunctionsAndChecks.ps1" -SourceFile ".\FilesToInstall\SharedFunctionsAndChecks.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Backup.ps1" -SourceFile ".\FilesToInstall\Backup.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "CloneRepos.ps1" -SourceFile ".\FilesToInstall\CloneRepos.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
-InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "IsAdmin.psm1" -SourceFile ".\InstallFiles\PowershellModules\IsAdmin.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
-InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "ReplaceLine.psm1" -SourceFile ".\InstallFiles\PowershellModules\ReplaceLine.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "IsAdmin.psm1" -SourceFile ".\FilesToInstall\PowershellModules\IsAdmin.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "ReplaceLine.psm1" -SourceFile ".\FilesToInstall\PowershellModules\ReplaceLine.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "SetConfigValue.psm1" -SourceFile ".\FilesToInstall\PowershellModules\SetConfigValue.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
 InstallFile -TargetDir "$($installLocation)wallpapers\" -TargetFileName "space.jpg" -SourceFile ".\wallpapers\space.jpg" -FileType ".jpg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
