@@ -162,7 +162,7 @@ if (($userConfigMajorVersion -eq $installMajorVersion) -and ($userConfigMinorVer
 }
 
 
-##########################  Copy Scripts To Install Location  ################################
+##########################  Copy Files To Install Location  ################################
 function InstallFile {
   param (
     $TargetDir,
@@ -193,11 +193,10 @@ function InstallFile {
     ".ps1" {
       $lineRegex = ".scriptMajorVersion=\d*;.scriptMinorVersion=\d*;"
       $newLine = "`$scriptMajorVersion=$($MajorVersion);`$scriptMajorVersion=$($MinorVersion);"
-      ReplaceLine -LineRegex $lineRegex -NewLine $newLine -File $targetFile
-      return
     }
     ".bat" {
-      $header = ":: scriptMajorVersion=$($MajorVersion);scriptMajorVersion=$($MinorVersion);"
+      $lineRegex = ":: scriptMajorVersion=\d*;scriptMajorVersion=\d*;"
+      $newLine = ":: scriptMajorVersion=$($MajorVersion);scriptMajorVersion=$($MinorVersion);"
     }
     ".jpg" {
       return
@@ -210,11 +209,8 @@ function InstallFile {
       return
     }
   }
-  $header | Set-Content "$($targetFile).temp"
-  Get-Content $targetFile -ReadCount 5000 |
-    Add-Content "$($targetFile).temp"
-  Remove-item $targetFile
-  Rename-Item "$($targetFile).temp" -NewName $targetFile
+  ReplaceLine -LineRegex $lineRegex -NewLine $newLine -File $targetFile
+  return
 }
 
 InstallFile -TargetDir $installLocation -TargetFileName "LazyBlaze.bat" -SourceFile ".\InstallFiles\LazyBlaze.bat" -FileType ".bat" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
@@ -236,9 +232,6 @@ InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "F
 InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "UpdateConsoleLockDisplayOffTimeout.reg" -SourceFile ".\registrysettings\UpdateConsoleLockDisplayOffTimeout.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "WindowsExplorerShowFileExtensions.reg" -SourceFile ".\registrysettings\WindowsExplorerShowFileExtensions.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)registrysettings\" -TargetFileName "WindowsExplorerShowHiddenFiles.reg" -SourceFile ".\registrysettings\WindowsExplorerShowHiddenFiles.reg" -FileType ".reg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
-
-
-##########################  Copy Other Files To Install Location  ################################
 
 
 ##########################  Stop Logging  ################################

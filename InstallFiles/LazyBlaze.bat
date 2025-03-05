@@ -1,4 +1,5 @@
-:: Version info scriptMajorVersion and scriptMajorVersion will be inserted above this line by install script
+:: Version info will be inserted by install script
+:: scriptMajorVersion=;scriptMajorVersion=;
 @ECHO OFF
 SET ThisScriptsDirectory=%~dp0
 SET PowerShellScriptPath=%ThisScriptsDirectory%Scripts\Main.ps1

@@ -15,8 +15,7 @@
   The file that the line should be replaced in.
 
 .Example
-   # Show a default display of this month.
-   Show-Calendar
+   ReplaceLine -LineRegex ".scriptMajorVersion=\d*;.scriptMinorVersion=\d*;" -NewLine "`$scriptMajorVersion=011;`$scriptMajorVersion=002" -File ".\LazyBlaze.bat"
 #>
 function ReplaceLine {
     param (
