@@ -3,7 +3,7 @@ param (
 )
 
 # Version info will be inserted by install script
-$scriptMajorVersion=?;$scriptMinorVersion=?;
+$scriptMajorVersion=;$scriptMinorVersion=;
   
 $globalPrimaryScriptName = "Main"
 $globalRequireAdmin = "True"

@@ -1,4 +1,6 @@
-# Version info $scriptMajorVersion and $scriptMajorVersion will be inserted above this line by install script
+# Version info will be inserted by install script
+$scriptMajorVersion=;$scriptMinorVersion=;
+
 $globalPrimaryScriptName = "Backup"
 $globalRequireAdmin = "True"
 $globalRequireUserMatch = "False"

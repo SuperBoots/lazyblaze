@@ -2,12 +2,10 @@ param (
   $workingDirectory
 )
 
-Import-Module ReplaceLine
-  
 $globalPrimaryScriptName = "InstallApps"
 $globalRequireAdmin = "True"
 
-  
+
 ##########################  Fix Working Directory  ################################
 # If launching as admin from a .bat file it will default the working directory to system32
 # so we need to pass what the working directory should be as a parameter
@@ -16,6 +14,9 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
   Write-Host -ForegroundColor Yellow "Setting working directory to '$workingDirectory'"
   Set-Location $workingDirectory
 }
+
+
+Import-Module ".\InstallFiles\ReplaceLine.psm1"
 
 
 ##########################  Install Steps  ################################
@@ -190,7 +191,10 @@ function InstallFile {
   # add comment to top of script with version info
   switch ($FileType) {
     ".ps1" {
-      $header = "`$scriptMajorVersion=$($MajorVersion);`$scriptMajorVersion=$($MinorVersion);"
+      $lineRegex = ".scriptMajorVersion=\d*;.scriptMinorVersion=\d*;"
+      $newLine = "`$scriptMajorVersion=$($MajorVersion);`$scriptMajorVersion=$($MinorVersion);"
+      ReplaceLine -LineRegex $lineRegex -NewLine $newLine -File $targetFile
+      return
     }
     ".bat" {
       $header = ":: scriptMajorVersion=$($MajorVersion);scriptMajorVersion=$($MinorVersion);"

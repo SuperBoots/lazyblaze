@@ -1,7 +1,9 @@
-# Version info $scriptMajorVersion and $scriptMajorVersion will be inserted above this line by install script
 param (
   $workingDirectory
 )
+
+# Version info will be inserted by install script
+$scriptMajorVersion=;$scriptMinorVersion=;
 
 $globalPrimaryScriptName = "CloneRepos"
 $globalRequireAdmin = "False"
