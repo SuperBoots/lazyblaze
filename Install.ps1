@@ -16,7 +16,7 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
 }
 
 
-Import-Module ".\InstallFiles\ReplaceLine.psm1"
+Import-Module ".\InstallFiles\PowershellModules\ReplaceLine.psm1"
 
 
 ##########################  Install Steps  ################################
@@ -194,6 +194,10 @@ function InstallFile {
       $lineRegex = ".scriptMajorVersion=\d*;.scriptMinorVersion=\d*;"
       $newLine = "`$scriptMajorVersion=$($MajorVersion);`$scriptMajorVersion=$($MinorVersion);"
     }
+    ".psm1" {
+      $lineRegex = "#.scriptMajorVersion=\d*;.scriptMinorVersion=\d*;"
+      $newLine = "#`$scriptMajorVersion=$($MajorVersion);`$scriptMajorVersion=$($MinorVersion);"
+    }
     ".bat" {
       $lineRegex = ":: scriptMajorVersion=\d*;scriptMajorVersion=\d*;"
       $newLine = ":: scriptMajorVersion=$($MajorVersion);scriptMajorVersion=$($MinorVersion);"
@@ -220,6 +224,9 @@ InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Main.ps1" 
 InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "SharedFunctionsAndChecks.ps1" -SourceFile ".\InstallFiles\SharedFunctionsAndChecks.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Backup.ps1" -SourceFile ".\InstallFiles\Backup.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "CloneRepos.ps1" -SourceFile ".\InstallFiles\CloneRepos.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+
+InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "IsAdmin.psm1" -SourceFile ".\InstallFiles\PowershellModules\IsAdmin.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "ReplaceLine.psm1" -SourceFile ".\InstallFiles\PowershellModules\ReplaceLine.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
 InstallFile -TargetDir "$($installLocation)wallpapers\" -TargetFileName "space.jpg" -SourceFile ".\wallpapers\space.jpg" -FileType ".jpg" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 

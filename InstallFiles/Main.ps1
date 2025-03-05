@@ -7,7 +7,7 @@ $scriptMajorVersion=;$scriptMinorVersion=;
   
 $globalPrimaryScriptName = "Main"
 $globalRequireAdmin = "True"
-  
+
   
 ##########################  Fix Working Directory  ################################
 # If launching as admin from a .bat file it will default the working directory to system32
@@ -17,7 +17,17 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
   Write-Host -ForegroundColor Yellow "Setting working directory to '$workingDirectory'"
   Set-Location $workingDirectory
 }
+
   
+Import-Module ".\Scripts\PowershellModules\IsAdmin.psm1"
+
+
+if (-not (IsAdmin)) {
+  Write-Host -ForegroundColor Red "Script must be run as administrator, exiting."
+  Pause
+  Exit
+}
+
   
 ##########################  Run SharedFunctionsAndChecks.ps1  ################################
 # Execute script in the current session context, variables are shared between the scripts
