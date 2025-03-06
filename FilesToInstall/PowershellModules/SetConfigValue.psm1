@@ -21,7 +21,7 @@
   If true, the config value will only be modified if the existing value is empty. Defaults to true. 
 
 .Example
-   SetConfigValue -Key 'machinename' -Value 'Goose' -MyLocalConfigFile 'C:\LazyBlaze'
+  SetConfigValue -Key 'machinename' -Value 'Goose' -MyLocalConfigFile 'C:\LazyBlaze'
 #>
 function SetConfigValue {
   param (

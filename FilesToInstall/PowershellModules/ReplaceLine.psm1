@@ -18,7 +18,7 @@
   The file that the line should be replaced in.
 
 .Example
-   ReplaceLine -LineRegex ".scriptMajorVersion=\d*;.scriptMinorVersion=\d*;" -NewLine "`$scriptMajorVersion=011;`$scriptMajorVersion=002" -File ".\LazyBlaze.bat"
+  ReplaceLine -LineRegex ".scriptMajorVersion=\d*;.scriptMinorVersion=\d*;" -NewLine "`$scriptMajorVersion=011;`$scriptMajorVersion=002" -File ".\LazyBlaze.bat"
 #>
 function ReplaceLine {
   param (

@@ -12,7 +12,7 @@
   The full path of the directory to delete
 
 .Example
-   DeleteDirectory -Directory "C:\DeleteMe"
+  DeleteDirectory -Directory "C:\DeleteMe"
 #>
 function DeleteDirectory {
   param (

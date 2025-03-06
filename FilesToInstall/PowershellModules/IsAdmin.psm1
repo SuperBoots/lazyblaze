@@ -9,7 +9,7 @@
   Uses Security.Principal.WindowsPrincipal to check if current script is being run as administrator. Returns $true or $false
 
 .Example
-   IsAdmin
+  IsAdmin
 #>
 function IsAdmin {
   $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
