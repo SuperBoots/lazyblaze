@@ -19,6 +19,13 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
 }
 
 
+##########################  Start Logging  ################################
+$date = (Get-Date).ToString("yyyy-MM-dd_HHmmss")
+$logFile = ".\Logs\$($date)_$($globalPrimaryScriptName)_log.txt"
+Start-Transcript -Path $logFile
+$logStarted = "True"
+
+
 ##########################  Import Custom Powershell Modules ################################
 Import-Module ".\Scripts\PowershellModules\IsAdmin.psm1"
 Import-Module ".\Scripts\PowershellModules\SetConfigValue.psm1"
@@ -75,16 +82,46 @@ if (($configMajorVersion -eq $scriptMajorVersion) -and ($configMinorVersion -lt 
 }
 
 
-  
-##########################  Run SharedFunctionsAndChecks.ps1  ################################
-# Execute script in the current session context, variables are shared between the scripts
-. ".\Scripts\SharedFunctionsAndChecks.ps1"
-if ($globalExit -like "True") {
+##########################  Verify User Has Reviewed Config  ################################
+if ($config.settings.reviewed -notlike "True") {
+  Write-Host -ForegroundColor Red "This script will not run until the 'reviewed' property has been set to True at the bottom of the new config file $($configDir)$($configFileName)"
   Pause
   Exit
 }
-if (-not($ranSharedFunctionsAndChecks -like "True")) {
-  Write-Host -ForegroundColor Red "SharedFunctionsAndChecks.ps1 script did not finish successfully, exiting."
+
+
+##########################  Check/Populate Core Config Values  ################################
+$generatedNewConfigValue = "False"
+$coreConfigValueMismatch = "False"
+$usernameInConfig = $config.settings.username
+$actualUsername = $env:USERNAME
+if ($null -eq $usernameInConfig -or $usernameInConfig -like "") {
+  SetConfigValue -Key 'username' -Value $actualUsername -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+  Write-Host -ForegroundColor Green "Automatically setting missing value in local config, Name: username, Value: $($actualUsername)"
+  $generatedNewConfigValue = "True"
+}
+elseif ($usernameInConfig -ne $actualUsername -and $globalRequireUserMatch -ne "False") {
+  Write-Host -ForegroundColor Red "Error, username value in config does not match current user, config value: $($usernameInConfig), actual value: $($actualUsername)"
+  $coreConfigValueMismatch = "True"
+}
+$machinenameInConfig = $config.settings.machinename
+$actualMachinename = Invoke-Expression -Command 'hostname'
+if ($null -eq $machinenameInConfig -or $machinenameInConfig -like "") {
+  SetConfigValue -Key 'machinename' -Value $actualMachinename -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+  Write-Host -ForegroundColor Green "Automatically setting missing value in local config, Name: machinename, Value: $($actualMachinename)"
+  $generatedNewConfigValue = "True"
+}
+elseif ($machinenameInConfig -ne $actualMachinename) {
+  Write-Host -ForegroundColor Red "Error, machinename value in config does not match current machine name, config value: $($machinenameInConfig), actual value: $($actualMachinename)"
+  $coreConfigValueMismatch = "True"
+}
+if ($coreConfigValueMismatch -like "True") {
+  Write-Host -ForegroundColor Red "Check/Populate core config values has found at least one existing config entry that does not match the current environment. Exiting."
+  Pause
+  Exit
+}
+if ($generatedNewConfigValue -like "True") {
+  Write-Host -ForegroundColor Red "Check/Populate core config values has populated at least one missing value. It is recommended that you review the populated value before running again. Exiting."
   Pause
   Exit
 }

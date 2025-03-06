@@ -233,6 +233,7 @@ InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "SharedFunc
 InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "Backup.ps1" -SourceFile ".\FilesToInstall\Backup.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)Scripts\" -TargetFileName "CloneRepos.ps1" -SourceFile ".\FilesToInstall\CloneRepos.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
+InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "DeleteDirectory.psm1" -SourceFile ".\FilesToInstall\PowershellModules\DeleteDirectory.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "IsAdmin.psm1" -SourceFile ".\FilesToInstall\PowershellModules\IsAdmin.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "ReplaceLine.psm1" -SourceFile ".\FilesToInstall\PowershellModules\ReplaceLine.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)Scripts\PowershellModules\" -TargetFileName "SetConfigValue.psm1" -SourceFile ".\FilesToInstall\PowershellModules\SetConfigValue.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
