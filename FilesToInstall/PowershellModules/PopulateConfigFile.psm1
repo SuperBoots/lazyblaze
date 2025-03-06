@@ -6,7 +6,7 @@
   Copies a file to a destination
 
 .Description
-  Intended for taking things like config files that have been backed up previously using LazyBlaze and 
+  Intended for taking things like config files that have been backed up previously using LazyBlaze and putting them back where they live.
 
 .Parameter FileName
   The filename of the file to be copied, including extension.
