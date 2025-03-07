@@ -6,7 +6,6 @@ param (
 $scriptMajorVersion="";$scriptMinorVersion="";
   
 $globalPrimaryScriptName = "Main"
-$globalRequireAdmin = "True"
 
   
 ##########################  Fix Working Directory  ################################
@@ -27,17 +26,17 @@ $logStarted = "True"
 
 
 ##########################  Import Custom Powershell Modules ################################
-Import-Module ".\Scripts\PowershellModules\BackupConfigFile.psm1"
-Import-Module ".\Scripts\PowershellModules\CleanForEnvVar.psm1"
-Import-Module ".\Scripts\PowershellModules\CloneGitRepo.psm1"
-Import-Module ".\Scripts\PowershellModules\DeleteDirectory.psm1"
-Import-Module ".\Scripts\PowershellModules\ExcludeFromBackblaze.psm1"
-Import-Module ".\Scripts\PowershellModules\IsAdmin.psm1"
-Import-Module ".\Scripts\PowershellModules\MoveShortcuts.psm1"
-Import-Module ".\Scripts\PowershellModules\PopulateConfigFile.psm1"
-Import-Module ".\Scripts\PowershellModules\RemoveBrokenShortcuts.psm1"
-Import-Module ".\Scripts\PowershellModules\ReplaceLine.psm1"
-Import-Module ".\Scripts\PowershellModules\SetConfigValue.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\BackupConfigFile.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\CleanForEnvVar.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\CloneGitRepo.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\DeleteDirectory.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\ExcludeFromBackblaze.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\IsAdmin.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\MoveShortcuts.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\PopulateConfigFile.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\RemoveBrokenShortcuts.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\ReplaceLine.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\SetConfigValue.psm1"
 
 
 ##########################  Verify Script Is Running As Admin ################################
@@ -247,12 +246,12 @@ if ($config.settings.registryedits.skipsection -like "False") {
       Write-Host -ForegroundColor Green "Registry Setting Update '$($regedit.filename)' already completed according to environment variable. Skipping."
       continue
     }
-    $regeditfile = "registrysettings\$($regedit.filename)"
+    $regeditfile = ".\LazyBlazeScripts\IncludedRegistrySettings\$($regedit.filename)"
     if (!(test-path -PathType leaf $regeditfile)) {
       Write-Host "ERROR: Registry update file $($regeditfile) not found"
       continue
     }
-    Reg import "registrysettings\$($regedit.filename)"
+    Reg import $regeditfile
     if ($LASTEXITCODE -eq 0) {
       Write-Host -ForegroundColor Green "$($regedit.filename) registry update completed successfully."
       [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
@@ -362,15 +361,10 @@ if ($config.settings.setwallpaper.skipsection -like "False") {
   Write-Host "Section: Set Wallpaper (setwallpaper in config), starting..."
   $wallpaperName = $config.settings.setwallpaper.wallpaper
   Write-Host -ForegroundColor Yellow "Setting wallpaper to $($wallpaperName)"
-  $wallpapersDir = "$($configDir)wallpapers\"
+  $wallpapersDir = "$($workingDirectory)\LazyBlazeScripts\IncludedWallpapers\"
   $MyWallpaper="$($wallpapersDir)$($wallpaperName)"
-  if (!(Test-Path -LiteralPath $wallpapersDir)){
-    New-Item -ItemType Directory -Path $wallpapersDir 
-  }
-  If (!(test-path -PathType leaf $MyWallpaper)){
-    Copy-Item -Path ".\wallpapers\$($wallpaperName)" -Destination $MyWallpaper
-  }
-  $code = @' 
+  If (test-path -PathType leaf $MyWallpaper){
+    $code = @' 
 using System.Runtime.InteropServices; 
 namespace Win32{ 
     
@@ -384,9 +378,13 @@ namespace Win32{
     }
  } 
 '@
-  add-type $code 
-  [Win32.Wallpaper]::SetWallpaper($MyWallpaper)
-  Write-Host "Section: Set Wallpaper (setwallpaper in config), finished"
+    add-type $code 
+    [Win32.Wallpaper]::SetWallpaper($MyWallpaper)
+    Write-Host "Section: Set Wallpaper (setwallpaper in config), finished"
+  }
+  else {
+    Write-Host -ForegroundColor Red "Failed to find wallpaper $($MyWallpaper), no wallpaper set."
+  }
 }
 else {
   Write-Host "Section: Set Wallpaper (setwallpaper in config), skipping"
