@@ -27,7 +27,16 @@ $logStarted = "True"
 
 
 ##########################  Import Custom Powershell Modules ################################
+Import-Module ".\Scripts\PowershellModules\BackupConfigFile.psm1"
+Import-Module ".\Scripts\PowershellModules\CleanForEnvVar.psm1"
+Import-Module ".\Scripts\PowershellModules\CloneGitRepo.psm1"
+Import-Module ".\Scripts\PowershellModules\DeleteDirectory.psm1"
+Import-Module ".\Scripts\PowershellModules\ExcludeFromBackblaze.psm1"
 Import-Module ".\Scripts\PowershellModules\IsAdmin.psm1"
+Import-Module ".\Scripts\PowershellModules\MoveShortcuts.psm1"
+Import-Module ".\Scripts\PowershellModules\PopulateConfigFile.psm1"
+Import-Module ".\Scripts\PowershellModules\RemoveBrokenShortcuts.psm1"
+Import-Module ".\Scripts\PowershellModules\ReplaceLine.psm1"
 Import-Module ".\Scripts\PowershellModules\SetConfigValue.psm1"
 
 
