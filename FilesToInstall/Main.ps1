@@ -759,11 +759,10 @@ if ($config.settings.scheduledbackuptask.skipsection -like "False") {
     Write-Host -ForegroundColor Green "Schedule Auto Backup of Settings already completed according to environment variable $($schBkupEnvVarName). Skipping."
   }
   else {
-    $scriptedBackupName = "Backup.ps1"
-    $localScriptedBackupFile = "$($configDir)$($scriptedBackupName)"
+    $localScriptedBackupFile = ".\LazyBlazeScripts\Backup.ps1"
     $user = "NT AUTHORITY\SYSTEM"
     $trigger = New-ScheduledTaskTrigger -Daily -At '12:15 PM' 
-    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $configDir
+    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $workingDirectory
     Register-ScheduledTask -Action $action -Trigger $trigger -User $user -TaskName "BackupSettings" -Description "run lazyblaze backups daily"
     [Environment]::SetEnvironmentVariable($schBkupEnvVarName, 'COMPLETE', 'User')
     Write-Host -ForegroundColor Green "Finished Schedule Auto Backup of Settings."
