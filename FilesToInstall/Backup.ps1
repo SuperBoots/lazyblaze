@@ -5,13 +5,31 @@ $globalPrimaryScriptName = "Backup"
 $globalRequireAdmin = "True"
 $globalRequireUserMatch = "False"
 
-# Execute script in the current session context, variables are shared between the scripts
-. ".\SharedFunctionsAndChecks.ps1"
-if ($globalExit -like "True") {
-  Exit
-}
-if (-not($ranSharedFunctionsAndChecks -like "True")) {
-  Write-Host -ForegroundColor Red "SharedFunctionsAndChecks.ps1 script did not finish successfully, exiting."
+
+##########################  Start Logging  ################################
+$date = (Get-Date).ToString("yyyy-MM-dd_HHmmss")
+$logFile = ".\Logs\$($date)_$($globalPrimaryScriptName)_log.txt"
+Start-Transcript -Path $logFile
+$logStarted = "True"
+
+
+##########################  Import Custom Powershell Modules ################################
+Import-Module ".\LazyBlazeScripts\PowershellModules\BackupConfigFile.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\CleanForEnvVar.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\CloneGitRepo.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\DeleteDirectory.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\ExcludeFromBackblaze.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\IsAdmin.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\MoveShortcuts.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\PopulateConfigFile.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\RemoveBrokenShortcuts.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\ReplaceLine.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\SetConfigValue.psm1"
+
+
+##########################  Verify Script Is Running As Admin ################################
+if (-not (IsAdmin)) {
+  Write-Host -ForegroundColor Red "Script must be run as administrator, exiting."
   Pause
   Exit
 }
