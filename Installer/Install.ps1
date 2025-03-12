@@ -229,7 +229,7 @@ InstallFile -TargetDir $installLocation -TargetFileName "LazyBlaze.bat" -SourceF
 InstallFile -TargetDir $installLocation -TargetFileName "CloneRepos.bat" -SourceFile ".\FilesToInstall\CloneRepos.bat" -FileType ".bat" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
 InstallFile -TargetDir "$($installLocation)LazyBlazeScripts\" -TargetFileName "Main.ps1" -SourceFile ".\FilesToInstall\Main.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
-InstallFile -TargetDir "$($installLocation)LazyBlazeScripts\" -TargetFileName "Backup.ps1" -SourceFile ".\FilesToInstall\Backup.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
+InstallFile -TargetDir $installLocation -TargetFileName "Backup.ps1" -SourceFile ".\FilesToInstall\Backup.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 InstallFile -TargetDir "$($installLocation)LazyBlazeScripts\" -TargetFileName "CloneRepos.ps1" -SourceFile ".\FilesToInstall\CloneRepos.ps1" -FileType ".ps1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
 
 InstallFile -TargetDir "$($installLocation)LazyBlazeScripts\PowershellModules\" -TargetFileName "BackupConfigFile.psm1" -SourceFile ".\FilesToInstall\PowershellModules\BackupConfigFile.psm1" -FileType ".psm1" -MajorVersion $installMajorVersion -MinorVersion $installMinorVersion
