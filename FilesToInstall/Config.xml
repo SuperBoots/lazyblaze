@@ -3,7 +3,6 @@
   <version major="" minor=""></version>
   <username></username>
   <machinename></machinename>
-  <backuplogretentiondays>30</backuplogretentiondays>
   <updatescripts>True</updatescripts>
   <displaydescriptions>True</displaydescriptions>
   <bloatwareremoval skipsection="True">
@@ -87,8 +86,8 @@
     <details>Sets Google Chrome as the default browser for Windows</details>
   </setchromedefaultbrowser>
   <appdatabackups skipsection="True">
-    <backup skip="False" configfolder="DBeaver"        filename="data-sources.json" appdatadir="AppData\Roaming\DBeaverData\workspace6\General\.dbeaver\"                   description="DBeaver stores connection settings in this file, not passwords though"></backup>
-    <backup skip="False" configfolder="TerminalConfig" filename="settings.json"     appdatadir="AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\" description="Windows Terminal stores its profiles in this settings file"></backup>
+    <backup skip="False" configfolder="UserBackups\DBeaver"        filename="data-sources.json" appdatadir="AppData\Roaming\DBeaverData\workspace6\General\.dbeaver\"                   description="DBeaver stores connection settings in this file, not passwords though"></backup>
+    <backup skip="False" configfolder="UserBackups\TerminalConfig" filename="settings.json"     appdatadir="AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\" description="Windows Terminal stores its profiles in this settings file"></backup>
   </appdatabackups>
   <cleandesktop skipsection="True">
     <details>Create a Shortcuts folder in the users directory and move all shortcuts from the desktop into the folder.</details>
@@ -103,6 +102,7 @@
     <details>Clean System Using DISM and SFC</details>
   </rundismclean>
   <scheduledbackuptask skipsection="True">
+    <options backuplogretentiondays="30"></options>
     <details>Add a scheduled task to run Backup.ps1 script daily</details>
   </scheduledbackuptask>
   <gitrepositories skipsection="True">
