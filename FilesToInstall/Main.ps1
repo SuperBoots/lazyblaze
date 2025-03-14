@@ -1,10 +1,12 @@
 param (
   $workingDirectory
 )
+
+# Version info will be inserted by install script
+$scriptMajorVersion="";$scriptMinorVersion="";
   
-$globalPrimaryScriptName = "InstallApps"
-$globalRequireAdmin = "True"
-  
+$globalPrimaryScriptName = "Main"
+
   
 ##########################  Fix Working Directory  ################################
 # If launching as admin from a .bat file it will default the working directory to system32
@@ -14,17 +16,120 @@ if ($null -ne $workingDirectory -and (-not($workingDirectory -like $currentWorki
   Write-Host -ForegroundColor Yellow "Setting working directory to '$workingDirectory'"
   Set-Location $workingDirectory
 }
-  
-  
-##########################  Run SharedFunctionsAndChecks.ps1  ################################
-# Execute script in the current session context, variables are shared between the scripts
-. ".\SharedFunctionsAndChecks.ps1"
-if ($globalExit -like "True") {
+
+
+##########################  Start Logging  ################################
+$date = (Get-Date).ToString("yyyy-MM-dd_HHmmss")
+$logFile = ".\Logs\$($date)_$($globalPrimaryScriptName)_log.txt"
+Start-Transcript -Path $logFile
+$logStarted = "True"
+
+
+##########################  Import Custom Powershell Modules ################################
+Import-Module ".\LazyBlazeScripts\PowershellModules\BackupConfigFile.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\CleanForEnvVar.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\CloneGitRepo.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\DeleteDirectory.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\ExcludeFromBackblaze.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\IsAdmin.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\MoveShortcuts.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\PopulateConfigFile.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\RemoveBrokenShortcuts.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\ReplaceLine.psm1"
+Import-Module ".\LazyBlazeScripts\PowershellModules\SetConfigValue.psm1"
+
+
+##########################  Verify Script Is Running As Admin ################################
+if (-not (IsAdmin)) {
+  Write-Host -ForegroundColor Red "Script must be run as administrator, exiting."
   Pause
   Exit
 }
-if (-not($ranSharedFunctionsAndChecks -like "True")) {
-  Write-Host -ForegroundColor Red "SharedFunctionsAndChecks.ps1 script did not finish successfully, exiting."
+
+
+##########################  Get User Specific Values From System ################################
+$sysUserName = $env:USERNAME
+$sysMachineName = Invoke-Expression -Command 'hostname'
+
+
+##########################  Load Config  ################################
+$configFullDest = ".\Config.xml"
+$config = [xml](Get-Content $configFullDest)
+$userFromConfig = $config.settings.username
+$userdir = "C:\Users\$($userFromConfig)\"
+
+
+##########################  Checking Config Version  ################################
+# This section exists to protect users from running a newer version of the scripts with an older local config
+# file when there have been breaking changes to the codebase. This can happen very easily if you're keeping your
+# local LazyBlaze repository up to date.
+$configMajorVersion = $config.settings.version.major
+$configMinorVersion = $config.settings.version.minor
+if (($configMajorVersion -gt $scriptMajorVersion) -or (($configMajorVersion -eq $scriptMajorVersion) -and ($configMinorVersion -gt $scriptMinorVersion))) {
+  # User has somehow ende up with a local config version that's more recent than the repo that the scripts are being run from.
+  Write-Host -ForegroundColor Red "You've somehow got a version of your config that's more recent than the current script. I'm going to be honest, I'm confused. I give up."
+  Pause
+  Exit
+}
+if ($configMajorVersion -lt $scriptMajorVersion) {
+  # User has a local config that is old enough that the current repo has breaking changes
+  Write-Host -ForegroundColor Red "ERROR: This script has a more recent major version ($($scriptMajorVersion)) than the config $($configFullDest) ($($configMajorVersion
+)). Updated major versions indicate breaking changes, please bring your local config up to date before trying again."
+  Pause
+  Exit
+}
+if (($configMajorVersion -eq $scriptMajorVersion) -and ($configMinorVersion -lt $scriptMinorVersion)) {
+  # User has a local config that is slightly out of date, default behavior is to block script execution but this can be overridden by the minorblocking setting in the local config.
+  Write-Host -ForegroundColor Yellow "Warning: This script has a more recent minor version ($($scriptMinorVersion
+)) than the config $($configFullDest) ($($configMinorVersion)). Updated minor versions indicate non-breaking changes but you may want to review the example config."
+  if ($null -eq $config.settings.version.minorblocking -or $config.settings.version.minorblocking -like "True") {
+    Write-Host -ForegroundColor Red "Exiting script. If you want to allow this script to continue with minor version differences set the minorblocking property to False in your local config $($configFullDest)"
+    Pause
+    Exit
+  }
+}
+
+
+##########################  Verify User Has Reviewed Config  ################################
+if ($config.settings.reviewed -notlike "True") {
+  Write-Host -ForegroundColor Red "This script will not run until the 'reviewed' property has been set to True at the bottom of the new config file $($configDir)$($configFileName)"
+  Pause
+  Exit
+}
+
+
+##########################  Check/Populate Core Config Values  ################################
+$generatedNewConfigValue = "False"
+$coreConfigValueMismatch = "False"
+$usernameInConfig = $config.settings.username
+$actualUsername = $env:USERNAME
+if ($null -eq $usernameInConfig -or $usernameInConfig -like "") {
+  SetConfigValue -Key 'username' -Value $actualUsername -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+  Write-Host -ForegroundColor Green "Automatically setting missing value in local config, Name: username, Value: $($actualUsername)"
+  $generatedNewConfigValue = "True"
+}
+elseif ($usernameInConfig -ne $actualUsername -and $globalRequireUserMatch -ne "False") {
+  Write-Host -ForegroundColor Red "Error, username value in config does not match current user, config value: $($usernameInConfig), actual value: $($actualUsername)"
+  $coreConfigValueMismatch = "True"
+}
+$machinenameInConfig = $config.settings.machinename
+$actualMachinename = Invoke-Expression -Command 'hostname'
+if ($null -eq $machinenameInConfig -or $machinenameInConfig -like "") {
+  SetConfigValue -Key 'machinename' -Value $actualMachinename -MyLocalConfigFile $configFullDest -OnlySetIfEmpty "True"
+  Write-Host -ForegroundColor Green "Automatically setting missing value in local config, Name: machinename, Value: $($actualMachinename)"
+  $generatedNewConfigValue = "True"
+}
+elseif ($machinenameInConfig -ne $actualMachinename) {
+  Write-Host -ForegroundColor Red "Error, machinename value in config does not match current machine name, config value: $($machinenameInConfig), actual value: $($actualMachinename)"
+  $coreConfigValueMismatch = "True"
+}
+if ($coreConfigValueMismatch -like "True") {
+  Write-Host -ForegroundColor Red "Check/Populate core config values has found at least one existing config entry that does not match the current environment. Exiting."
+  Pause
+  Exit
+}
+if ($generatedNewConfigValue -like "True") {
+  Write-Host -ForegroundColor Red "Check/Populate core config values has populated at least one missing value. It is recommended that you review the populated value before running again. Exiting."
   Pause
   Exit
 }
@@ -141,12 +246,12 @@ if ($config.settings.registryedits.skipsection -like "False") {
       Write-Host -ForegroundColor Green "Registry Setting Update '$($regedit.filename)' already completed according to environment variable. Skipping."
       continue
     }
-    $regeditfile = "registrysettings\$($regedit.filename)"
+    $regeditfile = ".\LazyBlazeScripts\IncludedRegistrySettings\$($regedit.filename)"
     if (!(test-path -PathType leaf $regeditfile)) {
       Write-Host "ERROR: Registry update file $($regeditfile) not found"
       continue
     }
-    Reg import "registrysettings\$($regedit.filename)"
+    Reg import $regeditfile
     if ($LASTEXITCODE -eq 0) {
       Write-Host -ForegroundColor Green "$($regedit.filename) registry update completed successfully."
       [Environment]::SetEnvironmentVariable($installEnvVarName, 'COMPLETE', 'User')
@@ -256,15 +361,10 @@ if ($config.settings.setwallpaper.skipsection -like "False") {
   Write-Host "Section: Set Wallpaper (setwallpaper in config), starting..."
   $wallpaperName = $config.settings.setwallpaper.wallpaper
   Write-Host -ForegroundColor Yellow "Setting wallpaper to $($wallpaperName)"
-  $wallpapersDir = "$($configDir)wallpapers\"
+  $wallpapersDir = "$($workingDirectory)\LazyBlazeScripts\IncludedWallpapers\"
   $MyWallpaper="$($wallpapersDir)$($wallpaperName)"
-  if (!(Test-Path -LiteralPath $wallpapersDir)){
-    New-Item -ItemType Directory -Path $wallpapersDir 
-  }
-  If (!(test-path -PathType leaf $MyWallpaper)){
-    Copy-Item -Path ".\wallpapers\$($wallpaperName)" -Destination $MyWallpaper
-  }
-  $code = @' 
+  If (test-path -PathType leaf $MyWallpaper){
+    $code = @' 
 using System.Runtime.InteropServices; 
 namespace Win32{ 
     
@@ -278,9 +378,13 @@ namespace Win32{
     }
  } 
 '@
-  add-type $code 
-  [Win32.Wallpaper]::SetWallpaper($MyWallpaper)
-  Write-Host "Section: Set Wallpaper (setwallpaper in config), finished"
+    add-type $code 
+    [Win32.Wallpaper]::SetWallpaper($MyWallpaper)
+    Write-Host "Section: Set Wallpaper (setwallpaper in config), finished"
+  }
+  else {
+    Write-Host -ForegroundColor Red "Failed to find wallpaper $($MyWallpaper), no wallpaper set."
+  }
 }
 else {
   Write-Host "Section: Set Wallpaper (setwallpaper in config), skipping"
@@ -655,11 +759,13 @@ if ($config.settings.scheduledbackuptask.skipsection -like "False") {
     Write-Host -ForegroundColor Green "Schedule Auto Backup of Settings already completed according to environment variable $($schBkupEnvVarName). Skipping."
   }
   else {
+    $installDir = "$($workingDirectory)\"
+    Write-Host "configDir: $($installDir)"
     $scriptedBackupName = "Backup.ps1"
-    $localScriptedBackupFile = "$($configDir)$($scriptedBackupName)"
+    $localScriptedBackupFile = "$($installDir)LazyBlazeScripts\$($scriptedBackupName)"
     $user = "NT AUTHORITY\SYSTEM"
     $trigger = New-ScheduledTaskTrigger -Daily -At '12:15 PM' 
-    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $configDir
+    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $installDir
     Register-ScheduledTask -Action $action -Trigger $trigger -User $user -TaskName "BackupSettings" -Description "run lazyblaze backups daily"
     [Environment]::SetEnvironmentVariable($schBkupEnvVarName, 'COMPLETE', 'User')
     Write-Host -ForegroundColor Green "Finished Schedule Auto Backup of Settings."

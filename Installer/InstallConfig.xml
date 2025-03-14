@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+  <version major="014" minor="001">
+    <options minorblocking="True"></options>
+    <details>Version is used so that the installer can know what version it currently is, and if LazyBlaze is already installed on a machine, what version is installed.</details>
+    <details>The situation we're trying to avoid is someone with an older version of the config running a newer version of LazyBlaze and encountering errors because the format of the config has changed.</details>
+    <details>Major version should be incremented when making a breaking change (a rename, a new section, etc). When major version is updated, minor version should be reset to 001.</details>
+    <details>Minor version should be incremented when making a non-breaking change</details>
+    <details>If LazyBlaze is creating a new user config file it will copy the version info from this file into the new user config file</details>
+  </version>
+  <installdirectory>
+    <options useuserdirectory="True"></options>
+    <details>Choose where to install LazyBlaze</details>
+    <details>If useuserdirectory in options is True, it will find the current users user directory (for example C:\Users\dan\) and add userdirectory from below.</details>
+    <details>If useuserdirectory in options is False, it will use fulldirectory from below.</details>
+    <userdirectory>LazyBlaze\</userdirectory>
+    <fulldirectory>C:\LazyBlaze\</fulldirectory>
+  </installdirectory>
+</settings>
