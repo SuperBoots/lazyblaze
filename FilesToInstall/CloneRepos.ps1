@@ -152,7 +152,7 @@ if ($config.settings.gitrepositories.skipsection -like "False") {
     }
     $currentGitClone++
     $cleanedId = CleanForEnvVar -Dirty "$($gitrepo.dest)$($gitrepo.name)"
-    $gitCloneEnvVarName = "NMSS_CLONEGITREPO_$($cleanedId)"
+    $gitCloneEnvVarName = "LZB_CLONEGITREPO_$($cleanedId)"
     $cloneComplete = [Environment]::GetEnvironmentVariable($gitCloneEnvVarName, 'User')
     Write-Host -ForegroundColor Yellow  "Cloning git repository ($($currentGitClone)/$($totalGitClones)) '$($gitrepo.name)' (source: '$($gitrepo.url)') from config"
     if ($cloneComplete -like "COMPLETE"){
@@ -193,7 +193,7 @@ if ($config.settings.gitrepositories.skipsection -like "False" -and $config.sett
     }
     $currentGitRepo++
     $cleanedId = CleanForEnvVar -Dirty "$($gitrepo.dest)$($gitrepo.name)"
-    $gitCloneEnvVarName = "NMSS_ADDGITREPOGHDESK_$($cleanedId)"
+    $gitCloneEnvVarName = "LZB_ADDGITREPOGHDESK_$($cleanedId)"
     $addComplete = [Environment]::GetEnvironmentVariable($gitCloneEnvVarName, 'User')
     Write-Host -ForegroundColor Yellow "Adding git repository ($($currentGitRepo)/$($totalGitRepos)) '$($gitrepo.name)' to Github Desktop"
     if ($addComplete -like "COMPLETE"){

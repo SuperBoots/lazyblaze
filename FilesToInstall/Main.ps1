@@ -240,7 +240,7 @@ if ($config.settings.registryedits.skipsection -like "False") {
       Write-Host "Description: $($regedit.description)"
     }
     $cleanedName = CleanForEnvVar -Dirty $regedit.filename
-    $installEnvVarName = "NMSS_REGEDITS_$($cleanedName)"
+    $installEnvVarName = "LZB_REGEDITS_$($cleanedName)"
     $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
     if ($installComplete -like "COMPLETE"){
       Write-Host -ForegroundColor Green "Registry Setting Update '$($regedit.filename)' already completed according to environment variable. Skipping."
@@ -395,7 +395,7 @@ else {
 # (Can be run multiple times)
 if ($config.settings.disccleanup.skipsection -like "False") {
   Write-Host "Section: Run Disc Cleanup (disccleanup in config), starting..."
-  $diskCleanupEnvVarName = "NMSS_DISKCLEANUP"
+  $diskCleanupEnvVarName = "LZB_DISKCLEANUP"
   $diskCleanupComplete = [Environment]::GetEnvironmentVariable($diskCleanupEnvVarName, 'User')
   if ($diskCleanupComplete -like "COMPLETE" -and $config.settings.disccleanup.firstrunonly -like "True") {
     Write-Host -ForegroundColor Green "Run Disc Cleanup already completed according to environment variable $($diskCleanupEnvVarName) and firstrunonly in config is True. Skipping."
@@ -443,7 +443,7 @@ if ($config.settings.chocoinstalls.skipsection -like "False" -and $totalChocoIns
     }
     $currentChocoInstall++
     $cleanedId = CleanForEnvVar -Dirty $app.id
-    $installEnvVarName = "NMSS_CHOCOINSTALLS_$($cleanedId)"
+    $installEnvVarName = "LZB_CHOCOINSTALLS_$($cleanedId)"
     $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
     Write-Host -ForegroundColor Yellow  "Chocolatey install ($($currentChocoInstall)/$($totalChocoInstalls)) '$($app.id)' from config"
     if ($config.settings.displaydescriptions -like "True" -and $null -ne $app.description) {
@@ -494,7 +494,7 @@ if ($totalWingetInstalls -gt 0 -or  $config.settings.visualstudio.app.skip -like
     }
     $currentWingetInstall++
     $cleanedId = CleanForEnvVar -Dirty $app.id
-    $installEnvVarName = "NMSS_WINGETINSTALLS_$($cleanedId)"
+    $installEnvVarName = "LZB_WINGETINSTALLS_$($cleanedId)"
     $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
     Write-Host -ForegroundColor Yellow "Winget install ($($currentWingetInstall)/$($totalWingetInstalls)) '$($app.id)' from config..."
     if ($config.settings.displaydescriptions -like "True" -and $null -ne $app.description) {
@@ -545,7 +545,7 @@ if ($config.settings.visualstudio.skipsection -like "False") {
     Exit
   }
   $cleanedId = CleanForEnvVar -Dirty $config.settings.visualstudio.app.id
-  $installEnvVarName = "NMSS_WINGETINSTALLS_$($cleanedId)"
+  $installEnvVarName = "LZB_WINGETINSTALLS_$($cleanedId)"
   $installComplete = [Environment]::GetEnvironmentVariable($installEnvVarName, 'User')
   Write-Host -ForegroundColor Yellow "Winget install '$($config.settings.visualstudio.app.id)' from config..."
   if ($config.settings.displaydescriptions -like "True" -and $null -ne $config.settings.visualstudio.app.description) {
@@ -598,7 +598,7 @@ else {
 if ($config.settings.setchromedefaultbrowser.skipsection -like "False") {
   Write-Host "Section: Set Chrome As Default Browser (setchromedefaultbrowser in config), starting..."
   Write-Host -ForegroundColor Yellow "Set Chrome As Default Browser..."
-  $chrDftEnvVarName = "NMSS_SETCHROMEASDEFAULT"
+  $chrDftEnvVarName = "LZB_SETCHROMEASDEFAULT"
   $stepComplete = [Environment]::GetEnvironmentVariable($chrDftEnvVarName, 'User')
   if ($stepComplete -like "COMPLETE"){
     Write-Host -ForegroundColor Green "Set Chrome as Default Browser already completed according to environment variable $($chrDftEnvVarName). Skipping."
@@ -638,7 +638,7 @@ else {
 if ($config.settings.appdatabackups.skipsection -like "False") {
   Write-Host "Section: Populate Config Files (appdatabackups in config), starting..."
   Write-Host -ForegroundColor Yellow "Populate Config Files..."
-  $popConfigsEnvVarName = "NMSS_POPULATECONFIGS"
+  $popConfigsEnvVarName = "LZB_POPULATECONFIGS"
   $stepComplete = [Environment]::GetEnvironmentVariable($popConfigsEnvVarName, 'User')
   if ($stepComplete -like "COMPLETE"){
     Write-Host -ForegroundColor Green "Populate Various Config Files already completed according to environment variable $($popConfigsEnvVarName). Skipping."
@@ -728,7 +728,7 @@ else {
 if ($config.settings.rundismclean.skipsection -like "False") {
   Write-Host "Section: Clean System Using DISM and SFC (rundismclean in config), starting..."
   Write-Host -ForegroundColor Yellow "Clean System Using DISM and SFC..."
-  $dismCleanEnvVarName = "NMSS_DISMCLEAN"
+  $dismCleanEnvVarName = "LZB_DISMCLEAN"
   $dismCleanComplete = [Environment]::GetEnvironmentVariable($dismCleanEnvVarName, 'User')
   if ($dismCleanComplete -like "COMPLETE" -and $config.settings.rundismclean.firstrunonly -like "True") {
     Write-Host -ForegroundColor Green "Clean System Using DISM and SFC already completed according to environment variable $($dismCleanEnvVarName) and firstrunonly in config is True. Skipping."
@@ -753,7 +753,7 @@ else {
 if ($config.settings.scheduledbackuptask.skipsection -like "False") {
   Write-Host "Section: Schedule Auto Backup of Settings (scheduledbackuptask in config), starting..."
   Write-Host -ForegroundColor Yellow "Schedule Auto Backup of Settings..."
-  $schBkupEnvVarName = "NMSS_SCHEDULEBACKUP"
+  $schBkupEnvVarName = "LZB_SCHEDULEBACKUP"
   $stepComplete = [Environment]::GetEnvironmentVariable($schBkupEnvVarName, 'User')
   if ($stepComplete -like "COMPLETE"){
     Write-Host -ForegroundColor Green "Schedule Auto Backup of Settings already completed according to environment variable $($schBkupEnvVarName). Skipping."
