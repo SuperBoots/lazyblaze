@@ -6,12 +6,16 @@ The goal of this project is to minimize the time and effort it takes to go from 
 
 This project is designed to take advantage of Backblaze computer backups to get a machine as close as possible to the state it was in before while still retaining the wonderful cleaning power of a disc reformat and Windows reinstall. (Note: I have not tested lazyblaze with Backblaze B2 Cloud Storage, but a ticket has been added to the backlog to investigate compatibility)
 
-This project will work perfectly fine even if you're not using Backblaze, just set usingbackblaze to False in the config and ignore the Backblaze specific steps in the instructions.
+This project will work perfectly fine even if you're not using Backblaze, just make sure skipsection="True" for backblazeclean in your config and ignore the Backblaze specific steps in the instructions.
 
 # Simplified Usage Instructions
-1. Run `LazyBlaze.bat` for first time, local config will be created.
-    * For more information see "Understanding the local configuration folder" below
-1. Make updates to `C:\LazyBlazeConfig\LocalConfig.xml` to define which programs to install (among other things)
+1. Run `InstallOrUpdate.bat` to install or update LazyBlaze.
+    * You will be prompted with the target install location, press 'y' to install
+    * Default install location is `C:\Users\(username)\LazyBlaze\`
+    * If you want to change the install location, press 'n' to cancel the install, then open Installer/InstallConfig.xml and modify settings under installdirectory, then run installer again.
+1. Open the folder that LazyBlaze was installed to, see default above
+    * You should see the folder `LazyBlazeScripts` and the files `LazyBlaze.bat` and `CloneRepos.bat` and `Config.xml`
+1. Make updates to `Config.xml` to define which programs to install (among other things)
     * Example Winget config entries for program installations that have been tested can be found in `\ExampleLocalConfig\VerifiedWingetInstalls.txt`
     * Example registry edits can be found in `\registrysettings\`
     * Update `<reviewed>False</reviewed>` to `<reviewed>True</reviewed>` at the bottom of the `C:\LazyBlazeConfig\LocalConfig.xml` file, if you don't update this the script won't install anything.
