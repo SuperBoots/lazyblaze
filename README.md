@@ -14,18 +14,19 @@ This project will work perfectly fine even if you're not using Backblaze, just m
     * Default install location is `C:\Users\(username)\LazyBlaze\`
     * If you want to change the install location, press 'n' to cancel the install, then open Installer/InstallConfig.xml and modify settings under installdirectory, then run installer again.
 1. Open the folder that LazyBlaze was installed to, see default above
+    * I will refer to this folder as 'your Lazyblaze instance' going forward
     * You should see the folder `LazyBlazeScripts` and the files `LazyBlaze.bat` and `CloneRepos.bat` and `Config.xml`
-1. Make updates to `Config.xml` to define which programs to install (among other things)
-    * Example Winget config entries for program installations that have been tested can be found in `\ExampleLocalConfig\VerifiedWingetInstalls.txt`
-    * Example registry edits can be found in `\registrysettings\`
-    * Update `<reviewed>False</reviewed>` to `<reviewed>True</reviewed>` at the bottom of the `C:\LazyBlazeConfig\LocalConfig.xml` file, if you don't update this the script won't install anything.
-1. Run `LazyBlaze.bat` again, if everything is configured correctly then the InstallApps.ps1 will be executed in it's entirety.
-1. Run `C:\LazyBlazeConfig\CloneRepos.bat` to clone the git repositories you've defined in your local config
+1. In your LazyBlaze instance: Make updates to `Config.xml` to define which programs to install (among other things)
+    * Example Winget config entries for program installations that have been tested can be found in this repository in `\ExampleConfigEntries\VerifiedWingetInstalls.txt`
+    * Example registry edits can be found in this repository in `\registrysettings\`, they are also copied to the install location under `\LazyBlazeScripts\IncludedRegistrySettings\`
+    * Update `<reviewed>False</reviewed>` to `<reviewed>True</reviewed>` at the bottom of the `Config.xml` file, if you don't update this the script won't install anything.
+1. In your LazyBlaze instance: Run `LazyBlaze.bat`, there are various safety checks in place so watch for the script to stop and prompt you to take some action. The common behavior if everything is configured correctly then the Main.ps1 will be executed in it's entirety.
+1. In your LazyBlaze instance: Run `CloneRepos.bat` to clone the git repositories you've defined in your local config
     * For more information see "Clone Code Repositories" below
 1. Done!
 
-## Understanding the local configuration folder `C:\LazyBlazeConfig\`
-Once you've cloned the repository for lazyblaze you should be all set to just start following the "Fresh Windows Install Instructions" below, but there's an external folder that will be created by the scripts that you should be aware of. The default location of this folder is `C:\LazyBlazeConfig\`, you can change it by updating `Config.xml` in the root of this repository before you run the scripts, but I'd recommend leaving it as default if possible.
+## Understanding Your LazyBlaze Instance (default `C:\Users\(username)\LazyBlaze\`)
+Once you've installed lazyblaze you should be all set to just start following the "Fresh Windows Install Instructions" below, but there's an external folder that will be created by the scripts that you should be aware of. The default location of this folder is `C:\LazyBlazeConfig\`, you can change it by updating `Config.xml` in the root of this repository before you run the scripts, but I'd recommend leaving it as default if possible.
 
 The `C:\LazyBlazeConfig\` folder that gets created will have some values already populated, but the purpose of this folder is to hold values and files that are specific to your machine that the scripts in this repository can use. The most important thing in this directory is LocalConfig.xml, it defines what programs to remove, what programs to install, and generally just lets you pick all your options once and then setup everything with minimal interaction. 
 
@@ -134,16 +135,15 @@ If you have another machine handy that's already up and running with access to t
 
 ## Clone Code Repositories
 1. *I'd suggest getting logged into your password manager and browsers before the Clone Code Repositories step.*
-1. If using `Add Git Repositories To Github Desktop` option 
-    * Then you'll need to launch the Github Desktop application first on your machine and get logged in.
-    * (`addrepostogithubdesktop` setting in config)
-1. Open local config folder, default is `C:\LazyBlazeConfig\`
-1. Run CloneRepos.bat
-    * The Git Credentials Manager UI will pop up for any repositories that don't already have creds saved in the manager.
-    * *FYI - CloneRepos.ps1 needs to be run from the local config folder because it needs to be in the same directory as the LocalConfig.xml file and it can't be in this repository because this repository will likely be deleted and recreated by the script.*
-1. *If using `Add Git Repositories To Github Desktop` option* 
+1. *If using `Add Git Repositories To Github Desktop` option (you should, it's awesome) then follow these sub-steps, otherwise just skip to 'Run CloneRepos.bat'* 
+    * *You'll need to launch the Github Desktop application and get logged in.*
+    * *Before running CloneRepos.bat, make sure the Github Desktop window is actually open*
+        * *If you DON'T have Github Desktop open when you run Run CloneRepos.bat then Github Desktop will launch for each local repository add, then you will need to close Github Desktop between each repository to continue*
+        * *If you DO have Github Desktop open when you run Run CloneRepos.bat then Github Desktop will just open a prompt for each local repository add, then you just hit 'Add Repository' to continue*
     * *After all the repositories are cloned the script will loop through the list again and pause on each one, waiting for you to prompt before launching Github Desktop with the local repository location filled in.*
     * *You'll need to click the `Add repository` button in GitHub Desktop once for each repository in your config*
+1. Run CloneRepos.bat
+    * The Git Credentials Manager UI will pop up for any repositories that don't already have creds saved in the manager.
 
 ## Sign in to apps
 I highly suggest that you keep your own detailed list of app logins and manual configurations.
