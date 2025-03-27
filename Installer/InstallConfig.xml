@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
-  <version major="015" minor="001">
+  <version major="016" minor="001">
     <options minorblocking="True"></options>
     <details>Version is used so that the installer can know what version it currently is, and if LazyBlaze is already installed on a machine, what version is installed.</details>
     <details>The situation we're trying to avoid is someone with an older version of the config running a newer version of LazyBlaze and encountering errors because the format of the config has changed.</details>
