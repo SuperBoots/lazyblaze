@@ -61,16 +61,46 @@ $logStarted = "True"
 
 
 ##########################  Determine Install Location  ################################
-$installLocation = $installConfig.settings.installdirectory.fulldirectory
-if ($installConfig.settings.installdirectory.options.useuserdirectory -like "True") {
-  $installLocation = "$($env:USERPROFILE)\$($installConfig.settings.installdirectory.userdirectory)"
+$installOverrideEnvVarName = "LZB_INSTALL_OVERRIDE"
+$configDirectoryOverride = $installConfig.settings.installdirectory.directoryoverride
+$envDirectoryOverride = [Environment]::GetEnvironmentVariable($installOverrideEnvVarName, 'User')
+if (-not ($null -eq $configDirectoryOverride -or $configDirectoryOverride -like "")) {
+  Write-Host -ForegroundColor Yellow "The directoryoverride setting in InstallConfig.xml has been set and will be used for install location."
+  Write-Host -ForegroundColor Yellow "This will install LazyBlaze to the override location, and also save the location to the $($installOverrideEnvVarName) environment variable for future use."
+  Write-Host -ForegroundColor Yellow "LazyBlaze will be installed to '$($configDirectoryOverride)'"
+  $userInput = Read-Host "Enter 'y' to continue installation"
+  if (-not ($userInput -ieq 'y')) {
+    Write-Host -ForegroundColor Red "Input did not match 'y', exiting."
+    Pause
+    Exit
+  }
+  Write-Host -ForegroundColor Yellow "Setting user environment variable $($installOverrideEnvVarName) = $($configDirectoryOverride)"
+  [Environment]::SetEnvironmentVariable($installOverrideEnvVarName, $configDirectoryOverride, 'User')
+  $installLocation = $configDirectoryOverride
 }
-Write-Host -ForegroundColor Yellow "LazyBlaze will be installed to '$($installLocation)'"
-$userInput = Read-Host "Enter 'y' to continue installation"
-if (-not ($userInput -ieq 'y')) {
-  Write-Host -ForegroundColor Red "Input did not match 'y', exiting."
-  Pause
-  Exit
+elseif (-not ($null -eq $envDirectoryOverride -or $envDirectoryOverride -like "")) {
+  Write-Host -ForegroundColor Yellow "The user environment variable $($installOverrideEnvVarName) was found to have a value and will be used for install location."
+  Write-Host -ForegroundColor Yellow "LazyBlaze will be installed to '$($envDirectoryOverride)'"
+  $userInput = Read-Host "Enter 'y' to continue installation"
+  if (-not ($userInput -ieq 'y')) {
+    Write-Host -ForegroundColor Red "Input did not match 'y', exiting."
+    Pause
+    Exit
+  }
+  $installLocation = $envDirectoryOverride
+}
+else {
+  $sysMachineName = Invoke-Expression -Command 'hostname'
+  Write-Host -ForegroundColor Yellow "Building default install location using user directory $($env:USERPROFILE) and machine name $($sysMachineName)."
+  $defaultInstallLocation = "$($env:USERPROFILE)\OneDrive\LazyBlaze_$($sysMachineName)\"
+  Write-Host -ForegroundColor Yellow "LazyBlaze will be installed to '$($defaultInstallLocation)'"
+  $userInput = Read-Host "Enter 'y' to continue installation"
+  if (-not ($userInput -ieq 'y')) {
+    Write-Host -ForegroundColor Red "Input did not match 'y', exiting."
+    Pause
+    Exit
+  }
+  $installLocation = $defaultInstallLocation
 }
 
 
