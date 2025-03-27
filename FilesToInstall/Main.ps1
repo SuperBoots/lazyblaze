@@ -672,6 +672,9 @@ if ($config.settings.cleandesktop.skipsection -like "False") {
   Write-Host -ForegroundColor Yellow "Clean Desktop..."
   $shortcutsFolderName = "Shortcuts"
   $desktopPath = "$($userdir)Desktop\"
+  if ($config.settings.cleandesktop.options.onedrive -like "True"){
+    $desktopPath = "$($userdir)OneDrive\Desktop\"
+  }
   $publicDesktopPath = "C:\Users\Public\Desktop\"
   $shortcutsDestination = "$($userdir)$($shortcutsFolderName)\"
   $shortcutsShortcut = "$($desktopPath)$($shortcutsFolderName).lnk"
