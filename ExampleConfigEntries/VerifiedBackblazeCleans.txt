@@ -2,6 +2,7 @@ I just keep adding to this list when I find another directory that I don't want 
 It doesn't hurt to include exclusions in your list that don't exist on your machine, so I just keep one big master list instead of maintaining specific lists for each machine.
 
     <dir skip="False" userdir="False" directory="C:\$SysReset" notes="The $SysReset folder is created when a Refresh or Reset operation fails. It contains a log folder that may be useful to system administrators experiencing a problem with refreshing or resetting a PC"></dir>
+    <dir skip="False" userdir="False" directory="C:\Battlestate Games" notes="The Battlestate Games directory is where Escape From Tarkov is installed to, it's like 55 GB. Things you might want to keep like control mappings are not here, they're in AppData."></dir>
     <dir skip="False" userdir="False" directory="C:\Config.Msi" notes="The Config.Msi folder is used by the Windows Installer process during an installation of software. It saves files with the extension of .RBS and .RBF. These are Rollback Script Files used by the installer to uninstall recent changes if an install fails somewhere along the way"></dir>
     <dir skip="False" userdir="False" directory="C:\ProgramData\Adobe"></dir>
     <dir skip="False" userdir="False" directory="C:\ProgramData\Battle.net"></dir>
