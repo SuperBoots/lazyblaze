@@ -90,22 +90,23 @@ If you have another machine handy that's already up and running with access to t
 * If using Backblaze:
     * Pause Backblaze backup after reboot is complete
 
-## *Special Instructions - Removing Files from Backblaze Backup - Part 1*
-*There are three main reasons I've needed to remove files from Backblaze backups, either they're causing issues with running the scripts, causing system instability, or they're just excessively large and it's making your restore process take forever. Whatever the reason, the method for removing files from your backup is the same.*
-1. *Identify the folders/files that are adding too much to storage size and add them to the <backblazeclean> section of the LocalConfig.xml (default location `C:\LazyBlazeConfig\`).* 
+## Run LazyBlaze.bat file (this is where the magic happens)
+1. *(wait until after Backblaze restore is complete before running LazyBlaze.bat)*
+1. Run LazyBlaze.bat in your LazyBlaze instance
+1. Pay attention to prompts, if there are any changes you need to make the script will tell you, and then you'll need to re-run LazyBlaze.bat.
+1. *Depending on what features you have enabled and the number of apps you're installing, this can be a long process. I've generally tried to keep anything that requires user interaction at the very beginning, so you should be able to walk away once you've confirmed it's chugging along.*
+
+## *Special Instructions - Removing Files from Backblaze Backup*
+*There are three main reasons I've needed to remove files from Backblaze backups, either they're causing issues with running the scripts, causing system instability, or they're just excessively large and it's making your restore process take forever. Whatever the reason, the method for removing files from your backup is the same. (and unfortunately kind of a pain because Backblaze doesn't make removing files from a backup easy)*
+1. *Identify the folders/files that are adding too much to storage size and add them to the <backblazeclean> section of your Config.xml in your BackBlaze instance.* 
 1. *At this point there should be two backups on backblaze.com for this machine, one that is the 'real' backup and one that was created today (because a new one is created whenever you install Backblaze). Identify the old (real) backup and the new (empty) backup*
 1. *If you've managed to keep the new backup empty, or a least keep any of the files you're trying to remove out of it, then you can just let the new backup be the backup going forward. In this case, skip the rest of 'Removing Files from Backblaze Backup - Part 1'*
-1. *You should only be at this step if you need to throw away the new backup and start a new one*
-1. *On backblaze.com delete the new (created today) backup*
-1. *Uninstall Backblaze (via Add/Remove Programs) and restart computer*
-1. *Re-Install Backblaze AND IMMEDIATELY OPEN THE BACKBLAZE CONTROL PANEL AND PAUSE THE BACKUP. It will be trying to create a new backup from scratch and if you don't pause the backup it'll just start backing up everything. You can go look at anything that got uploaded on backblaze.com, as long as the files you're tring to remove didn't get uploaded yet you should be good.*
-1. *Continue 'Removing Files from Backblaze Backup - Part 2' after completing the next step*
-
-## Run .bat file to install all applications (after Backblaze restore is complete)
-1. Run LazyBlaze.bat in your local lazyblaze directory
-
-## *Special Instructions - Removing Files from Backblaze Backup - Part 2*
-*Creating a fresh backup*
+1. *Only follow these sub-steps if you need to throw away the new backup and start a new one*
+    1. *On backblaze.com delete the new (created today) backup*
+    1. *Uninstall Backblaze (via Add/Remove Programs) and then restart computer*
+    1. *Re-Install Backblaze AND IMMEDIATELY OPEN THE BACKBLAZE CONTROL PANEL AND PAUSE THE BACKUP AND/OR KILL THE BACKBLAZE APP.* 
+        * *(It will be trying to create a new backup from scratch and if you don't pause the backup it'll just start backing up everything. You can go look at anything that got uploaded on backblaze.com, as long as the files you're tring to remove didn't get uploaded yet you should be good.)*
+1. *Run (or re-run) LazyBlaze.bat with `<backblazeclean skipsection="False">` in order to re-populate the Backblaze exclusions list that got reset when Backblaze was re-installed*
 1. *Restart the computer*
 1. *Let Backblaze populate the new backup, it will show up on backblaze.com as unlicensed with today's date in the name* 
 1. *Verify that the new backup on backblaze.com does not include the files that you wanted to remove.*
@@ -150,10 +151,6 @@ If you have another machine handy that's already up and running with access to t
 
 ## Sign in to apps
 I highly suggest that you keep your own detailed list of app logins and manual configurations.
-
-## Any Other apps to manually install
-1. [Oculus PC App](https://www.meta.com/help/quest/articles/headsets-and-accessories/oculus-rift-s/install-app-for-link/) 
-1. ???
 
 ## A list of other similar projects on github
 1. [Opendows Tweakers](https://github.com/MarcoRavich/Opendows/blob/main/Tweakers.md#-) (this list is awesome)
