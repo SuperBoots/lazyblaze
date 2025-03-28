@@ -43,7 +43,6 @@
     <details>Runs CleanMgr.exe with argument sagerun:1</details>
   </disccleanup>
   <chocoinstalls skipsection="True">
-    <app skip="False" id="intel-xtu"                               description="Intel Extreme Tuning Utility (Intel XTU) is used to overclock, monitor, and stress a system"></app>
     <app skip="False" id="samsung-magician"                        description="Samsung Magician - Manage your drive like magic"></app>
   </chocoinstalls>
   <wingetinstalls skipsection="True">
