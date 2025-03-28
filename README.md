@@ -6,26 +6,34 @@ The goal of this project is to minimize the time and effort it takes to go from 
 
 This project is designed to take advantage of Backblaze computer backups to get a machine as close as possible to the state it was in before while still retaining the wonderful cleaning power of a disc reformat and Windows reinstall. (Note: I have not tested lazyblaze with Backblaze B2 Cloud Storage, but a ticket has been added to the backlog to investigate compatibility)
 
-This project will work perfectly fine even if you're not using Backblaze, just set usingbackblaze to False in the config and ignore the Backblaze specific steps in the instructions.
+This project will work perfectly fine even if you're not using Backblaze, just make sure skipsection="True" for backblazeclean in your config and ignore the Backblaze specific steps in the instructions.
 
 # Simplified Usage Instructions
-1. Run `LazyBlaze.bat` for first time, local config will be created.
-    * For more information see "Understanding the local configuration folder" below
-1. Make updates to `C:\LazyBlazeConfig\LocalConfig.xml` to define which programs to install (among other things)
-    * Example Winget config entries for program installations that have been tested can be found in `\ExampleLocalConfig\VerifiedWingetInstalls.txt`
-    * Example registry edits can be found in `\registrysettings\`
-    * Update `<reviewed>False</reviewed>` to `<reviewed>True</reviewed>` at the bottom of the `C:\LazyBlazeConfig\LocalConfig.xml` file, if you don't update this the script won't install anything.
-1. Run `LazyBlaze.bat` again, if everything is configured correctly then the InstallApps.ps1 will be executed in it's entirety.
-1. Run `C:\LazyBlazeConfig\CloneRepos.bat` to clone the git repositories you've defined in your local config
+1. Run `InstallOrUpdate.bat` to install or update LazyBlaze (from somewhere on your C:\ drive).
+    * You will be prompted with the target install location, press 'y' to install
+    * Default install location is `C:\Users\(username)\OneDrive\LazyBlaze_(machinename)\`
+    * If you want to change the install location, press 'n' to cancel the install, then open Installer/InstallConfig.xml and modify settings under installdirectory, then run installer again.
+1. Open the folder that LazyBlaze was installed to, see default above
+    * I will refer to this folder as 'your Lazyblaze instance' going forward
+    * You should see the folder `LazyBlazeScripts` and the files `LazyBlaze.bat` and `CloneRepos.bat` and `Config.xml`
+1. In your LazyBlaze instance: Make updates to `Config.xml` to define which programs to install (among other things)
+    * Example Winget config entries for program installations that have been tested can be found in this repository in `\ExampleConfigEntries\VerifiedWingetInstalls.txt`
+    * Example registry edits can be found in this repository in `\registrysettings\`, they are also copied to the install location under `\LazyBlazeScripts\IncludedRegistrySettings\`
+    * Update `<reviewed>False</reviewed>` to `<reviewed>True</reviewed>` at the bottom of the `Config.xml` file, if you don't update this the script won't install anything.
+1. In your LazyBlaze instance: Run `LazyBlaze.bat`, there are various safety checks in place so watch for the script to stop and prompt you to take some action. The common behavior if everything is configured correctly then the Main.ps1 will be executed in it's entirety.
+1. (optional) In your LazyBlaze instance: Run `CloneRepos.bat` to clone the git repositories you've defined in your local config
     * For more information see "Clone Code Repositories" below
 1. Done!
 
-## Understanding the local configuration folder `C:\LazyBlazeConfig\`
-Once you've cloned the repository for lazyblaze you should be all set to just start following the "Fresh Windows Install Instructions" below, but there's an external folder that will be created by the scripts that you should be aware of. The default location of this folder is `C:\LazyBlazeConfig\`, you can change it by updating `Config.xml` in the root of this repository before you run the scripts, but I'd recommend leaving it as default if possible.
+## Understanding Your LazyBlaze Instance (default `C:\Users\(username)\OneDrive\LazyBlaze_(machinename)\`)
+LazyBlaze uses a very basic "installer" for two main reasons. One is to provide some safety net around updating your instance of LazyBlaze, and the other reason is to simplify development by keeping user-specific changes out of the code repository.
+The default location that your LazyBlaze instance will be installed to is `C:\Users\(username)\OneDrive\LazyBlaze_(machinename)\`, you can change it by updating `Installer\InstallConfig.xml` in the root of this repository before you run the scripts.
 
-The `C:\LazyBlazeConfig\` folder that gets created will have some values already populated, but the purpose of this folder is to hold values and files that are specific to your machine that the scripts in this repository can use. The most important thing in this directory is LocalConfig.xml, it defines what programs to remove, what programs to install, and generally just lets you pick all your options once and then setup everything with minimal interaction. 
+The file you will want to get familiar with in your LazyBlaze instance is `Config.xml`. The `Config.xml` file allows LazyBlaze to require almost zero user interaction while it's running by specifying all your preferences and selections ahead of time in one location. When you first install your LazyBlaze instance `Config.xml` will just have some default values in it, these are mostly to show what the structure looks like of the various options.
 
-The idea is that you'll run through the setup process once and make a lot of changes to the local config, then once it's in a spot that you like you can save LocalConfig.xml somewhere safe off your machine, or better yet save the whole `C:\LazyBlazeConfig\` folder, and then if you need to rebuild your machine from scratch you can just put your saved config folder back in place and run LazyBlaze.bat to get your environment built out exactly how it was before.
+Some features of LazyBlaze can use files that you provide, for example "Set Wallpaper" will by default use `(your lazyblaze instance)\LazyBlazeScripts\IncludedWallpapers\space.jpg` as your wallpaper image, but you can put whatever image you want in the IncludedWallpapers folder and update `Config.xml` to use your custom wallpaper.
+
+The idea here is that you get your LazyBlaze instance all set up so that it's got the app installs that you want and all the details are how you like them. Then, if you get a new PC or you need to wipe your existing PC, you can just have your LazyBlaze instance backed up, and put your LazyBlaze instance on the new machine and run it and you should end up coming as close as possible to replicating the set up of your old machine.
 
 # Fresh Windows Install Instructions
 I suggest keeping a document for each of your machines with more specific details to keep your environment as repeatable as possible. My personal instruction documents live in google docs, I have one document per machine. I basically copied these instructions to start and then added details as I went.
@@ -82,22 +90,23 @@ If you have another machine handy that's already up and running with access to t
 * If using Backblaze:
     * Pause Backblaze backup after reboot is complete
 
-## *Special Instructions - Removing Files from Backblaze Backup - Part 1*
-*There are three main reasons I've needed to remove files from Backblaze backups, either they're causing issues with running the scripts, causing system instability, or they're just excessively large and it's making your restore process take forever. Whatever the reason, the method for removing files from your backup is the same.*
-1. *Identify the folders/files that are adding too much to storage size and add them to the <backblazeclean> section of the LocalConfig.xml (default location `C:\LazyBlazeConfig\`).* 
+## Run LazyBlaze.bat file (this is where the magic happens)
+1. *(wait until after Backblaze restore is complete before running LazyBlaze.bat)*
+1. Run LazyBlaze.bat in your LazyBlaze instance
+1. Pay attention to prompts, if there are any changes you need to make the script will tell you, and then you'll need to re-run LazyBlaze.bat.
+1. *Depending on what features you have enabled and the number of apps you're installing, this can be a long process. I've generally tried to keep anything that requires user interaction at the very beginning, so you should be able to walk away once you've confirmed it's chugging along.*
+
+## *Special Instructions - Removing Files from Backblaze Backup*
+*There are three main reasons I've needed to remove files from Backblaze backups, either they're causing issues with running the scripts, causing system instability, or they're just excessively large and it's making your restore process take forever. Whatever the reason, the method for removing files from your backup is the same. (and unfortunately kind of a pain because Backblaze doesn't make removing files from a backup easy)*
+1. *Identify the folders/files that are adding too much to storage size and add them to the <backblazeclean> section of your Config.xml in your BackBlaze instance.* 
 1. *At this point there should be two backups on backblaze.com for this machine, one that is the 'real' backup and one that was created today (because a new one is created whenever you install Backblaze). Identify the old (real) backup and the new (empty) backup*
 1. *If you've managed to keep the new backup empty, or a least keep any of the files you're trying to remove out of it, then you can just let the new backup be the backup going forward. In this case, skip the rest of 'Removing Files from Backblaze Backup - Part 1'*
-1. *You should only be at this step if you need to throw away the new backup and start a new one*
-1. *On backblaze.com delete the new (created today) backup*
-1. *Uninstall Backblaze (via Add/Remove Programs) and restart computer*
-1. *Re-Install Backblaze AND IMMEDIATELY OPEN THE BACKBLAZE CONTROL PANEL AND PAUSE THE BACKUP. It will be trying to create a new backup from scratch and if you don't pause the backup it'll just start backing up everything. You can go look at anything that got uploaded on backblaze.com, as long as the files you're tring to remove didn't get uploaded yet you should be good.*
-1. *Continue 'Removing Files from Backblaze Backup - Part 2' after completing the next step*
-
-## Run .bat file to install all applications (after Backblaze restore is complete)
-1. Run LazyBlaze.bat in your local lazyblaze directory
-
-## *Special Instructions - Removing Files from Backblaze Backup - Part 2*
-*Creating a fresh backup*
+1. *Only follow these sub-steps if you need to throw away the new backup and start a new one*
+    1. *On backblaze.com delete the new (created today) backup*
+    1. *Uninstall Backblaze (via Add/Remove Programs) and then restart computer*
+    1. *Re-Install Backblaze AND IMMEDIATELY OPEN THE BACKBLAZE CONTROL PANEL AND PAUSE THE BACKUP AND/OR KILL THE BACKBLAZE APP.* 
+        * *(It will be trying to create a new backup from scratch and if you don't pause the backup it'll just start backing up everything. You can go look at anything that got uploaded on backblaze.com, as long as the files you're tring to remove didn't get uploaded yet you should be good.)*
+1. *Run (or re-run) LazyBlaze.bat with `<backblazeclean skipsection="False">` in order to re-populate the Backblaze exclusions list that got reset when Backblaze was re-installed*
 1. *Restart the computer*
 1. *Let Backblaze populate the new backup, it will show up on backblaze.com as unlicensed with today's date in the name* 
 1. *Verify that the new backup on backblaze.com does not include the files that you wanted to remove.*
@@ -130,23 +139,18 @@ If you have another machine handy that's already up and running with access to t
 
 ## Clone Code Repositories
 1. *I'd suggest getting logged into your password manager and browsers before the Clone Code Repositories step.*
-1. If using `Add Git Repositories To Github Desktop` option 
-    * Then you'll need to launch the Github Desktop application first on your machine and get logged in.
-    * (`addrepostogithubdesktop` setting in config)
-1. Open local config folder, default is `C:\LazyBlazeConfig\`
-1. Run CloneRepos.bat
-    * The Git Credentials Manager UI will pop up for any repositories that don't already have creds saved in the manager.
-    * *FYI - CloneRepos.ps1 needs to be run from the local config folder because it needs to be in the same directory as the LocalConfig.xml file and it can't be in this repository because this repository will likely be deleted and recreated by the script.*
-1. *If using `Add Git Repositories To Github Desktop` option* 
+1. *If using `Add Git Repositories To Github Desktop` option (you should, it's awesome) then follow these sub-steps, otherwise just skip to 'Run CloneRepos.bat'* 
+    * *You'll need to launch the Github Desktop application and get logged in.*
+    * *Before running CloneRepos.bat, make sure the Github Desktop window is actually open*
+        * *If you DON'T have Github Desktop open when you run Run CloneRepos.bat then Github Desktop will launch for each local repository add, then you will need to close Github Desktop between each repository to continue*
+        * *If you DO have Github Desktop open when you run Run CloneRepos.bat then Github Desktop will just open a prompt for each local repository add, then you just hit 'Add Repository' to continue*
     * *After all the repositories are cloned the script will loop through the list again and pause on each one, waiting for you to prompt before launching Github Desktop with the local repository location filled in.*
     * *You'll need to click the `Add repository` button in GitHub Desktop once for each repository in your config*
+1. Run CloneRepos.bat
+    * The Git Credentials Manager UI will pop up for any repositories that don't already have creds saved in the manager.
 
 ## Sign in to apps
 I highly suggest that you keep your own detailed list of app logins and manual configurations.
-
-## Any Other apps to manually install
-1. [Oculus PC App](https://www.meta.com/help/quest/articles/headsets-and-accessories/oculus-rift-s/install-app-for-link/) 
-1. ???
 
 ## A list of other similar projects on github
 1. [Opendows Tweakers](https://github.com/MarcoRavich/Opendows/blob/main/Tweakers.md#-) (this list is awesome)
