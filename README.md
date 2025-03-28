@@ -9,9 +9,9 @@ This project is designed to take advantage of Backblaze computer backups to get 
 This project will work perfectly fine even if you're not using Backblaze, just make sure skipsection="True" for backblazeclean in your config and ignore the Backblaze specific steps in the instructions.
 
 # Simplified Usage Instructions
-1. Run `InstallOrUpdate.bat` to install or update LazyBlaze.
+1. Run `InstallOrUpdate.bat` to install or update LazyBlaze (from somewhere on your C:\ drive).
     * You will be prompted with the target install location, press 'y' to install
-    * Default install location is `C:\Users\(username)\LazyBlaze\`
+    * Default install location is `C:\Users\(username)\OneDrive\LazyBlaze_(machinename)\`
     * If you want to change the install location, press 'n' to cancel the install, then open Installer/InstallConfig.xml and modify settings under installdirectory, then run installer again.
 1. Open the folder that LazyBlaze was installed to, see default above
     * I will refer to this folder as 'your Lazyblaze instance' going forward
@@ -21,16 +21,19 @@ This project will work perfectly fine even if you're not using Backblaze, just m
     * Example registry edits can be found in this repository in `\registrysettings\`, they are also copied to the install location under `\LazyBlazeScripts\IncludedRegistrySettings\`
     * Update `<reviewed>False</reviewed>` to `<reviewed>True</reviewed>` at the bottom of the `Config.xml` file, if you don't update this the script won't install anything.
 1. In your LazyBlaze instance: Run `LazyBlaze.bat`, there are various safety checks in place so watch for the script to stop and prompt you to take some action. The common behavior if everything is configured correctly then the Main.ps1 will be executed in it's entirety.
-1. In your LazyBlaze instance: Run `CloneRepos.bat` to clone the git repositories you've defined in your local config
+1. (optional) In your LazyBlaze instance: Run `CloneRepos.bat` to clone the git repositories you've defined in your local config
     * For more information see "Clone Code Repositories" below
 1. Done!
 
-## Understanding Your LazyBlaze Instance (default `C:\Users\(username)\LazyBlaze\`)
-Once you've installed lazyblaze you should be all set to just start following the "Fresh Windows Install Instructions" below, but there's an external folder that will be created by the scripts that you should be aware of. The default location of this folder is `C:\LazyBlazeConfig\`, you can change it by updating `Config.xml` in the root of this repository before you run the scripts, but I'd recommend leaving it as default if possible.
+## Understanding Your LazyBlaze Instance (default `C:\Users\(username)\OneDrive\LazyBlaze_(machinename)\`)
+LazyBlaze uses a very basic "installer" for two main reasons. One is to provide some safety net around updating your instance of LazyBlaze, and the other reason is to simplify development by keeping user-specific changes out of the code repository.
+The default location that your LazyBlaze instance will be installed to is `C:\Users\(username)\OneDrive\LazyBlaze_(machinename)\`, you can change it by updating `Installer\InstallConfig.xml` in the root of this repository before you run the scripts.
 
-The `C:\LazyBlazeConfig\` folder that gets created will have some values already populated, but the purpose of this folder is to hold values and files that are specific to your machine that the scripts in this repository can use. The most important thing in this directory is LocalConfig.xml, it defines what programs to remove, what programs to install, and generally just lets you pick all your options once and then setup everything with minimal interaction. 
+The file you will want to get familiar with in your LazyBlaze instance is `Config.xml`. The `Config.xml` file allows LazyBlaze to require almost zero user interaction while it's running by specifying all your preferences and selections ahead of time in one location. When you first install your LazyBlaze instance `Config.xml` will just have some default values in it, these are mostly to show what the structure looks like of the various options.
 
-The idea is that you'll run through the setup process once and make a lot of changes to the local config, then once it's in a spot that you like you can save LocalConfig.xml somewhere safe off your machine, or better yet save the whole `C:\LazyBlazeConfig\` folder, and then if you need to rebuild your machine from scratch you can just put your saved config folder back in place and run LazyBlaze.bat to get your environment built out exactly how it was before.
+Some features of LazyBlaze can use files that you provide, for example "Set Wallpaper" will by default use `(your lazyblaze instance)\LazyBlazeScripts\IncludedWallpapers\space.jpg` as your wallpaper image, but you can put whatever image you want in the IncludedWallpapers folder and update `Config.xml` to use your custom wallpaper.
+
+The idea here is that you get your LazyBlaze instance all set up so that it's got the app installs that you want and all the details are how you like them. Then, if you get a new PC or you need to wipe your existing PC, you can just have your LazyBlaze instance backed up, and put your LazyBlaze instance on the new machine and run it and you should end up coming as close as possible to replicating the set up of your old machine.
 
 # Fresh Windows Install Instructions
 I suggest keeping a document for each of your machines with more specific details to keep your environment as repeatable as possible. My personal instruction documents live in google docs, I have one document per machine. I basically copied these instructions to start and then added details as I went.
