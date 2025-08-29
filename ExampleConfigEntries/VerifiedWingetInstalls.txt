@@ -4,6 +4,8 @@ Note: If you're looking for a specific program try searching within this documen
 are not very helpful but the name of the program should be in the description.
 
 <app skip="False" id="7zip.7zip"                               description="7-Zip is a free and open-source file archiver"></app>
+<app skip="False" id="Anysphere.Cursor"                        description="Cursor is a proprietary AI-assisted integrated development environment for Windows, macOS and Linux designed to enhance developer productivity by integrating artificial intelligence features directly into the coding environment"></app>
+<app skip="False" id="Bambulab.Bambustudio"                    description="Bambu Studio is an open-source, cutting-edge, feature-rich slicing software. It contains project-based workflows, systematically optimized slicing algorithms, and an easy-to-use graphical interface, bringing users an incredibly smooth printing experience."></app>
 <app skip="False" id="Corsair.iCUE.5"                          description="iCUEs single intuitive interface links together supported CORSAIR products, allowing you to quickly and easily fine-tune your settings"></app>
 <app skip="False" id="CrystalDewWorld.CrystalDiskInfo"         description="CrystalDiskInfo is open source software for checking HDD/SSD health status"></app>
 <app skip="False" id="CrystalDewWorld.CrystalDiskMark"         description="CrystalDiskMark is an open source disk drive benchmark tool for Microsoft Windows from Crystal Dew World"></app>
