@@ -102,8 +102,8 @@
   <rundismclean skipsection="True" firstrunonly="True">
     <details>Clean System Using DISM and SFC</details>
   </rundismclean>
-  <scheduledbackuptask skipsection="True">
-    <options backuplogretentiondays="30"></options>
+  <scheduledbackuptask skipsection="True" cleanold="True">
+    <options backuplogretentiondays="30" overwrite="True"></options>
     <details>Add a scheduled task to run Backup.ps1 script daily</details>
   </scheduledbackuptask>
   <gitrepositories skipsection="True">
