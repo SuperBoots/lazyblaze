@@ -756,12 +756,24 @@ else {
 if ($config.settings.scheduledbackuptask.skipsection -like "False") {
   Write-Host "Section: Schedule Auto Backup of Settings (scheduledbackuptask in config), starting..."
   Write-Host -ForegroundColor Yellow "Schedule Auto Backup of Settings..."
-  $schBkupEnvVarName = "LZB_SCHEDULEBACKUP"
-  $stepComplete = [Environment]::GetEnvironmentVariable($schBkupEnvVarName, 'User')
-  if ($stepComplete -like "COMPLETE"){
-    Write-Host -ForegroundColor Green "Schedule Auto Backup of Settings already completed according to environment variable $($schBkupEnvVarName). Skipping."
+  $scheduledTaskName = "BackupSettingsLazyBlaze"
+  if ($config.settings.scheduledbackuptask.options.overwrite -like "True") {
+    Write-Host "Option overwrite is True, checking for exising scheduled task..."
+    # Find existing scheduled task
+    if (Get-ScheduledTask -TaskName $scheduledTaskName -ErrorAction SilentlyContinue){
+      Write-Host "Found existing scheduled task $($scheduledTaskName), deleting..."
+      # Delete existing scheduled task
+      Unregister-ScheduledTask -TaskName $scheduledTaskName -Confirm:$false
+    }
+    else{
+      Write-Host "Did not find existing scheduled task $($scheduledTaskName)"
+    }
+  }
+  if ((-not ($config.settings.scheduledbackuptask.options.overwrite -like "True")) -and (Get-ScheduledTask -TaskName $scheduledTaskName -ErrorAction SilentlyContinue)){
+    Write-Host "Option overwrite is not True and scheduled task $($scheduledTaskName) already exists, skipping"
   }
   else {
+    Write-Host "Starting creating scheduled task $($scheduledTaskName)..."
     $installDir = "$($workingDirectory)\"
     Write-Host "configDir: $($installDir)"
     $scriptedBackupName = "Backup.ps1"
@@ -769,14 +781,30 @@ if ($config.settings.scheduledbackuptask.skipsection -like "False") {
     $user = "NT AUTHORITY\SYSTEM"
     $trigger = New-ScheduledTaskTrigger -Daily -At '12:15 PM' 
     $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $installDir
-    Register-ScheduledTask -Action $action -Trigger $trigger -User $user -TaskName "BackupSettings" -Description "run lazyblaze backups daily"
-    [Environment]::SetEnvironmentVariable($schBkupEnvVarName, 'COMPLETE', 'User')
-    Write-Host -ForegroundColor Green "Finished Schedule Auto Backup of Settings."
+    Register-ScheduledTask -Action $action -Trigger $trigger -User $user -TaskName $scheduledTaskName -Description "run lazyblaze backups daily"
+    Write-Host -ForegroundColor Green "Finished creating scheduled task $($scheduledTaskName)."
   }
   Write-Host "Section: Schedule Auto Backup of Settings (scheduledbackuptask in config), finished"
 }
 else {
   Write-Host "Section: Schedule Auto Backup of Settings (scheduledbackuptask in config), skipping"
+}
+
+##########################  Clean Old Schedule Auto Backup of Settings  ################################
+# Check for leftovers from old script versions and clean them up.
+if ($config.settings.scheduledbackuptask.cleanold -like "True") {
+  Write-Host "Section: Clean Old Schedule Auto Backup of Settings (scheduledbackuptask in config), starting..."
+  $oldSchBkupEnvVarName = "LZB_SCHEDULEBACKUP"
+  if ([Environment]::GetEnvironmentVariable($oldSchBkupEnvVarName, 'User')){
+    Write-Host -ForegroundColor Yellow "Old environment variable $($oldSchBkupEnvVarName) found, deleting..."
+    [Environment]::SetEnvironmentVariable($oldSchBkupEnvVarName, $null, 'User')
+  }
+  $oldScheduledTaskName = "BackupSettings"
+  if (Get-ScheduledTask -TaskName $oldScheduledTaskName -ErrorAction SilentlyContinue){
+    Write-Host "Old scheduled task $($oldScheduledTaskName) found, deleting..."
+    Unregister-ScheduledTask -TaskName $oldScheduledTaskName -Confirm:$false
+  }
+  Write-Host "Section: Clean Old Schedule Auto Backup of Settings (scheduledbackuptask in config), finished"
 }
 
 
