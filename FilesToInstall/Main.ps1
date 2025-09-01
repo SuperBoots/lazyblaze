@@ -778,10 +778,10 @@ if ($config.settings.scheduledbackuptask.skipsection -like "False") {
     Write-Host "configDir: $($installDir)"
     $scriptedBackupName = "Backup.ps1"
     $localScriptedBackupFile = "$($installDir)LazyBlazeScripts\$($scriptedBackupName)"
-    $user = "NT AUTHORITY\SYSTEM"
     $trigger = New-ScheduledTaskTrigger -Daily -At '12:15 PM' 
     $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument "-WindowStyle Hidden -File `"$localScriptedBackupFile`"" -WorkingDirectory $installDir
-    Register-ScheduledTask -Action $action -Trigger $trigger -User $user -TaskName $scheduledTaskName -Description "run lazyblaze backups daily"
+    $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+    Register-ScheduledTask -Action $action -Trigger $trigger -Principal $principal -TaskName $scheduledTaskName -Description "run lazyblaze backups daily"
     Write-Host -ForegroundColor Green "Finished creating scheduled task $($scheduledTaskName)."
   }
   Write-Host "Section: Schedule Auto Backup of Settings (scheduledbackuptask in config), finished"
