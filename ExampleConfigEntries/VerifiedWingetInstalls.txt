@@ -10,7 +10,7 @@ are not very helpful but the name of the program should be in the description.
 <app skip="False" id="CrystalDewWorld.CrystalDiskInfo"         description="CrystalDiskInfo is open source software for checking HDD/SSD health status"></app>
 <app skip="False" id="CrystalDewWorld.CrystalDiskMark"         description="CrystalDiskMark is an open source disk drive benchmark tool for Microsoft Windows from Crystal Dew World"></app>
 <app skip="False" id="CyberPowerSystemsInc.PowerPanelPersonal" description="PowerPanel Personal makes the most vital information about your UPS, power source, battery capacity, and runtime, immediately visible on your computer"></app>
-<app skip="False" id="dbeaver.dbeaver"                         description="DBeaver is a SQL client software application and a database administration tool"></app>
+<app skip="False" id="DBeaver.DBeaver.Community"               description="DBeaver is a SQL client software application and a database administration tool"></app>
 <app skip="False" id="Discord.Discord"                         description="Discord is an instant messaging and VoIP social platform which allows communication through voice calls, video calls, text messaging, and media"></app>
 <app skip="False" id="Docker.DockerDesktop"                    description="Docker Desktop is collaborative containerization software for developers"></app>
 <app skip="False" id="Dropbox.Dropbox"                         description="Dropbox is a file hosting service operated by the American company Dropbox, Inc"></app>
