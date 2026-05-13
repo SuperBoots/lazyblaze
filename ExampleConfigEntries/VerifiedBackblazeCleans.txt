@@ -119,6 +119,7 @@ It doesn't hurt to include exclusions in your list that don't exist on your mach
     <dir skip="False" userdir="True"  directory="AppData\Local\CEF"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Local\Comms"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Local\ConnectedDevicesPlatform"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Local\Corsair"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Local\CrashDumps"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Local\CrashReportClient"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Local\D3DSCache"></dir>
@@ -225,6 +226,7 @@ It doesn't hurt to include exclusions in your list that don't exist on your mach
     <dir skip="False" userdir="True"  directory="AppData\Roaming\Autodesk"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Roaming\Blender Foundation"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Roaming\Code"></dir>
+    <dir skip="False" userdir="True"  directory="AppData\Roaming\Corsair"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Roaming\Cudo Miner"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Roaming\discord"></dir>
     <dir skip="False" userdir="True"  directory="AppData\Roaming\DBeaverData"></dir>
